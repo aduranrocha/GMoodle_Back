@@ -1,7 +1,6 @@
 package com.gmoodle.models.entity;
 
-
-
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -19,7 +18,7 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Table(name="groupClass")
-public class groupClass {
+public class groupClass implements Serializable{
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long idGroup;
@@ -40,7 +39,6 @@ public class groupClass {
 	private String enrolmentKey;
 	
 	@NotNull(message ="can not be empty")
-	@Column(name="create_at")
 	@Temporal(TemporalType.DATE)
 	private Date createAt;
 	
@@ -124,6 +122,5 @@ public class groupClass {
 	public void setEnableGroup(boolean isEnableGroup) {
 		this.isEnableGroup = isEnableGroup;
 	}
-	
 	private static final long serialVersionUID = 1L;
 }
