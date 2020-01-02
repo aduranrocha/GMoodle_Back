@@ -15,9 +15,11 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 /* Indicar que es un objeto de persistencia que esta mapeado a una tabla */
 @Entity
@@ -41,6 +43,14 @@ public class Users {
 	// El usuario es unico y con un ancho de 20 caracteres
 	@Column(unique = true, length = 20)
 	private String userName;
+	
+	private String name;
+
+	private String lastName;
+	
+	//@Column(unique = true)
+	private String email;
+	
 	// Un ancho de 61 caracteres ya que la contraseña se va a cifrar
 	@Column(length = 61)
 	private String password;
@@ -48,25 +58,28 @@ public class Users {
 	// Para validar si el usuario esta activo o no
 	private Boolean enabled;
 
-	private String name;
-
-	private String lastName;
-
-	@Column(unique = true)
-	private String email;
-
 	private boolean gender;
 
 	private String address;
 
 	private String phoneNumber;
 
+	//@DateTimeFormat(style = "dd/mm/yyyy hh:mm")
+	//Notese la M mayúscula para el mes en el pattern
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="dd/MM/yyyy hh:mm")
+	//@NotNull
 	private Date birthDate;
 
 	private String photo;
 
+	//@DateTimeFormat(style = "dd/mm/yyyy")
+	//Notese la M mayúscula para el mes en el pattern
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
 	private Date createAt;
 
+	//@DateTimeFormat(style = "dd/mm/yyyy")
+	//Notese la M mayúscula para el mes en el pattern
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
 	private Date updateAt;
 
 	/*

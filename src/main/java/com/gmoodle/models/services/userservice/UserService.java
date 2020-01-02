@@ -97,4 +97,15 @@ public class UserService implements IUserService, UserDetailsService {
 		return userDao.save(user);
 	}
 
+	@Override
+	public Users findById(Long id) {
+		//Se busca el usuario por id y si no lo encuentra retorna null
+		return userDao.findById(id).orElse(null);
+	}
+
+	@Override
+	public void delete(Long id) {
+		userDao.deleteById(id);	
+	}
+
 }

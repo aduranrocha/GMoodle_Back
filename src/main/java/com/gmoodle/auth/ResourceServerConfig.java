@@ -36,8 +36,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 		 * /images/**: Se les da acceso a la ruta donde se encuentran todas las imagenes en el servidor 
 		 * (/src/main/resources/images/**)
 		 */
-		.antMatchers(HttpMethod.POST, "/admin/create").permitAll()
-		.antMatchers(HttpMethod.GET, "/admin", "/admin/**").permitAll()
+		.antMatchers("/admin/**").permitAll()
+		//.antMatchers(HttpMethod.GET, "/admin", "/admin/**").permitAll()
 		.anyRequest().authenticated()
 		.and().cors().configurationSource(corsConfigurationSource());
 	}
