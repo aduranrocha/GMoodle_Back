@@ -83,10 +83,12 @@ public class UsersSystemController {
 	}
 	
 	@PostMapping("/create")
-	public Users CreateUser(@RequestBody Users user)
+	public ResponseEntity<?> CreateUser(@RequestBody Users user)
 	{
 		//Se obtiene la hora actual del servidor para guardarla en el campo createAt
 		dt = new Date(System.currentTimeMillis());
+		Users nUser = null;
+		Map<String, Object> response = new HashMap<>();
 		/*
 		 * Se la contraseña del modelo se encripta y se soobrescribe al modelo
 		 * guardandolo encriptado en la base de datos 
@@ -94,7 +96,17 @@ public class UsersSystemController {
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		user.setCreateAt(dt);
 		
-		return userService.save(user);
+		try
+		{
+			nUser = userService.save(user);
+		} catch(DataAccessException e)
+		{
+			response.put("mensaje", "Error al crear el usuario");
+			response.put("error", e.getMessage() + " : " + e.getMostSpecificCause());
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		return new ResponseEntity<Users>(nUser, HttpStatus.CREATED);
 	}
 	
 	@PutMapping("/{id}")
