@@ -42,6 +42,12 @@ public class UsersSystemController {
 		return userService.findAll();
 	}
 	
+	@GetMapping("/{id}")
+	public Users showOne(@PathVariable Long id)
+	{
+		return userService.findById(id);
+	}
+	
 	@PostMapping("/create")
 	public Users CreateUser(@RequestBody Users user)
 	{
