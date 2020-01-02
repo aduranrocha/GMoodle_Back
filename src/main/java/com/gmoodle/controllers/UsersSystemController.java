@@ -110,17 +110,26 @@ public class UsersSystemController {
 	}
 	
 	@PutMapping("/{id}")
-	public Users UpdateUser(@RequestBody Users user, @PathVariable Long id)
+	public ResponseEntity<?> UpdateUser(@RequestBody Users user, @PathVariable Long id)
 	{
 		//Se obtiene la hora actual del servidor para guardarla en el campo createAt
 		dt = new Date(System.currentTimeMillis());
-
+		Map<String, Object> response = new HashMap<>();
 		
 		/*
 		 * Se crea un nuevo objeto para guardar los cambios que se realicen en la base de datos
 		 * se toma como referencia el id para sobreescribir los datos actuales
 		 */
-		Users u = userService.findById(id);
+		Users u = null;
+		Users userUploaded = null;
+		u = userService.findById(id);
+		
+		if (u == null)
+		{
+			response.put("mensaje", "El usuario no se encuentra ne la base de datos");
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+		}
+		
 		u.setUserName(user.getUserName());
 		u.setName(user.getName());
 		u.setLastName(user.getLastName());
@@ -135,8 +144,15 @@ public class UsersSystemController {
 		
 		
 		u.setUpdateAt(dt);
-		
-		return userService.save(u);
+		try
+		{
+			userUploaded = userService.save(u);			
+		} catch (DataAccessException e)
+		{
+			response.put("mensaje", "Error al actualizar el usuario en la base de datos, intenta más tarde");
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return new ResponseEntity<Users>(userUploaded, HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/{id}")
