@@ -1,9 +1,14 @@
 package com.gmoodle.controllers;
 
 import java.sql.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,6 +31,9 @@ public class UsersSystemController {
 	/*
 	 * @RequestBody: Se obtiene el cuerpo de la petición (lo datos que se mandan por POST, PUT, DELETE)
 	 * @PathVariable: Se obtienen los datos que se mandan por la url 
+	 * ResponseEntity: Se utiliza para retornar cualquier tipo de objeto, de esta manera se puede retornar el objeto
+	 * 				   Users o un error en caso de que el usuario no exista (por ejemplo en el metodo de consulta showOne)
+	 * 
 	 */
 
 	@Autowired
@@ -43,9 +51,35 @@ public class UsersSystemController {
 	}
 	
 	@GetMapping("/{id}")
-	public Users showOne(@PathVariable Long id)
+	public ResponseEntity<?> showOne(@PathVariable Long id)
 	{
-		return userService.findById(id);
+		/*
+		 * Se declara el objeto user como null para poder validarlo en caso de que no exista en la base de datos
+		 * El objeto response de tipo Map se utiliza para asignar los mensajes en caso de error
+		 * DataAccessException: Es propio de spring y se utiliza para manejar un error en la consulta sql, en caso de que
+		 * 						exista algún error, este entrara en el catch asignara los mensajes al objeto response y 
+		 * 						los retornara con un error 500
+		 * Si el usuario es null se asigna el mensaje correspondiente y se regresa un error 404 
+		 */
+		Users user = null;
+		Map<String, Object> response = new HashMap<>();
+		try 
+		{
+			user = userService.findById(id);
+		} catch(DataAccessException e)
+		{
+			response.put("mensaje", "Error al consultar la base de datos");
+			response.put("error", e.getMessage() + " : " + e.getMostSpecificCause());
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		if (user == null)
+		{
+			response.put("mensaje", "No existe el usuario en la base de datos");
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+		}
+		
+		return new ResponseEntity<Users>(user, HttpStatus.OK);
 	}
 	
 	@PostMapping("/create")
