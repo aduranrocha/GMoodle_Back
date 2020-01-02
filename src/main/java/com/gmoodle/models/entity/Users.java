@@ -1,5 +1,6 @@
 package com.gmoodle.models.entity;
 
+import java.sql.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -15,58 +16,73 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /* Indicar que es un objeto de persistencia que esta mapeado a una tabla */
 @Entity
 /*
- * Indica el nombre de la tabla en caso de que se requiera sea diferente al nombre del modelo,
- * por defecto se crea con el nombre del modelo  
+ * Indica el nombre de la tabla en caso de que se requiera sea diferente al
+ * nombre del modelo, por defecto se crea con el nombre del modelo
  */
 @Table(name = "users")
 public class Users {
 
-	//Pendiente
+	// Pendiente
 	private static final long serialVersionUID = 1L;
-	
-	//Para indicar que es la llave primaria
+
+	// Para indicar que es la llave primaria
 	@Id
-	//Indicar la estrategia en como se genera el id, al ser mysql se utiliza GenerationType.IDENTITY
+	// Indicar la estrategia en como se genera el id, al ser mysql se utiliza
+	// GenerationType.IDENTITY
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	//El usuario es unico y con un ancho de 20 caracteres
+	// El usuario es unico y con un ancho de 20 caracteres
 	@Column(unique = true, length = 20)
-	private String username;
-	//Un ancho de 60 caracteres ya que la contraseña se va a cifrar
-	@Column(length = 69)
+	private String userName;
+	// Un ancho de 61 caracteres ya que la contraseña se va a cifrar
+	@Column(length = 61)
 	private String password;
-	
-	//Para validar si el usuario esta activo o no
+
+	// Para validar si el usuario esta activo o no
 	private Boolean enabled;
-	
+
 	private String name;
-	
-	private String lastname;
-	
+
+	private String lastName;
+
 	@Column(unique = true)
 	private String email;
 
+	private boolean gender;
+
+	private String address;
+
+	private String phoneNumber;
+
+	private Date birthDate;
+
+	private String photo;
+
+	private Date createAt;
+
+	private Date updateAt;
+
 	/*
-	 * Relación muchos a muchos
-	 * fecth: carga peresoza
-	 * cascade: si el usuario se elimina se van a eliminar todos los roles asignados
-	 * y si se crea se van a guardar todos los roles asignados
-	*/
+	 * Relación muchos a muchos fecth: carga peresoza cascade: si el usuario se
+	 * elimina se van a eliminar todos los roles asignados y si se crea se van a
+	 * guardar todos los roles asignados
+	 */
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	/*
-	 * name: nombre de la tabla intermedia para la relación
-	 * joinColumns: nombre de la foreign de la tabla usuarios
-	 * inverseJoinColumns: nombre de la foreign de la tabla roles
-	 * uniqueConstraints:  uniqueConstraints indica que un usuario solo puede tener un rol, no se puede repetir en la tabla
+	 * name: nombre de la tabla intermedia para la relación joinColumns: nombre de
+	 * la foreign de la tabla usuarios inverseJoinColumns: nombre de la foreign de
+	 * la tabla roles uniqueConstraints: uniqueConstraints indica que un usuario
+	 * solo puede tener un rol, no se puede repetir en la tabla
 	 */
-	@JoinTable(name="users_roles", joinColumns = @JoinColumn(name = "user_id")
-	, inverseJoinColumns = @JoinColumn(name = "role_id")
-	, uniqueConstraints = { @UniqueConstraint(columnNames = { "user_id", "role_id" }) })
+	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"), uniqueConstraints = {
+			@UniqueConstraint(columnNames = { "user_id", "role_id" }) })
 	private List<Roles> roles;
 
 	public Long getId() {
@@ -77,12 +93,12 @@ public class Users {
 		this.id = id;
 	}
 
-	public String getUsername() {
-		return username;
+	public String getUserName() {
+		return userName;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	public String getPassword() {
@@ -109,12 +125,12 @@ public class Users {
 		this.name = name;
 	}
 
-	public String getLastname() {
-		return lastname;
+	public String getLastName() {
+		return lastName;
 	}
 
-	public void setLastname(String lastname) {
-		this.lastname = lastname;
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 	public String getEmail() {
@@ -125,6 +141,62 @@ public class Users {
 		this.email = email;
 	}
 
+	public boolean isGender() {
+		return gender;
+	}
+
+	public void setGender(boolean gender) {
+		this.gender = gender;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	public Date getBirthDate() {
+		return birthDate;
+	}
+
+	public void setBirthDate(Date birthDate) {
+		this.birthDate = birthDate;
+	}
+
+	public String getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(String photo) {
+		this.photo = photo;
+	}
+
+	public Date getCreateAt() {
+		return createAt;
+	}
+
+	public void setCreateAt(Date createAt) {
+		this.createAt = createAt;
+	}
+
+	public Date getUpdateAt() {
+		return updateAt;
+	}
+
+	public void setUpdateAt(Date updateAt) {
+		this.updateAt = updateAt;
+	}
+
 	public List<Roles> getRoles() {
 		return roles;
 	}
@@ -133,4 +205,5 @@ public class Users {
 		this.roles = roles;
 	}
 
+	
 }

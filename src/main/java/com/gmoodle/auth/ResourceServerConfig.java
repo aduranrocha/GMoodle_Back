@@ -36,16 +36,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 		 * /images/**: Se les da acceso a la ruta donde se encuentran todas las imagenes en el servidor 
 		 * (/src/main/resources/images/**)
 		 */
-		.antMatchers(HttpMethod.GET, "/api/clientes", "/api/clientes/page/**", "/api/uploads/img/**", "/images/**").permitAll()
-		// Se configura para que solo los usuarios con rol user y admin puedan acceder a estos recursos
-		/*.antMatchers(HttpMethod.GET, "/api/clientes/{id}").hasAnyRole("USER", "ADMIN")
-		.antMatchers(HttpMethod.POST, "/api/clientes/upload").hasAnyRole("USER", "ADMIN")
-		// Solo los admin pueden crear y eliminar registros
-		.antMatchers(HttpMethod.POST, "/api/clientes").hasRole("ADMIN")
-		// Solo los admin pueden acceder al siguiente recurso
-		// Al no especificarse el metodo la regla se aplicara a todos los metodos (GET, POST, PUT, DELETE ETC...)
-		.antMatchers("/api/clientes/**").hasRole("ADMIN")*/
-		// Se le asignan permisos a todas las rutas faltantes (esta configuración siempre va al final)
+		.antMatchers(HttpMethod.POST, "/admin/create").permitAll()
+		.antMatchers(HttpMethod.GET, "/admin", "/admin/**").permitAll()
 		.anyRequest().authenticated()
 		.and().cors().configurationSource(corsConfigurationSource());
 	}

@@ -1,7 +1,11 @@
 package com.gmoodle.models.services.userservice;
 
+import java.util.List;
+
 import com.gmoodle.models.entity.Users;
 
 public interface IUserService {
-	public Users findByUsername(String username);
+	public List<Users> findAll();
+	public Users findByUserName(String username);
+	public Users save(Users user);
 }
