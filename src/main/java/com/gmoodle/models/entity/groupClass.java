@@ -115,11 +115,11 @@ public class groupClass implements Serializable{
 		this.idNumberMax = idNumberMax;
 	}
 
-	public boolean isEnableGroup() {
+	public boolean getIsEnableGroup() {
 		return isEnableGroup;
 	}
 
-	public void setEnableGroup(boolean isEnableGroup) {
+	public void setIsEnableGroup(boolean isEnableGroup) {
 		this.isEnableGroup = isEnableGroup;
 	}
 	private static final long serialVersionUID = 1L;
