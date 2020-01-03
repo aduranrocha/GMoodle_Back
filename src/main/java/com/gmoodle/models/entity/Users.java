@@ -17,6 +17,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 /* Indicar que es un objeto de persistencia que esta mapeado a una tabla */
@@ -68,14 +70,14 @@ public class Users {
 
 	private String phoneNumber;
 
-	//@DateTimeFormat(style = "dd/mm/yyyy hh:mm")
+	@DateTimeFormat(style = "dd/mm/yyyy")
 	//Notese la M mayúscula para el mes en el pattern
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="dd/MM/yyyy hh:mm")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
 	private Date birthDate;
 
 	private String photo;
 
-	//@DateTimeFormat(style = "dd/mm/yyyy")
+	@DateTimeFormat(style = "dd/mm/yyyy")
 	//Notese la M mayúscula para el mes en el pattern
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
 	private Date createAt;
