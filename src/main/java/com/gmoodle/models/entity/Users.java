@@ -1,6 +1,7 @@
 package com.gmoodle.models.entity;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -26,18 +27,22 @@ import com.fasterxml.jackson.annotation.JsonFormat;
  */
 @Table(name = "users")
 public class Users {
+	
+	/*
+	 * @Id indicar que es una llave primaria
+	 * @GeneratedValue Indica como se genera el id en la base de datos.
+	 * @Column Asigna las propiedades del campo en la base de datos
+	 *    unique = true si el registro debe ser único o false para aceptar campos ducplicados
+	 *    length = El ancho (número de caracteres de la columna)
+	 */
 
 	// Pendiente
 	private static final long serialVersionUID = 1L;
 
-	// Para indicar que es la llave primaria
 	@Id
-	// Indicar la estrategia en como se genera el id, al ser mysql se utiliza
-	// GenerationType.IDENTITY
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	// El usuario es unico y con un ancho de 20 caracteres
 	@Column(unique = true, length = 20)
 	private String userName;
 	
@@ -46,16 +51,17 @@ public class Users {
 
 	private String lastName;
 	
-	//@Column(unique = true)
+	@Column(unique = true)
 	private String email;
 	
 	// Un ancho de 61 caracteres ya que la contraseña se va a cifrar
 	@Column(length = 61)
 	private String password;
 
-	// Para validar si el usuario esta activo o no
+	// true si el usuario esta activo
 	private Boolean enabled;
 
+	// true si el usuario se ha graduado
 	private boolean gender;
 
 	private String address;
@@ -65,7 +71,6 @@ public class Users {
 	//@DateTimeFormat(style = "dd/mm/yyyy hh:mm")
 	//Notese la M mayúscula para el mes en el pattern
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="dd/MM/yyyy hh:mm")
-	//@NotNull
 	private Date birthDate;
 
 	private String photo;
@@ -81,20 +86,21 @@ public class Users {
 	private Date updateAt;
 
 	/*
+	 * @ManyToMany:
 	 * Relación muchos a muchos fecth: carga peresoza cascade: si el usuario se
 	 * elimina se van a eliminar todos los roles asignados y si se crea se van a
 	 * guardar todos los roles asignados
-	 */
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	/*
+	 *
+	 * @JoinTable
 	 * name: nombre de la tabla intermedia para la relación joinColumns: nombre de
 	 * la foreign de la tabla usuarios inverseJoinColumns: nombre de la foreign de
 	 * la tabla roles uniqueConstraints: uniqueConstraints indica que un usuario
 	 * solo puede tener un rol, no se puede repetir en la tabla
 	 */
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"), uniqueConstraints = {
 			@UniqueConstraint(columnNames = { "user_id", "role_id" }) })
-	private List<Roles> roles;
+	private List<Roles> roles = new ArrayList<>();
 
 	public Long getId() {
 		return id;
