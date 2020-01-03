@@ -2,6 +2,7 @@ package com.gmoodle.controllers;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -92,19 +93,27 @@ public class UsersSystemController {
 
 	@PostMapping("/create")
 	public ResponseEntity<?> CreateUser(@RequestBody Users user) {
+		
 		// Se obtiene la hora actual del servidor para guardarla en el campo createAt
 		dt = new Date(System.currentTimeMillis());
 		Users nUser = null;
 		Map<String, Object> response = new HashMap<>();
+		
 		// Se crea un objeto con el mismo tipo de dato del modelo en la propiedad Roles
 		// para realizar la relación
 		List<Roles> roles = new ArrayList<>();
+		
 		// Se obtiene la contraseña enviada por el usuario y se encripta para mayor seguridad
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		user.setCreateAt(dt);
-
-		// Pendiente
-		Optional<Roles> userRol = roleDao.findByName("ROLE_ADMIN");
+		
+		/*
+		 * Desde el frontend por json se recive la propiedad roles como un array de un solo elemento
+		 * tipo json el cual contiene un unico campo llamado "name" y que contiene el nombre del rol
+		 * para obtenerlo posteriormente y realizar la relación en la base de datos
+		 * Pendiente Options
+		 */
+		Optional<Roles> userRol = roleDao.findByName(user.getRoles().get(0).getName());
 		roles.add(userRol.get());
 
 		/*
