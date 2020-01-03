@@ -31,17 +31,22 @@ import com.fasterxml.jackson.annotation.JsonFormat;
  */
 @Table(name = "users")
 public class Users {
-	
+
 	/*
 	 * @Id indicar que es una llave primaria
+	 * 
 	 * @GeneratedValue Indica como se genera el id en la base de datos.
-	 * @Column Asigna las propiedades del campo en la base de datos
-	 *    unique = true si el registro debe ser único o false para aceptar campos ducplicados
-	 *    length = El ancho (número de caracteres de la columna)
-	 *    
+	 * 
+	 * @Column Asigna las propiedades del campo en la base de datos unique = true si
+	 * el registro debe ser único o false para aceptar campos ducplicados length =
+	 * El ancho (número de caracteres de la columna)
+	 * 
 	 * VALIDADORES:
+	 * 
 	 * @NotEmpty: Indica que el campo no puede ir vacío
+	 * 
 	 * @Size: Indica el minimo y máximo de un campo
+	 * 
 	 * @Email: Valida que el email tenga un formato correcto
 	 */
 
@@ -53,24 +58,25 @@ public class Users {
 	private Long id;
 
 	@Column(unique = true, length = 20)
-	@NotEmpty
-	@Size(min=4, max=20)
+	@NotEmpty(message = "cannot be empty")
+	@Size(min = 4, max = 20, message = "the size must be between 4 and 20 characteres")
 	private String username;
-	
+
 	@Column(nullable = false)
-	@NotEmpty
+	@NotEmpty(message = "cannot be empty")
 	private String name;
 
-	@NotEmpty
+	@NotEmpty(message = "cannot be empty")
 	private String lastName;
-	
+
 	@Column(unique = true)
-	@NotEmpty
+	@NotEmpty(message = "cannot be empty")
 	private String email;
-	
+
 	// Un ancho de 61 caracteres ya que la contraseña se va a cifrar
 	@Column(length = 61)
-	@NotEmpty
+	@Size(min = 8, message = "the minimun characteres is 8")
+	@NotEmpty(message = "cannot be empty")
 	private String password;
 
 	// true si el usuario esta activo
@@ -79,40 +85,38 @@ public class Users {
 	// true si el usuario se ha graduado
 	private boolean gender;
 
-	@NotEmpty
+	@NotEmpty(message = "cannot be empty")
 	private String address;
 
-	@NotEmpty
+	@NotEmpty(message = "cannot be empty")
 	private String phoneNumber;
 
-	//@DateTimeFormat(style = "dd/mm/yyyy")
-	//Notese la M mayúscula para el mes en el pattern
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
+	// @DateTimeFormat(style = "dd/mm/yyyy")
+	// Notese la M mayúscula para el mes en el pattern
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	private Date birthDate;
 
 	private String photo;
 
-	//@DateTimeFormat(style = "dd/mm/yyyy")
-	//Notese la M mayúscula para el mes en el pattern
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
+	// @DateTimeFormat(style = "dd/mm/yyyy")
+	// Notese la M mayúscula para el mes en el pattern
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	private Date createAt;
 
-	//@DateTimeFormat(style = "dd/mm/yyyy")
-	//Notese la M mayúscula para el mes en el pattern
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
+	// @DateTimeFormat(style = "dd/mm/yyyy")
+	// Notese la M mayúscula para el mes en el pattern
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	private Date updateAt;
 
 	/*
-	 * @ManyToMany:
-	 * Relación muchos a muchos fecth: carga peresoza cascade: si el usuario se
-	 * elimina se van a eliminar todos los roles asignados y si se crea se van a
-	 * guardar todos los roles asignados
+	 * @ManyToMany: Relación muchos a muchos fecth: carga peresoza cascade: si el
+	 * usuario se elimina se van a eliminar todos los roles asignados y si se crea
+	 * se van a guardar todos los roles asignados
 	 *
-	 * @JoinTable
-	 * name: nombre de la tabla intermedia para la relación joinColumns: nombre de
-	 * la foreign de la tabla usuarios inverseJoinColumns: nombre de la foreign de
-	 * la tabla roles uniqueConstraints: uniqueConstraints indica que un usuario
-	 * solo puede tener un rol, no se puede repetir en la tabla
+	 * @JoinTable name: nombre de la tabla intermedia para la relación joinColumns:
+	 * nombre de la foreign de la tabla usuarios inverseJoinColumns: nombre de la
+	 * foreign de la tabla roles uniqueConstraints: uniqueConstraints indica que un
+	 * usuario solo puede tener un rol, no se puede repetir en la tabla
 	 */
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"), uniqueConstraints = {
@@ -239,5 +243,4 @@ public class Users {
 		this.roles = roles;
 	}
 
-	
 }
