@@ -2,5 +2,6 @@ INSERT INTO `users` (username, name, last_name, email, password, enabled, gender
 
 INSERT INTO `roles` (name) VALUES ('ROLE_ADMIN');
 INSERT INTO `roles` (name) VALUES ('ROLE_TEACHER');
+INSERT INTO `roles` (name) VALUES ('ROLE_STUDENT');
 
 INSERT INTO `users_roles` (user_id, role_id) VALUES (1, 1);
