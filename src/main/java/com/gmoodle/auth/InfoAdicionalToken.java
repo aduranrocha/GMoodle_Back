@@ -29,7 +29,7 @@ public class InfoAdicionalToken implements TokenEnhancer {
 		/*
 		 * Se obtienen los datos del usuario mediante la autenticación. 
 		 */
-		Users user = userService.findByUserName(authentication.getName());
+		Users user = userService.findByUsername(authentication.getName());
 		
 		info.put("nombre", user.getName());
 		info.put("apellido", user.getLastName());
