@@ -158,7 +158,7 @@ public class UsersSystemController {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
 
-		u.setUserName(user.getUserName());
+		u.setUsername(user.getUsername());
 		u.setName(user.getName());
 		u.setLastName(user.getLastName());
 		u.setEmail(user.getEmail());

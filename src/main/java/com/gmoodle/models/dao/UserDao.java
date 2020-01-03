@@ -14,5 +14,5 @@ public interface UserDao extends CrudRepository<Users, Long> {
 	 * Username : Por el campo que se va a buscar (Id, Status etc...)
 	 * And o OR :  Para utilizar más de un parametro
 	 */
-	public Users findByUserName(String username);
+	public Users findByUsername(String username);
 }

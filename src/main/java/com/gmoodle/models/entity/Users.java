@@ -44,7 +44,7 @@ public class Users {
 	private Long id;
 
 	@Column(unique = true, length = 20)
-	private String userName;
+	private String username;
 	
 	@Column(nullable = false)
 	private String name;
@@ -110,12 +110,12 @@ public class Users {
 		this.id = id;
 	}
 
-	public String getUserName() {
-		return userName;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setUsername(String userName) {
+		this.username = userName;
 	}
 
 	public String getPassword() {

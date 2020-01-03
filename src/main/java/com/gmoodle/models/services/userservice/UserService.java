@@ -11,7 +11,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.core.userdetails.User;
@@ -43,16 +42,16 @@ public class UserService implements IUserService, UserDetailsService {
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
 		//Obtener el usuario a traves del username
-		Users user = userDao.findByUserName(username);
+		Users user = userDao.findByUsername(username);
 		
 		// Se comprueba si el usuario es null
 		if (user == null)
 		{
 			// Se escribe un mensaje de error en el log en caso de que el usuario no exista
-			logger.error("El usuario " + user.getUserName() + " no existe en el sistema!");
+			logger.error("El usuario " + username + " no existe en el sistema!");
 			System.out.println("El ususario no existe en el sistema");
 			// Se lanza excepción de error en caso de que el usuario no exista
-			throw new UsernameNotFoundException("El usuario " + user.getUserName() + " no existe en el sistema!");
+			throw new UsernameNotFoundException("El usuario " + username + " no existe en el sistema!");
 		}
 		
 		
@@ -71,8 +70,8 @@ public class UserService implements IUserService, UserDetailsService {
 
 		/*
 		 * Se retorna una instancia de User (Se importa de spring security)
-		 */		
-		return new User(user.getUserName(), user.getPassword()
+		 */
+		return new User(user.getUsername(), user.getPassword()
 					, true, true, true, true, authorities);
 	}
 
@@ -81,9 +80,8 @@ public class UserService implements IUserService, UserDetailsService {
 	 */
 	@Override
 	@Transactional(readOnly = true)
-	public Users findByUserName(String username) {
-		// TODO Auto-generated method stub
-		return null;
+	public Users findByUsername(String username) {
+		return userDao.findByUsername(username);
 	}
 
 	@Override
