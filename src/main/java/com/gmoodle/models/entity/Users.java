@@ -15,9 +15,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.NotNull;
-
-import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -44,6 +41,7 @@ public class Users {
 	@Column(unique = true, length = 20)
 	private String userName;
 	
+	@Column(nullable = false)
 	private String name;
 
 	private String lastName;

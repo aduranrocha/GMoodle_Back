@@ -157,8 +157,19 @@ public class UsersSystemController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public void DeleteUser(@PathVariable Long id)
+	public ResponseEntity<?> DeleteUser(@PathVariable Long id)
 	{
-		userService.delete(id);
+		Map<String, Object> response = new HashMap<>();
+		try
+		{
+			userService.delete(id);			
+		} catch(DataAccessException e)
+		{
+			response.put("mensaje", "Error al eliminar el usuario");
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		response.put("mensaje", "Usuario eliminado con exito!");
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 }
