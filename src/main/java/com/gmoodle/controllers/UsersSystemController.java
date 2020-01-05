@@ -68,6 +68,7 @@ public class UsersSystemController {
 
 	Date dt;
 
+	@Secured({ "ROLE_ADMIN" })
 	@GetMapping
 	public List<Users> index() {
 		return userService.findAll();
@@ -103,6 +104,7 @@ public class UsersSystemController {
 		return new ResponseEntity<Users>(user, HttpStatus.OK);
 	}
 
+	@Secured({ "ROLE_ADMIN" })
 	@PostMapping("/create")
 	public ResponseEntity<?> CreateUser(@Valid @RequestBody Users user, BindingResult result) {
 
@@ -164,6 +166,7 @@ public class UsersSystemController {
 		return new ResponseEntity<Users>(nUser, HttpStatus.CREATED);
 	}
 
+	@Secured({ "ROLE_ADMIN" })
 	@PutMapping("/{id}")
 	public ResponseEntity<?> UpdateUser(@RequestBody Users user, BindingResult result, @PathVariable Long id) {
 		// Se obtiene la hora actual del servidor para guardarla en el campo updateAt
@@ -226,6 +229,7 @@ public class UsersSystemController {
 		return new ResponseEntity<Users>(userUploaded, HttpStatus.OK);
 	}
 
+	@Secured({ "ROLE_ADMIN" })
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> DeleteUser(@PathVariable Long id) {
 		Map<String, Object> response = new HashMap<>();
