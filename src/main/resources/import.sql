@@ -8,7 +8,7 @@ INSERT INTO groupclass (nameGroup, createAt,enrolmentKey,idNumberMax,isEnableGro
 
 INSERT INTO course(nameCourse,summaryCourse,startDateCourse,endDateCourse,isEnableCourse,createAt) VALUES ('JavaFullstack','Desarrollo de conociemiento en tecnologias web mediante JAVA','2019-09-30','2019-12-30',true,'2019-08-30');
 INSERT INTO course(nameCourse,summaryCourse,startDateCourse,endDateCourse,isEnableCourse,createAt) VALUES ('English','Mejorar en el habla del idioma Ingles en un ambiente laboral','2019-09-30','2019-12-30',true,'2019-08-30');
-INSERT INTO course(nameCourse,summaryCourse,startDateCourse,endDateCourse,isEnableCourse) VALUES ('Mentoria','Mejorar las softskills del alumno','2019-09-30','2019-12-30',true);
+INSERT INTO course(nameCourse,summaryCourse,startDateCourse,endDateCourse,isEnableCourse,createAt) VALUES ('Mentoria','Mejorar las softskills del alumno','2019-09-30','2019-12-30',true,'2019-08-30');
 
 INSERT INTO activity(titleActivity) VALUES ('Series de Fiboncci');
 INSERT INTO activity(titleActivity) VALUES ('Email solution of problems');
