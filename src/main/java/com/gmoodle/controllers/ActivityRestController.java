@@ -123,6 +123,7 @@ public class ActivityRestController {
 		}
 		try {
 			activityActual.setTitleActivity(activity.getTitleActivity());
+			activityActual.setInstructions(activity.getInstructions());
 			
 			activityUpdate = activityService.save(activityActual);
 			
