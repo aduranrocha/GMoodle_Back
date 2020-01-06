@@ -211,6 +211,7 @@ public class UsersSystemController {
 		u.setPhoneNumber(user.getPhoneNumber());
 		u.setBirthDate(user.getBirthDate());
 		u.setPhoto(user.getPhoto());
+		u.setIsDemoUser(user.getIsDemoUser());
 		u.setUpdateAt(dt);
 
 		/*
