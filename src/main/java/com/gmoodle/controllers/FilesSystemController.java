@@ -79,7 +79,7 @@ public class FilesSystemController {
 				// En caso de error se agrega el un mensaje de error con sus especificaciones y
 				// se regresa un error 500
 				e.printStackTrace();
-				response.put("mensaje", "Error al subir la imagen");
+				response.put("mensaje", "Error to upload the image");
 				response.put("error", e.getCause() + " : " + e.getMessage());
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 			}
@@ -104,6 +104,9 @@ public class FilesSystemController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
+	
+	
+	
 	@PostMapping("/upload/file")
 	public ResponseEntity<?> UploadFile(@RequestParam("file") MultipartFile file, @RequestParam Long idUser,
 			@RequestParam Long idActivity) {
@@ -129,7 +132,7 @@ public class FilesSystemController {
 			 * blanco del nombre del archivo
 			 */
 
-			String mimeType = GenerateDirectoryByMime(file.getContentType());
+			String mimeType = GetMimeType(file.getContentType());
 
 			String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename().replace(" ", "");
 
@@ -148,11 +151,11 @@ public class FilesSystemController {
 				response.put("error", e.getCause() + " : " + e.getMessage());
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 			}
-			response.put("message", "Imagen subida con exito!");
+			response.put("message", "Uploaded success!");
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 		}
 
-		response.put("message", "No se ha seleccionado una imagen para subir");
+		response.put("message", "File not selected!");
 
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
@@ -169,7 +172,7 @@ public class FilesSystemController {
 		}
 
 		if (!resource.exists() && !resource.isReadable()) {
-			throw new RuntimeException("No se pudo cargar la imagen: " + fileName);
+			throw new RuntimeException("Image cannot be showed: " + fileName);
 		}
 
 		HttpHeaders header = new HttpHeaders();
@@ -198,7 +201,7 @@ public class FilesSystemController {
 		}
 	}
 
-	private String GenerateDirectoryByMime(String mimeType) {
+	private String GetMimeType(String mimeType) {
 		String[] mime = mimeType.split(Pattern.quote("/"));
 
 		return mime[mime.length - 1];
