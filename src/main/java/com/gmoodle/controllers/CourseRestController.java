@@ -126,7 +126,7 @@ public class CourseRestController {
 			courseActual.setSummaryCourse(course.getSummaryCourse());
 			courseActual.setStartDateCourse(course.getStartDateCourse());
 			courseActual.setEndDateCourse(course.getEndDateCourse());
-			courseActual.setIsEnableGroup(course.getIsEnableGroup());
+			courseActual.setIsEnableCourse(course.getIsEnableCourse());
 			courseActual.setUpdateAt(new Date());
 			
 			courseUpdate = courseService.save(courseActual);
