@@ -238,6 +238,13 @@ public class UsersSystemController {
 		 * Se intenta eliminar el usuario, en caso de fallo se ejecuta el catch y
 		 * regresa un error 500 con su respectivo mensaje
 		 */
+		
+		
+		// Se obtiene el usuario por su id antes de eliminarlo
+		Users user = userService.findById(id);
+		// Se elimina la imagen antes de eliminar el usuario
+		FilesSystemController.deleteLastImage(user.getPhoto());
+		
 		try {
 			userService.delete(id);
 		} catch (DataAccessException e) {
