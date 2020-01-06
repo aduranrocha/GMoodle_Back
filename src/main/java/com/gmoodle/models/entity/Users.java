@@ -108,6 +108,9 @@ public class Users implements Serializable{
 	// Notese la M mayúscula para el mes en el pattern
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	private Date updateAt;
+	
+	@NotEmpty(message = "cannot be empty")
+	private boolean isDemoUser;
 
 	/*
 	 * @ManyToMany: Relación muchos a muchos fecth: carga peresoza cascade: si el
@@ -253,6 +256,20 @@ public class Users implements Serializable{
 
 	public void setRoles(List<Roles> roles) {
 		this.roles = roles;
+	}
+
+	/**
+	 * @return the isDemoUser
+	 */
+	public boolean getIsDemoUser() {
+		return isDemoUser;
+	}
+
+	/**
+	 * @param isDemoUser the isDemoUser to set
+	 */
+	public void setIsDemoUser(boolean isDemoUser) {
+		this.isDemoUser = isDemoUser;
 	}
 
 }
