@@ -196,9 +196,12 @@ public class FilesSystemController {
 	
 	private void CreateDirectory(String path)
 	{
-		//Se intenta crear el directorio files por cuestiones de pruebas
+		/*
+		 * Se intenta crear el directorio (variable path)
+		 * Si el directorio ya esta creado no se sobreescribe o se afecta
+		 */
 		try {
-			Files.createDirectories(Paths.get("/" + path));
+			Files.createDirectories(Paths.get(path));
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
