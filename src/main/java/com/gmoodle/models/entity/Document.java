@@ -32,6 +32,10 @@ public class Document implements Serializable{
 	@JoinColumn(name="idActivity")
     private Activity activity;
 	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="idUser")
+    private Users users;
+	
 	@NotEmpty(message="can not be empty")
 	@Size(min=4, max=44, message="the size must be between 4 and 44")
 	@Column(nullable=false,unique=true)

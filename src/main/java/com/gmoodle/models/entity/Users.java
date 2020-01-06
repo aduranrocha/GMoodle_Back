@@ -137,7 +137,9 @@ public class Users implements Serializable{
 	@OneToMany(mappedBy="users", cascade = CascadeType.ALL)
 	private List<Course> course = new ArrayList<>();
 		
-		
+	@OneToMany(mappedBy="users", cascade = CascadeType.ALL)
+    private List<Document> document = new ArrayList<>();
+	
 	public Long getId() {
 		return id;
 	}
