@@ -40,24 +40,22 @@ public class FilesSystemController {
 	private IUserService userService;
 
 	/*
-	 * Se crea el metodo para subir la foto de perfil
-	 * Se valida si el archivo es imagen, ya que solo se permitiran imagenes
-	 * Se crean los directorios automaticamente (se respalda con try catch)
+	 * Se crea el metodo para subir la foto de perfil Se valida si el archivo es
+	 * imagen, ya que solo se permitiran imagenes Se crean los directorios
+	 * automaticamente (se respalda con try catch)
 	 */
 	@PostMapping("/upload/profile")
-	public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file,
-			@RequestParam("id") Long id) {
+	public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file, @RequestParam("id") Long id) {
 		Map<String, Object> response = new HashMap<>();
 		Users user = userService.findById(id);
-		
+
 		// Validar si el campo archivo esta vacío
 		if (!file.isEmpty()) {
-			
-			//Se intenta crear el directorio raiz de los archivos
+
+			// Se intenta crear el directorio raiz de los archivos
 			CreateDirectory("files");
 
-			if (isImageValidation(file.getContentType()) == false)
-			{
+			if (isImageValidation(file.getContentType()) == false) {
 				response.put("message", "The file was not uploaded");
 				response.put("error", "Only images allow");
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -69,10 +67,10 @@ public class FilesSystemController {
 			 */
 			String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename().replace(" ", "");
 			// Se configura la ruta del archivo
-			
-			//Se intenta crear el directorio raiz de los archivos
+
+			// Se intenta crear el directorio raiz de los archivos
 			CreateDirectory("files/profiles");
-			
+
 			Path pathFile = Paths.get("files/profiles").resolve(fileName).toAbsolutePath();
 			try {
 				// Se sube el archivo al servidor
@@ -107,21 +105,21 @@ public class FilesSystemController {
 	}
 
 	@PostMapping("/upload/file")
-	public ResponseEntity<?> UploadFile(@RequestParam("file") MultipartFile file, @RequestParam Long idUser, @RequestParam Long idActivity) {
-		
-		
+	public ResponseEntity<?> UploadFile(@RequestParam("file") MultipartFile file, @RequestParam Long idUser,
+			@RequestParam Long idActivity) {
+
 		Map<String, Object> response = new HashMap<>();
 		// Validar si el campo archivo esta vacío
 		if (!file.isEmpty()) {
-			
-			//Se intenta crear el directorio raiz de los archivos
+
+			// Se intenta crear el directorio raiz de los archivos
 			CreateDirectory("files");
-			
-			if (HasExtensionValidation( file.getOriginalFilename() ) == false || BlockedExtensionsValidation( file.getOriginalFilename() ) == false )
-			{
+
+			if (HasExtensionValidation(file.getOriginalFilename()) == false
+					|| BlockedExtensionsValidation(file.getOriginalFilename()) == false) {
 				response.put("message", "The file was not uploaded!");
 				response.put("error", "Image not valid!");
-				
+
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 
@@ -130,9 +128,15 @@ public class FilesSystemController {
 			 * duplicidades al momento de subir los archivos se reemplazan los caracteres en
 			 * blanco del nombre del archivo
 			 */
+
+			String mimeType = GenerateDirectoryByMime(file.getContentType());
+
 			String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename().replace(" ", "");
+
+			CreateDirectory("files/" + mimeType);
+
 			// Se configura la ruta del archivo
-			Path pathFile = Paths.get("files/profiles").resolve(fileName).toAbsolutePath();
+			Path pathFile = Paths.get("files/" + mimeType).resolve(fileName).toAbsolutePath();
 			try {
 				// Se sube el archivo al servidor
 				Files.copy(file.getInputStream(), pathFile);
@@ -193,12 +197,17 @@ public class FilesSystemController {
 			}
 		}
 	}
-	
-	private void CreateDirectory(String path)
-	{
+
+	private String GenerateDirectoryByMime(String mimeType) {
+		String[] mime = mimeType.split(Pattern.quote("/"));
+
+		return mime[mime.length - 1];
+	}
+
+	private void CreateDirectory(String path) {
 		/*
-		 * Se intenta crear el directorio (variable path)
-		 * Si el directorio ya esta creado no se sobreescribe o se afecta
+		 * Se intenta crear el directorio (variable path) Si el directorio ya esta
+		 * creado no se sobreescribe o se afecta
 		 */
 		try {
 			Files.createDirectories(Paths.get(path));
@@ -210,12 +219,11 @@ public class FilesSystemController {
 
 	private boolean isImageValidation(String mimeType) {
 		boolean isValid = true;
-		
-		if(mimeType.indexOf("image") < 0)
-		{
+
+		if (mimeType.indexOf("image") < 0) {
 			isValid = false;
 		}
-		
+
 		return isValid;
 	}
 
@@ -234,16 +242,15 @@ public class FilesSystemController {
 		List<String> blockedExtensions = new ArrayList<>();
 		String[] arr = fileName.split(Pattern.quote("."));
 		String ext = arr[arr.length - 1];
-		
+
 		blockedExtensions.add("exe");
 		blockedExtensions.add("bat");
 
-		for (String e : blockedExtensions)
-		{
+		for (String e : blockedExtensions) {
 			if (e.equals(ext))
 				isValid = false;
 		}
-		
+
 		return isValid;
 	}
 }
