@@ -10,8 +10,8 @@ INSERT INTO course(nameCourse,summaryCourse,startDateCourse,endDateCourse,isEnab
 INSERT INTO course(nameCourse,summaryCourse,startDateCourse,endDateCourse,isEnableCourse,createAt,createById) VALUES ('English','Mejorar en el habla del idioma Ingles en un ambiente laboral','2019-09-30','2019-12-30',true,'2019-08-30',1);
 INSERT INTO course(nameCourse,summaryCourse,startDateCourse,endDateCourse,isEnableCourse,createAt,createById) VALUES ('Mentoria','Mejorar las softskills del alumno','2019-09-30','2019-12-30',true,'2019-08-30',1);
 
-INSERT INTO activity(titleActivity) VALUES ('Series de Fiboncci');
-INSERT INTO activity(titleActivity) VALUES ('Email solution of problems');
-INSERT INTO activity(titleActivity) VALUES ('Preguntas para entrevista');
+INSERT INTO activity(titleActivity,instructions) VALUES ('Series de Fiboncci','Create a code that generates the Fibonnaci series util de the number the user ask');
+INSERT INTO activity(titleActivity,instructions) VALUES ('Email solution of problems','Write an email to solve a conflict');
+INSERT INTO activity(titleActivity,instructions) VALUES ('Interview questions','Make a list of interview questions');
 
 INSERT INTO document(titleDocument,pathDoucument,isCheack,isEnableDocument) VALUES ('HOLA','path/path/path',true,true);
