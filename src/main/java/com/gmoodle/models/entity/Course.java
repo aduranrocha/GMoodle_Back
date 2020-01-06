@@ -8,9 +8,12 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -33,7 +36,7 @@ public class Course implements Serializable {
 	
 	@NotEmpty(message ="can not be empty")
 	@Size(min=10, max=150, message="the size must be between 10 and 150")
-	@Column(nullable=false)
+	@Column(nullable=false, columnDefinition = "longtext")
 	private String summaryCourse;
 	
 	@NotNull(message ="can not be empty")
@@ -57,10 +60,23 @@ public class Course implements Serializable {
 	@Temporal(TemporalType.DATE)
 	private Date updateAt;
 	
+	@NotNull(message="can not be empty")
+	@Column(nullable=false)
+	private boolean createById;
+	
 	//column that will connect with the other table
 	@OneToMany(mappedBy="course", cascade = CascadeType.ALL)
 	private List<Activity> activity = new ArrayList<>();
-
+	
+	/**
+	 * Relation ManyToOne from Document to Activity
+	 * @JoinColumn: will add the column with that name into the actual table
+	 * 
+	 */
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="idUser")
+    private Users users;
+	
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -173,5 +189,19 @@ public class Course implements Serializable {
 	 */
 	public void setUpdateAt(Date updateAt) {
 		this.updateAt = updateAt;
+	}
+
+	/**
+	 * @return the createById
+	 */
+	public boolean isCreateById() {
+		return createById;
+	}
+
+	/**
+	 * @param createById the createById to set
+	 */
+	public void setCreateById(boolean createById) {
+		this.createById = createById;
 	}
 }
