@@ -30,7 +30,16 @@ public class Activity implements Serializable{
 	@Column(nullable=false,unique=true)
 	private String titleActivity;
 	
-	//column that will connect with the other table
+	@Column(columnDefinition="LONGTEXT")
+	private String instructions;
+	
+	/**
+	 * Relation OneToMany from Activity to Document
+	 * mappedBy is the table that will produce the relation
+	 * The method will 
+	 * return a list of the courses
+	 * 
+	 */
 	@OneToMany(mappedBy="activity", cascade = CascadeType.ALL)
     private List<Document> document = new ArrayList<>();
 	
@@ -64,6 +73,19 @@ public class Activity implements Serializable{
 	 */
 	public void setTitleActivity(String titleActivity) {
 		this.titleActivity = titleActivity;
+	}
+	/**
+	 * @return the instructions
+	 */
+	public String getInstructions() {
+		return instructions;
+	}
+
+	/**
+	 * @param instructions the instructions to set
+	 */
+	public void setInstructions(String instructions) {
+		this.instructions = instructions;
 	}
 	/**
 	 * 
