@@ -39,15 +39,22 @@ public class FilesSystemController {
 	@Autowired
 	private IUserService userService;
 
+	/*
+	 * Se crea el metodo para subir la foto de perfil
+	 * Se valida si el archivo es imagen, ya que solo se permitiran imagenes
+	 * Se crean los directorios automaticamente (se respalda con try catch)
+	 */
 	@PostMapping("/upload/profile")
 	public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file,
 			@RequestParam("id") Long id) {
 		Map<String, Object> response = new HashMap<>();
 		Users user = userService.findById(id);
-
 		
 		// Validar si el campo archivo esta vacío
 		if (!file.isEmpty()) {
+			
+			//Se intenta crear el directorio raiz de los archivos
+			CreateDirectory("files");
 
 			if (isImageValidation(file.getContentType()) == false)
 			{
@@ -62,6 +69,10 @@ public class FilesSystemController {
 			 */
 			String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename().replace(" ", "");
 			// Se configura la ruta del archivo
+			
+			//Se intenta crear el directorio raiz de los archivos
+			CreateDirectory("files/profiles");
+			
 			Path pathFile = Paths.get("files/profiles").resolve(fileName).toAbsolutePath();
 			try {
 				// Se sube el archivo al servidor
@@ -102,6 +113,10 @@ public class FilesSystemController {
 		Map<String, Object> response = new HashMap<>();
 		// Validar si el campo archivo esta vacío
 		if (!file.isEmpty()) {
+			
+			//Se intenta crear el directorio raiz de los archivos
+			CreateDirectory("files");
+			
 			if (HasExtensionValidation( file.getOriginalFilename() ) == false || BlockedExtensionsValidation( file.getOriginalFilename() ) == false )
 			{
 				response.put("message", "The file was not uploaded!");
@@ -176,6 +191,17 @@ public class FilesSystemController {
 				// Se elimina la foto
 				fileLastPhoto.delete();
 			}
+		}
+	}
+	
+	private void CreateDirectory(String path)
+	{
+		//Se intenta crear el directorio files por cuestiones de pruebas
+		try {
+			Files.createDirectories(Paths.get("/" + path));
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 	}
 
