@@ -23,6 +23,11 @@ public class Document implements Serializable{
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long idDocument;
 	
+	/**
+	 * Relation ManyToOne from Document to Activity
+	 * @JoinColumn: will add the column with that name into the actual table
+	 * 
+	 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="idActivity")
     private Activity activity;
@@ -39,6 +44,10 @@ public class Document implements Serializable{
 	@NotNull(message="can not be empty")
 	@Column(nullable=false)
 	private boolean isCheack;
+	
+	@NotNull(message="can not be empty")
+	@Column(nullable=false)
+	private boolean isEnableDocument;
 	
 	/**
 	 * @return the idDocument
@@ -94,6 +103,20 @@ public class Document implements Serializable{
 	 */
 	public void setIsCheack(boolean isCheack) {
 		this.isCheack = isCheack;
+	}
+
+	/**
+	 * @return the isEnableDocument
+	 */
+	public boolean getIsEnableDocument() {
+		return isEnableDocument;
+	}
+
+	/**
+	 * @param isEnableDocument the isEnableDocument to set
+	 */
+	public void setIsEnableDocument(boolean isEnableDocument) {
+		this.isEnableDocument = isEnableDocument;
 	}
 
 	/**
