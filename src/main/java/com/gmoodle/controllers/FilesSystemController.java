@@ -6,11 +6,9 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -39,6 +37,12 @@ public class FilesSystemController {
 	@Autowired
 	private IUserService userService;
 	
+	@GetMapping
+	public String index()
+	{
+		return "Hola!";
+	}
+	
 	@PostMapping("/upload/profile")
 	public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file, @RequestParam("id") Long id)
 	{
@@ -56,6 +60,7 @@ public class FilesSystemController {
 			String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename().replace(" ", "");
 			//Se configura la ruta del archivo
 			Path pathFile = Paths.get("files/profiles").resolve(fileName).toAbsolutePath();
+			
 			try {
 				//Se sube el archivo al servidor
 				Files.copy(file.getInputStream(), pathFile);
@@ -87,33 +92,45 @@ public class FilesSystemController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	@PostMapping("/upload/file")
-	public ResponseEntity<?> UploadFiles(@RequestParam("file") MultipartFile file, @RequestParam("id") Long id)
+	
+	@PostMapping("/upload/profile")
+	public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file)
 	{
-		Map<String, Object> response = new HashMap<>();
+		Map<String, Object> response = new HashMap<>();	
 		
-		
-		if (!file.isEmpty())
+		//Validar si el campo archivo esta vacío
+		if(!file.isEmpty())
 		{
-			String fileName = file.getOriginalFilename();
+			/*
+			 * Se obtiene el nombre del archivo
+			 * Se le asigna un uuid para evitar duplicidades al momento de subir los archivos
+			 * Se reemplazan los caracteres en blanco del nombre del archivo
+			 */
+			String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename().replace(" ", "");
+			//Se configura la ruta del archivo
+			Path pathFile = Paths.get("files/profiles").resolve(fileName).toAbsolutePath();
 			
-			String[] arr = fileName.split(Pattern.quote("."));
-			System.out.println(fileName.indexOf("."));
 			try {
-				Files.createDirectory(Paths.get("files/jsp"));
+				//Se sube el archivo al servidor
+				Files.copy(file.getInputStream(), pathFile);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				//e.printStackTrace();
-				System.out.println("Carpeta no creada");
+				//En caso de error se agrega el un mensaje de error con sus especificaciones y se regresa un error 500
+				e.printStackTrace();
+				response.put("mensaje", "Error al subir la imagen");
+				response.put("error", e.getCause() + " : " + e.getMessage() );
+				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 			}
-			System.out.println(arr[arr.length - 1]);
-			System.out.println(file.getOriginalFilename());
+			
+			response.put("message", "Archivo subido con exito!");
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 		}
 		
 		response.put("message", "No se ha seleccionado una imagen para subir");
 		
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+	
+	
 	
 	
 	@GetMapping("/p/{fileName:.+}")
@@ -142,17 +159,7 @@ public class FilesSystemController {
 	
 	
 	
-	private boolean ValidateExtension(String name)
-	{
-		if(name.indexOf(".") < 0)
-		{
-			return false;
-		}
-		else
-		{
-			return true;
-		}
-	}
+	
 	
 	
 	
