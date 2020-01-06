@@ -1,5 +1,6 @@
 package com.gmoodle.models.entity;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,12 +15,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-
-import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
  * nombre del modelo, por defecto se crea con el nombre del modelo
  */
 @Table(name = "users")
-public class Users {
+public class Users implements Serializable{
 
 	/*
 	 * @Id indicar que es una llave primaria
@@ -55,6 +55,7 @@ public class Users {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="idUser")
 	private Long id;
 
 	@Column(unique = true, length = 20)
@@ -122,7 +123,18 @@ public class Users {
 	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"), uniqueConstraints = {
 			@UniqueConstraint(columnNames = { "user_id", "role_id" }) })
 	private List<Roles> roles = new ArrayList<>();
-
+	
+	/**
+	 * Relation OneToMany from User to Course
+	 * mappedBy is the table that will produce the relation
+	 * The method will 
+	 * return a list of the courses
+	 * 
+	 */
+	@OneToMany(mappedBy="users", cascade = CascadeType.ALL)
+	private List<Course> course = new ArrayList<>();
+		
+		
 	public Long getId() {
 		return id;
 	}
