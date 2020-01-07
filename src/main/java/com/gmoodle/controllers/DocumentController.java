@@ -118,9 +118,8 @@ public class DocumentController {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
 		try {
-			documentActual.setTitleActivity(document.getTitleActivity());
 			documentActual.setPathDoucument(document.getPathDoucument());
-			documentActual.setIsCheack(document.getIsCheack());
+			documentActual.setIsCheck(document.getIsCheck());
 			
 			documentUpdate = documentService.save(documentActual);
 			
