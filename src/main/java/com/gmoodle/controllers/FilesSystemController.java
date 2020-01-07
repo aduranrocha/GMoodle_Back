@@ -121,7 +121,7 @@ public class FilesSystemController {
 			if (HasExtensionValidation(file.getOriginalFilename()) == false
 					|| BlockedExtensionsValidation(file.getOriginalFilename()) == false) {
 				response.put("message", "The file was not uploaded!");
-				response.put("error", "Image not valid!");
+				response.put("error", "File not valid!");
 
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 			}
@@ -184,6 +184,11 @@ public class FilesSystemController {
 
 	// Clase estatica para eliminar las imagenes del servidor
 	public static void deleteLastImage(String photo) {
+		/*
+		 * Al momento de actualizar la imagen del perfil del usuario, se elimina la imagen anterior
+		 * del servidor y se reemplaza por la imagen nueva.
+		 */
+		
 		// Se obtiene el nombre de la foto actual del usuario
 		String lastPhoto = photo;
 		// Se valida que el nombre realmente exista
@@ -202,9 +207,14 @@ public class FilesSystemController {
 	}
 
 	private String GetMimeType(String mimeType) {
+		/*
+		 * Se obtiene el mimetype y se realiza un split para obtener la primera parte
+		 * image/jpg = image
+		 * text/html = text 
+		 */
 		String[] mime = mimeType.split(Pattern.quote("/"));
-
-		return mime[mime.length - 1];
+		
+		return mime[0];
 	}
 
 	private void CreateDirectory(String path) {
@@ -221,6 +231,10 @@ public class FilesSystemController {
 	}
 
 	private boolean isImageValidation(String mimeType) {
+		/*
+		 * Este metodo se utiliza al momento de subir la imagen de perfil del usuario
+		 * se valida para que el usuario no suba un archivo que no es una imagen
+		 */
 		boolean isValid = true;
 
 		if (mimeType.indexOf("image") < 0) {
@@ -231,6 +245,9 @@ public class FilesSystemController {
 	}
 
 	private boolean HasExtensionValidation(String fileName) {
+		/*
+		 * Se valida que el archivo subido tenga una extension 
+		 */
 		boolean isValid = true;
 
 		if (fileName.indexOf(".") < 0) {
@@ -241,6 +258,10 @@ public class FilesSystemController {
 	}
 
 	private boolean BlockedExtensionsValidation(String fileName) {
+		/*
+		 * Se bloquean algunas extensiones por seguridad y se valida que la extension
+		 * del archivo no se encuentre entre las extensiones bloqueadas 
+		 */
 		boolean isValid = true;
 		List<String> blockedExtensions = new ArrayList<>();
 		String[] arr = fileName.split(Pattern.quote("."));
