@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -65,6 +66,7 @@ public class CourseRestController {
 		return new ResponseEntity<Course>(course,HttpStatus.OK);
 	}
 	
+	@Secured({ "ROLE_ADMIN" })
 	@PostMapping("/course")
 	// @Valid validates the data @BindingResult error messages
 	public ResponseEntity<?> create(@Valid @RequestBody Course course, BindingResult result) {
@@ -96,7 +98,7 @@ public class CourseRestController {
 		response.put("cliente", courseNew);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
-	
+	@Secured({ "ROLE_ADMIN" })
 	@PutMapping("/course/{id}")
 	public ResponseEntity<?> update(@Valid @RequestBody Course course, BindingResult result, @PathVariable Long id) {
 		Course courseActual = courseService.findById(id);
@@ -142,7 +144,7 @@ public class CourseRestController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 
 	}
-	
+	@Secured({ "ROLE_ADMIN" })
 	@DeleteMapping("/course/{id}") 
 	public ResponseEntity<?> delete(@PathVariable Long id) {		
 		Map<String, Object> response = new HashMap<>();
