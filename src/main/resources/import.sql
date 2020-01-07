@@ -23,4 +23,4 @@ INSERT INTO activity(titleActivity,instructions,idCourse,idUser) VALUES ('Series
 INSERT INTO activity(titleActivity,instructions,idCourse,idUser) VALUES ('Email solution of problems','Write an email to solve a conflict',1,1);
 INSERT INTO activity(titleActivity,instructions,idCourse,idUser) VALUES ('Interview questions','Make a list of interview questions',1,1);
 
-INSERT INTO document(titleDocument,pathDoucument,isCheack,isEnableDocument) VALUES ('HOLA','path/path/path',true,true);
+INSERT INTO document(pathDoucument,isCheck,isEnableDocument) VALUES ('path/path/path',true,true);
