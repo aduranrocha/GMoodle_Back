@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.gmoodle.models.entity.Document;
 import com.gmoodle.models.entity.Users;
 import com.gmoodle.models.services.userservice.IUserService;
 
@@ -101,25 +102,26 @@ public class FilesSystemController {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 		}
 
-		// Si ninguna imagen es seleccionada se retoran un mensaje de error y un estatus 500
+		// Si ninguna imagen es seleccionada se retoran un mensaje de error y un estatus
+		// 500
 		response.put("message", "No image selected!");
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
-	
-	
-	
 	@PostMapping("/upload/file")
 	public ResponseEntity<?> UploadFile(@RequestParam("file") MultipartFile file, @RequestParam Long idUser,
 			@RequestParam Long idActivity) {
-		
+
 		/*
-		 * Se crean las variables para guardar el tipo de archivo, nombre completo y las carpetas
-		 * donde se guardara el archivo
+		 * Se crean las variables para guardar el tipo de archivo, nombre completo y las
+		 * carpetas donde se guardara el archivo
 		 */
 		String mimeType = "";
 		String fileName = "";
 		String fullPath = "files/";
+		
+		//Se crea el objeto document para posteriormente guardarlo en la base de datos
+		Document document = null;
 
 		Map<String, Object> response = new HashMap<>();
 		// Validar si el campo archivo esta vacío
@@ -129,8 +131,9 @@ public class FilesSystemController {
 			CreateDirectory("files");
 
 			/*
-			 * Se evalua si el archivo tiene una extension y no es un archivo bloqueado por extension
-			 * en caso de que una retorne false se retorna un mensaje de error y un estatus 500 
+			 * Se evalua si el archivo tiene una extension y no es un archivo bloqueado por
+			 * extension en caso de que una retorne false se retorna un mensaje de error y
+			 * un estatus 500
 			 */
 			if (HasExtensionValidation(file.getOriginalFilename()) == false
 					|| BlockedExtensionsValidation(file.getOriginalFilename()) == false) {
@@ -141,8 +144,8 @@ public class FilesSystemController {
 			}
 
 			/*
-			 * Se obtiene el nombre del archivo se le asigna un uuid para evitar
-			 * sobre escribir al momento de subir los archivos se reemplazan los caracteres en
+			 * Se obtiene el nombre del archivo se le asigna un uuid para evitar sobre
+			 * escribir al momento de subir los archivos se reemplazan los caracteres en
 			 * blanco del nombre del archivo
 			 */
 
@@ -151,8 +154,8 @@ public class FilesSystemController {
 			fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename().replace(" ", "");
 
 			fullPath += mimeType;
-			
-			//Se intenta crear el directorio donde se guardara el archivo
+
+			// Se intenta crear el directorio donde se guardara el archivo
 			CreateDirectory(fullPath);
 
 			// Se configura la ruta del archivo
@@ -168,35 +171,55 @@ public class FilesSystemController {
 				response.put("error", e.getCause() + " : " + e.getMessage());
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 			}
-			
-			//El archivo se sube correctamente se retorna un mensaje al usuario con un estatus 200
+
+			// El archivo se sube correctamente se retorna un mensaje al usuario con un
+			// estatus 200
 			response.put("message", "Uploaded success!");
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 		}
-		
-		//Si ningún archivo es seleccionado se retorna un mensaje de error con el estatus 500
+
+		// Si ningún archivo es seleccionado se retorna un mensaje de error con el
+		// estatus 500
 		response.put("message", "File not selected!");
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 	@GetMapping("/v/{fileName:.+}")
 	public ResponseEntity<Resource> watchPhoto(@PathVariable String fileName) {
-		
-		Path pathFile = Paths.get("files/profiles").resolve(fileName).toAbsolutePath();
+
+		/*
+		 * Se realiza split al nombre del archivo ya que contiene la ruta completa donde se
+		 * guardo en el servidor
+		 * 0: La carpeta raiz
+		 * 1: La carpeta donde se guardo el archivo según su tipo
+		 * 2: Nombre del archivo
+		 * Se crea la ruta con las carpetas donde se guarda el archivo
+		 */
+		String partsFile[] = fileName.split(Pattern.quote("/"));
+		String fullPath = partsFile[0] + "/" + partsFile[1];
+
+		// Se obtiene la ruta absoluta y se asigna a la variable
+		Path pathFile = Paths.get(fullPath).resolve(partsFile[2]).toAbsolutePath();
+		// Se crea el objeto para poder obtener el archivo
 		Resource resource = null;
 
+		/*
+		 * Se convierte la ruta del archivo en URI para poder mostrarlo en el código HTML
+		 * En caso de error se imprime en la terminal 
+		 */
 		try {
 			resource = new UrlResource(pathFile.toUri());
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
 
+		// Se comprueba que el recurso se exista y se pueda leer
 		if (!resource.exists() && !resource.isReadable()) {
-			throw new RuntimeException("Image cannot be showed: " + fileName);
+			throw new RuntimeException("Image cannot be read: " + fileName);
 		}
 
+		// Se configuran las cabeceras para que la petición las reconozca como archivo y se retorna
 		HttpHeaders header = new HttpHeaders();
-
 		header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"");
 		return new ResponseEntity<Resource>(resource, header, HttpStatus.OK);
 	}
@@ -204,10 +227,10 @@ public class FilesSystemController {
 	// Clase estatica para eliminar las imagenes del servidor
 	public static void deleteLastImage(String photo) {
 		/*
-		 * Al momento de actualizar la imagen del perfil del usuario, se elimina la imagen anterior
-		 * del servidor y se reemplaza por la imagen nueva.
+		 * Al momento de actualizar la imagen del perfil del usuario, se elimina la
+		 * imagen anterior del servidor y se reemplaza por la imagen nueva.
 		 */
-		
+
 		// Se obtiene el nombre de la foto actual del usuario
 		String lastPhoto = photo;
 		// Se valida que el nombre realmente exista
@@ -228,11 +251,10 @@ public class FilesSystemController {
 	private String GetMimeType(String mimeType) {
 		/*
 		 * Se obtiene el mimetype y se realiza un split para obtener la primera parte
-		 * image/jpg = image
-		 * text/html = text 
+		 * image/jpg = image text/html = text
 		 */
 		String[] mime = mimeType.split(Pattern.quote("/"));
-		
+
 		return mime[0];
 	}
 
@@ -251,8 +273,8 @@ public class FilesSystemController {
 
 	private boolean isImageValidation(String mimeType) {
 		/*
-		 * Este metodo se utiliza al momento de subir la imagen de perfil del usuario
-		 * se valida para que el usuario no suba un archivo que no es una imagen
+		 * Este metodo se utiliza al momento de subir la imagen de perfil del usuario se
+		 * valida para que el usuario no suba un archivo que no es una imagen
 		 */
 		boolean isValid = true;
 
@@ -265,7 +287,7 @@ public class FilesSystemController {
 
 	private boolean HasExtensionValidation(String fileName) {
 		/*
-		 * Se valida que el archivo subido tenga una extension 
+		 * Se valida que el archivo subido tenga una extension
 		 */
 		boolean isValid = true;
 
@@ -279,7 +301,7 @@ public class FilesSystemController {
 	private boolean BlockedExtensionsValidation(String fileName) {
 		/*
 		 * Se bloquean algunas extensiones por seguridad y se valida que la extension
-		 * del archivo no se encuentre entre las extensiones bloqueadas 
+		 * del archivo no se encuentre entre las extensiones bloqueadas
 		 */
 		boolean isValid = true;
 		List<String> blockedExtensions = new ArrayList<>();
