@@ -51,75 +51,54 @@ public class Activity implements Serializable{
 	@JoinColumn(name="idUser")
     private Users users;
 	
-	/**
-	 * @return the idActivity
-	 */
 	public Long getIdActivity() {
 		return idActivity;
 	}
 
-	/**
-	 * @param idActivity the idActivity to set
-	 */
 	public void setIdActivity(Long idActivity) {
 		this.idActivity = idActivity;
 	}
 
-	/**
-	 * @return the titleActivity
-	 */
 	public String getTitleActivity() {
 		return titleActivity;
 	}
 
-	/**
-	 * @param titleActivity the titleActivity to set
-	 */
+
 	public void setTitleActivity(String titleActivity) {
 		this.titleActivity = titleActivity;
 	}
-	/**
-	 * @return the instructions
-	 */
+
 	public String getInstructions() {
 		return instructions;
 	}
 
-	/**
-	 * @param instructions the instructions to set
-	 */
 	public void setInstructions(String instructions) {
 		this.instructions = instructions;
 	}
-	/**
-	 * @return the course
-	 */
+
 	public Course getCourse() {
 		return course;
 	}
 
-	/**
-	 * @param course the course to set
-	 */
 	public void setCourse(Course course) {
 		this.course = course;
 	}
 
-	/**
-	 * @return the users
-	 */
 	public Users getUsers() {
 		return users;
 	}
 
-	/**
-	 * @param users the users to set
-	 */
 	public void setUsers(Users users) {
 		this.users = users;
 	}
-	/**
-	 * 
-	 */
+	
+	public List<Document> getDocument() {
+		return document;
+	}
+
+	public void setDocument(List<Document> document) {
+		this.document = document;
+	}
+
 	private static final long serialVersionUID = 1L;
 }
