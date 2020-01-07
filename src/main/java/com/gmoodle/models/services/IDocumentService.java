@@ -8,11 +8,12 @@ import org.springframework.data.domain.Pageable;
 import com.gmoodle.models.entity.Document;
 
 
-public interface IDocumentServices {
+public interface IDocumentService {
 	public List<Document> findAll();
 	// Page the group list
 	public Page<Document> findAll(Pageable pageable);
 	public Document findById(Long id);
 	public Document save(Document group);
 	public void delete(Long id);
+	d
 }
