@@ -92,6 +92,33 @@ public class Activity implements Serializable{
 		this.instructions = instructions;
 	}
 	/**
+	 * @return the course
+	 */
+	public Course getCourse() {
+		return course;
+	}
+
+	/**
+	 * @param course the course to set
+	 */
+	public void setCourse(Course course) {
+		this.course = course;
+	}
+
+	/**
+	 * @return the users
+	 */
+	public Users getUsers() {
+		return users;
+	}
+
+	/**
+	 * @param users the users to set
+	 */
+	public void setUsers(Users users) {
+		this.users = users;
+	}
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
