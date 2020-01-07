@@ -112,7 +112,6 @@ public class Users implements Serializable{
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	private Date updateAt;
 	
-	@NotEmpty(message = "cannot be empty")
 	private boolean isDemoUser;
 
 	/*

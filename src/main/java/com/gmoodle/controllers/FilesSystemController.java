@@ -32,6 +32,7 @@ import com.gmoodle.models.entity.Activity;
 import com.gmoodle.models.entity.Document;
 import com.gmoodle.models.entity.Users;
 import com.gmoodle.models.services.IActivityService;
+import com.gmoodle.models.services.IDocumentService;
 import com.gmoodle.models.services.userservice.IUserService;
 
 @CrossOrigin(origins = { "http://localhost:4200" })
@@ -44,6 +45,9 @@ public class FilesSystemController {
 	
 	@Autowired
 	private IActivityService activityService;
+	
+	@Autowired
+	private IDocumentService documentService;
 
 	/*
 	 * Se crea el metodo para subir la foto de perfil Se valida si el archivo es
@@ -96,7 +100,7 @@ public class FilesSystemController {
 			deleteLastImage(user.getPhoto());
 
 			// Se actualiza con el nombre de la foto en el modelo Users
-			user.setPhoto((String) fileName);
+			user.setPhoto(fullPath + fileName);
 
 			// Se guarda dicha actualización en la base de datos
 			userService.save(user);
@@ -184,6 +188,14 @@ public class FilesSystemController {
 			}
 			
 			document = new Document();
+			
+			document.setActivity(activity);
+			document.setIsCheck(false);
+			document.setIsEnableDocument(true);
+			document.setPathDoucument(fullPath + fileName);
+			document.setUsers(user);
+			
+			documentService.save(document);
 
 			// El archivo se sube correctamente se retorna un mensaje al usuario con un
 			// estatus 200
