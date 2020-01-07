@@ -1,6 +1,7 @@
 package com.gmoodle.models.entity;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -103,6 +104,40 @@ public class Document implements Serializable{
 	public void setIsEnableDocument(boolean isEnableDocument) {
 		this.isEnableDocument = isEnableDocument;
 	}
+	
+	
+	/**
+	 * Method that gets the object of class Activity
+	 * @return the activity
+	 */
+	public Activity getActivity() {
+		return activity;
+	}
+
+	/**
+	 * Method that sets the object of class Activity
+	 * @param activity the activity to set
+	 */
+	public void setActivity(Activity activity) {
+		this.activity = activity;
+	}
+
+	/**
+	 *  Method that gets the object of class Users
+	 * @return the users
+	 */
+	public Users getUsers() {
+		return users;
+	}
+
+	/**
+	 *  Method that sets the object of class Users
+	 * @param users the users to set
+	 */
+	public void setUsers(Users users) {
+		this.users = users;
+	}
+
 
 	/**
 	 * 
