@@ -269,14 +269,6 @@ public class Users implements Serializable{
 		this.updateAt = updateAt;
 	}
 
-	public List<Roles> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(List<Roles> roles) {
-		this.roles = roles;
-	}
-
 	/**
 	 * @return the isDemoUser
 	 */
@@ -304,5 +296,20 @@ public class Users implements Serializable{
 	public void setDegree(String degree) {
 		this.degree = degree;
 	}
+	
+	public List<Roles> getRoles() {
+		return roles;
+	}
 
+	public void setRoles(List<Roles> roles) {
+		this.roles = roles;
+	}
+	
+	public List<groupClass> getGroup(){
+		return group;
+	}
+	
+	public void setGroup(List<groupClass> group) {
+		this.group = group;
+	}
 }
