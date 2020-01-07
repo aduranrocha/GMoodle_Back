@@ -120,7 +120,11 @@ public class FilesSystemController {
 		String fileName = "";
 		String fullPath = "files/";
 		
-		//Se crea el objeto document para posteriormente guardarlo en la base de datos
+		/*
+		 * Document: Para guardar los datos del archivo en la base de datos
+		 * Users: Para crear la relación del usuario que subio el archivo
+		 * Activity: Para crear la relación de la actividad a la cual pertenece el archivo
+		 */
 		Document document = null;
 
 		Map<String, Object> response = new HashMap<>();
