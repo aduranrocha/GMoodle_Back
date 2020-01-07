@@ -204,13 +204,15 @@ public class UsersSystemController {
 		u.setName(user.getName());
 		u.setLastName(user.getLastName());
 		u.setEmail(user.getEmail());
-		// Se encripa la contraseña para mayor seguridad
+		u.setDegree(user.getDegree());
+		// Se encripta la contraseña para mayor seguridad
 		u.setPassword(passwordEncoder.encode(user.getPassword()));
-		u.setEnabled(user.getEnabled());
+		u.setIsEnabled(user.getIsEnabled());
 		u.setAddress(user.getAddress());
 		u.setPhoneNumber(user.getPhoneNumber());
 		u.setBirthDate(user.getBirthDate());
 		u.setPhoto(user.getPhoto());
+		u.setGender(user.getGender());
 		u.setIsDemoUser(user.getIsDemoUser());
 		u.setUpdateAt(dt);
 
