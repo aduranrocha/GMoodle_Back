@@ -130,6 +130,11 @@ public class Users implements Serializable{
 			@UniqueConstraint(columnNames = { "user_id", "role_id" }) })
 	private List<Roles> roles = new ArrayList<>();
 	
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinTable(name = "users_members", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "group_id"), uniqueConstraints = {
+			@UniqueConstraint(columnNames = { "user_id", "group_id" }) })
+	private List<groupClass> group = new ArrayList<>();
+	
 	/**
 	 * Relation OneToMany from User to Course
 	 * mappedBy is the table that will produce the relation
@@ -139,7 +144,13 @@ public class Users implements Serializable{
 	 */
 	@OneToMany(mappedBy="users", cascade = CascadeType.ALL)
 	private List<Course> course = new ArrayList<>();
-		
+	/**
+	 * Relation OneToMany from User to Document
+	 * mappedBy is the table that will produce the relation
+	 * The method will 
+	 * return a list of the Documents
+	 * 
+	 */
 	@OneToMany(mappedBy="users", cascade = CascadeType.ALL)
     private List<Document> document = new ArrayList<>();
 	
