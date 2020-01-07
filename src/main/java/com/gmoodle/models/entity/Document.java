@@ -13,7 +13,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 @Entity
 @Table(name="document")
@@ -103,6 +102,40 @@ public class Document implements Serializable{
 	public void setIsEnableDocument(boolean isEnableDocument) {
 		this.isEnableDocument = isEnableDocument;
 	}
+	
+	
+	/**
+	 * Method that gets the object of class Activity
+	 * @return the activity
+	 */
+	public Activity getActivity() {
+		return activity;
+	}
+
+	/**
+	 * Method that sets the object of class Activity
+	 * @param activity the activity to set
+	 */
+	public void setActivity(Activity activity) {
+		this.activity = activity;
+	}
+
+	/**
+	 *  Method that gets the object of class Users
+	 * @return the users
+	 */
+	public Users getUsers() {
+		return users;
+	}
+
+	/**
+	 *  Method that sets the object of class Users
+	 * @param users the users to set
+	 */
+	public void setUsers(Users users) {
+		this.users = users;
+	}
+
 
 	/**
 	 * 
