@@ -1,8 +1,10 @@
 package com.gmoodle.controllers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -13,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gmoodle.models.entity.Activity;
+import com.gmoodle.models.entity.Roles;
 import com.gmoodle.models.services.IActivityService;
 
 
@@ -33,15 +37,20 @@ public class ActivityRestController {
 	@Autowired
 	private IActivityService activityService;
 	
+	
 	@GetMapping("/activity")
 	public List<Activity> index(){
 		return activityService.findAll();	
 	}
-	
+	/*
+	 * Me pregunto si el find sera exclusivo del maestro
+	 * ya que alumno tambien quiero verlo
+	 * */
 	@GetMapping("/activity/page/{page}")
 	public Page<Activity> index(@PathVariable Integer page){
 		return activityService.findAll(PageRequest.of(page, 3));	
 	}
+	
 	
 	@GetMapping("/activity/{id}")
 	public ResponseEntity<?> show(@PathVariable Long id){
@@ -65,6 +74,7 @@ public class ActivityRestController {
 		return new ResponseEntity<Activity>(activity,HttpStatus.OK);
 	}
 	
+	@Secured({ "ROLE_TEACHER" })
 	@PostMapping("/activity")
 	// @Valid validates the data @BindingResult error messages
 	public ResponseEntity<?> create(@Valid @RequestBody Activity activity, BindingResult result) {
@@ -84,6 +94,7 @@ public class ActivityRestController {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
 		
+				
 		try {
 			activityNew = activityService.save(activity);
 		} catch(DataAccessException e) {
@@ -97,6 +108,7 @@ public class ActivityRestController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
 	
+	@Secured({ "ROLE_TEACHER" })
 	@PutMapping("/activity/{id}")
 	public ResponseEntity<?> update(@Valid @RequestBody Activity activity, BindingResult result, @PathVariable Long id) {
 		Activity activityActual = activityService.findById(id);
