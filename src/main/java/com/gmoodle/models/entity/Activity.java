@@ -47,6 +47,10 @@ public class Activity implements Serializable{
 	@JoinColumn(name="idCourse")
     private Course course;
 	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="idUser")
+    private Users users;
+	
 	/**
 	 * @return the idActivity
 	 */
