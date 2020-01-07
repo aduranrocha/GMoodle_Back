@@ -171,6 +171,8 @@ public class FilesSystemController {
 				response.put("error", e.getCause() + " : " + e.getMessage());
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 			}
+			
+			document = new Document();
 
 			// El archivo se sube correctamente se retorna un mensaje al usuario con un
 			// estatus 200
