@@ -1,5 +1,7 @@
 package com.gmoodle.models.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,7 +16,7 @@ import javax.persistence.Table;
  * por defecto se crea con el nombre del modelo  
  */
 @Table(name = "roles")
-public class Roles {
+public class Roles implements Serializable{
 
 	//Pendiente
 	private static final long serialVersionUID = 1L;
@@ -23,6 +25,7 @@ public class Roles {
 	@Id
 	//Indicar la estrategia en como se genera el id, al ser mysql se utiliza GenerationType.IDENTITY
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="idRoles")
 	private Long id;
 
 	//Nombre unico y ancho de 20 caracteres

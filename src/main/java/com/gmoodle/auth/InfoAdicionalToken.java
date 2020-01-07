@@ -31,9 +31,19 @@ public class InfoAdicionalToken implements TokenEnhancer {
 		 */
 		Users user = userService.findByUsername(authentication.getName());
 		
-		info.put("nombre", user.getName());
-		info.put("apellido", user.getLastName());
+		info.put("name", user.getName());
+		info.put("lastName", user.getLastName());
 		info.put("email", user.getEmail());
+		info.put("gender",user.getGender());
+		info.put("isEnable", user.getIsEnabled());
+		info.put("address", user.getAddress());
+		info.put("phoneNumber", user.getPhoneNumber());
+		info.put("degree", user.getDegree());
+		info.put("birthDate", user.getBirthDate());
+		info.put("photo", user.getPhoto());
+		info.put("createAt", user.getCreateAt());
+		info.put("updateAt", user.getUpdateAt());
+		info.put("isDemoUser", user.getIsDemoUser());
 		
 		
 		/*
