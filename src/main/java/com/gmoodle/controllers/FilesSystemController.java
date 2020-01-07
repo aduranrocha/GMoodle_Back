@@ -28,8 +28,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.gmoodle.models.entity.Activity;
 import com.gmoodle.models.entity.Document;
 import com.gmoodle.models.entity.Users;
+import com.gmoodle.models.services.IActivityService;
 import com.gmoodle.models.services.userservice.IUserService;
 
 @CrossOrigin(origins = { "http://localhost:4200" })
@@ -39,6 +41,9 @@ public class FilesSystemController {
 
 	@Autowired
 	private IUserService userService;
+	
+	@Autowired
+	private IActivityService activityService;
 
 	/*
 	 * Se crea el metodo para subir la foto de perfil Se valida si el archivo es
@@ -126,6 +131,8 @@ public class FilesSystemController {
 		 * Activity: Para crear la relación de la actividad a la cual pertenece el archivo
 		 */
 		Document document = null;
+		Users user = userService.findById(idUser);
+		Activity activity = activityService.findById(idActivity);
 
 		Map<String, Object> response = new HashMap<>();
 		// Validar si el campo archivo esta vacío
