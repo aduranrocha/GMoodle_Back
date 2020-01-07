@@ -48,6 +48,7 @@ public class FilesSystemController {
 	public ResponseEntity<?> UploadProfile(@RequestParam("file") MultipartFile file, @RequestParam("id") Long id) {
 		Map<String, Object> response = new HashMap<>();
 		Users user = userService.findById(id);
+		String fullPath = "files/profiles";
 
 		// Validar si el campo archivo esta vacío
 		if (!file.isEmpty()) {
@@ -69,9 +70,10 @@ public class FilesSystemController {
 			// Se configura la ruta del archivo
 
 			// Se intenta crear el directorio raiz de los archivos
-			CreateDirectory("files/profiles");
+			CreateDirectory(fullPath);
 
-			Path pathFile = Paths.get("files/profiles").resolve(fileName).toAbsolutePath();
+			// Se crea la ruta completa de la imagen
+			Path pathFile = Paths.get(fullPath).resolve(fileName).toAbsolutePath();
 			try {
 				// Se sube el archivo al servidor
 				Files.copy(file.getInputStream(), pathFile);
@@ -99,8 +101,8 @@ public class FilesSystemController {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 		}
 
+		// Si ninguna imagen es seleccionada se retoran un mensaje de error y un estatus 500
 		response.put("message", "No image selected!");
-
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
@@ -110,6 +112,14 @@ public class FilesSystemController {
 	@PostMapping("/upload/file")
 	public ResponseEntity<?> UploadFile(@RequestParam("file") MultipartFile file, @RequestParam Long idUser,
 			@RequestParam Long idActivity) {
+		
+		/*
+		 * Se crean las variables para guardar el tipo de archivo, nombre completo y las carpetas
+		 * donde se guardara el archivo
+		 */
+		String mimeType = "";
+		String fileName = "";
+		String fullPath = "files/";
 
 		Map<String, Object> response = new HashMap<>();
 		// Validar si el campo archivo esta vacío
@@ -118,6 +128,10 @@ public class FilesSystemController {
 			// Se intenta crear el directorio raiz de los archivos
 			CreateDirectory("files");
 
+			/*
+			 * Se evalua si el archivo tiene una extension y no es un archivo bloqueado por extension
+			 * en caso de que una retorne false se retorna un mensaje de error y un estatus 500 
+			 */
 			if (HasExtensionValidation(file.getOriginalFilename()) == false
 					|| BlockedExtensionsValidation(file.getOriginalFilename()) == false) {
 				response.put("message", "The file was not uploaded!");
@@ -127,19 +141,22 @@ public class FilesSystemController {
 			}
 
 			/*
-			 * Se obtiene el nombre del archivo Se le asigna un uuid para evitar
-			 * duplicidades al momento de subir los archivos se reemplazan los caracteres en
+			 * Se obtiene el nombre del archivo se le asigna un uuid para evitar
+			 * sobre escribir al momento de subir los archivos se reemplazan los caracteres en
 			 * blanco del nombre del archivo
 			 */
 
-			String mimeType = GetMimeType(file.getContentType());
+			mimeType = GetMimeType(file.getContentType());
 
-			String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename().replace(" ", "");
+			fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename().replace(" ", "");
 
-			CreateDirectory("files/" + mimeType);
+			fullPath += mimeType;
+			
+			//Se intenta crear el directorio donde se guardara el archivo
+			CreateDirectory(fullPath);
 
 			// Se configura la ruta del archivo
-			Path pathFile = Paths.get("files/" + mimeType).resolve(fileName).toAbsolutePath();
+			Path pathFile = Paths.get(fullPath).resolve(fileName).toAbsolutePath();
 			try {
 				// Se sube el archivo al servidor
 				Files.copy(file.getInputStream(), pathFile);
@@ -151,17 +168,20 @@ public class FilesSystemController {
 				response.put("error", e.getCause() + " : " + e.getMessage());
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 			}
+			
+			//El archivo se sube correctamente se retorna un mensaje al usuario con un estatus 200
 			response.put("message", "Uploaded success!");
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 		}
-
+		
+		//Si ningún archivo es seleccionado se retorna un mensaje de error con el estatus 500
 		response.put("message", "File not selected!");
-
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
-	@GetMapping("/p/{fileName:.+}")
+	@GetMapping("/v/{fileName:.+}")
 	public ResponseEntity<Resource> watchPhoto(@PathVariable String fileName) {
+		
 		Path pathFile = Paths.get("files/profiles").resolve(fileName).toAbsolutePath();
 		Resource resource = null;
 
@@ -178,7 +198,6 @@ public class FilesSystemController {
 		HttpHeaders header = new HttpHeaders();
 
 		header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"");
-
 		return new ResponseEntity<Resource>(resource, header, HttpStatus.OK);
 	}
 
