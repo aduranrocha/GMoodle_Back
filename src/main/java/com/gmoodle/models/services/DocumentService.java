@@ -33,8 +33,8 @@ public class DocumentService implements IDocumentService {
 	}
 
 	@Override
-	public Document save(Document group) {
-		return documentDao.save(group);
+	public Document save(Document document) {
+		return documentDao.save(document);
 	}
 
 	@Override
