@@ -112,7 +112,6 @@ public class Users implements Serializable{
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	private Date updateAt;
 	
-	@NotEmpty(message = "cannot be empty")
 	private boolean isDemoUser;
 
 	/*
@@ -311,5 +310,29 @@ public class Users implements Serializable{
 	
 	public void setGroup(List<groupClass> group) {
 		this.group = group;
+	}
+
+	public List<Course> getCourse() {
+		return course;
+	}
+
+	public void setCourse(List<Course> course) {
+		this.course = course;
+	}
+
+	public List<Document> getDocument() {
+		return document;
+	}
+
+	public void setDocument(List<Document> document) {
+		this.document = document;
+	}
+
+	public List<Activity> getActivity() {
+		return activity;
+	}
+
+	public void setActivity(List<Activity> activity) {
+		this.activity = activity;
 	}
 }
