@@ -12,7 +12,7 @@ import com.gmoodle.models.dao.IDocumentDao;
 import com.gmoodle.models.entity.Document;
 
 @Service
-public class DocumentService implements IDocumentService {
+public class DocumentServiceImpl implements IDocumentService {
 	@Autowired
 	private IDocumentDao documentDao; 
 	
