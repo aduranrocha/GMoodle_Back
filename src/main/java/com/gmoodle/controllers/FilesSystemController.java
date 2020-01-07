@@ -45,7 +45,7 @@ public class FilesSystemController {
 	 * automaticamente (se respalda con try catch)
 	 */
 	@PostMapping("/upload/profile")
-	public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file, @RequestParam("id") Long id) {
+	public ResponseEntity<?> UploadProfile(@RequestParam("file") MultipartFile file, @RequestParam("id") Long id) {
 		Map<String, Object> response = new HashMap<>();
 		Users user = userService.findById(id);
 
@@ -94,7 +94,7 @@ public class FilesSystemController {
 			userService.save(user);
 
 			// Se agrega un mensaje de ok en la foto
-			response.put("user", user);
+			response.put("newPath", user.getPhoto());
 			response.put("message", "Upload success!");
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 		}
