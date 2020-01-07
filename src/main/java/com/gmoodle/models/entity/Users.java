@@ -81,7 +81,7 @@ public class Users implements Serializable{
 	private String password;
 
 	// true si el usuario esta activo
-	private Boolean enabled;
+	private Boolean isEnabled;
 
 	// true si el usuario se ha graduado
 	private boolean gender;
@@ -91,12 +91,15 @@ public class Users implements Serializable{
 
 	@NotEmpty(message = "cannot be empty")
 	private String phoneNumber;
+	
+	@NotEmpty(message = "cannot be empty")
+	private String degree;
 
 	// @DateTimeFormat(style = "dd/mm/yyyy")
 	// Notese la M mayúscula para el mes en el pattern
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	private Date birthDate;
-
+	
 	private String photo;
 
 	// @DateTimeFormat(style = "dd/mm/yyyy")
@@ -140,6 +143,9 @@ public class Users implements Serializable{
 	@OneToMany(mappedBy="users", cascade = CascadeType.ALL)
     private List<Document> document = new ArrayList<>();
 	
+	@OneToMany(mappedBy="users", cascade = CascadeType.ALL)
+    private List<Activity> activity = new ArrayList<>();
+	
 	public Long getId() {
 		return id;
 	}
@@ -164,12 +170,12 @@ public class Users implements Serializable{
 		this.password = password;
 	}
 
-	public Boolean getEnabled() {
-		return enabled;
+	public Boolean getIsEnabled() {
+		return isEnabled;
 	}
 
-	public void setEnabled(Boolean enabled) {
-		this.enabled = enabled;
+	public void setIsEnabled(Boolean isEnabled) {
+		this.isEnabled = isEnabled;
 	}
 
 	public String getName() {
@@ -196,7 +202,7 @@ public class Users implements Serializable{
 		this.email = email;
 	}
 
-	public boolean isGender() {
+	public boolean getGender() {
 		return gender;
 	}
 
@@ -272,6 +278,20 @@ public class Users implements Serializable{
 	 */
 	public void setIsDemoUser(boolean isDemoUser) {
 		this.isDemoUser = isDemoUser;
+	}
+
+	/**
+	 * @return the degree
+	 */
+	public String getDegree() {
+		return degree;
+	}
+
+	/**
+	 * @param degree the degree to set
+	 */
+	public void setDegree(String degree) {
+		this.degree = degree;
 	}
 
 }
