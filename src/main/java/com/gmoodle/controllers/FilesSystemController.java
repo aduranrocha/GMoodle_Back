@@ -100,7 +100,7 @@ public class FilesSystemController {
 			deleteLastImage(user.getPhoto());
 
 			// Se actualiza con el nombre de la foto en el modelo Users
-			user.setPhoto(fullPath + fileName);
+			user.setPhoto(fullPath + "/" + fileName);
 
 			// Se guarda dicha actualización en la base de datos
 			userService.save(user);
@@ -192,7 +192,7 @@ public class FilesSystemController {
 			document.setActivity(activity);
 			document.setIsCheck(false);
 			document.setIsEnableDocument(true);
-			document.setPathDoucument(fullPath + fileName);
+			document.setPathDoucument(fullPath + "/" + fileName);
 			document.setUsers(user);
 			
 			documentService.save(document);
