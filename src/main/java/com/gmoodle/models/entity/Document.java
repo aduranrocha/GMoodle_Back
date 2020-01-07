@@ -36,18 +36,13 @@ public class Document implements Serializable{
 	@JoinColumn(name="idUser")
     private Users users;
 	
-	@NotEmpty(message="can not be empty")
-	@Size(min=4, max=44, message="the size must be between 4 and 44")
-	@Column(nullable=false,unique=true)
-	private String titleDocument;
-	
 	@NotEmpty(message ="can not be empty")
 	@Column(nullable=false)
 	private String pathDoucument;
 	
 	@NotNull(message="can not be empty")
 	@Column(nullable=false)
-	private boolean isCheack;
+	private boolean isCheck;
 	
 	@NotNull(message="can not be empty")
 	@Column(nullable=false)
@@ -68,20 +63,6 @@ public class Document implements Serializable{
 	}
 
 	/**
-	 * @return the titleActivity
-	 */
-	public String getTitleActivity() {
-		return titleDocument;
-	}
-
-	/**
-	 * @param titleActivity the titleActivity to set
-	 */
-	public void setTitleActivity(String titleDocument) {
-		this.titleDocument = titleDocument;
-	}
-
-	/**
 	 * @return the pathDoucument
 	 */
 	public String getPathDoucument() {
@@ -98,15 +79,15 @@ public class Document implements Serializable{
 	/**
 	 * @return the isCheack
 	 */
-	public boolean getIsCheack() {
-		return isCheack;
+	public boolean getIsCheck() {
+		return isCheck;
 	}
 
 	/**
 	 * @param isCheack the isCheack to set
 	 */
-	public void setIsCheack(boolean isCheack) {
-		this.isCheack = isCheack;
+	public void setIsCheck(boolean isCheck) {
+		this.isCheck = isCheck;
 	}
 
 	/**
