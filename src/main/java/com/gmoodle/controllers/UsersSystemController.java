@@ -67,7 +67,20 @@ public class UsersSystemController {
 	private RoleDao roleDao;
 
 	Date dt;
-
+	/*
+	@Secured({ "ROLE_ADMIN" })
+	@GetMapping
+	public List<Users> index() {
+		List<Users> myUsers = userService.findAll();
+		List<Users> nonePassUser = new ArrayList<Users>();
+		for(Users user : myUsers){
+			user.setPassword(" ");
+			nonePassUser.add(user);
+		}
+		
+		return nonePassUser;
+	}
+	*/
 	@Secured({ "ROLE_ADMIN" })
 	@GetMapping
 	public List<Users> index() {
@@ -255,7 +268,6 @@ public class UsersSystemController {
 	@Secured({ "ROLE_ADMIN" })
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> DeleteUser(@PathVariable Long id) {
-		Users user = null;
 		Map<String, Object> response = new HashMap<>();
 
 		/*
@@ -263,26 +275,15 @@ public class UsersSystemController {
 		 * regresa un error 500 con su respectivo mensaje
 		 */
 		try {
-			//userService.delete(id);
-			user = userService.findById(id);
+			userService.delete(id);
 		} catch (DataAccessException e) {
 			response.put("message", "Error: Connecting with DB");
 			response.put("error", e.getMessage() + " : " + e.getMostSpecificCause());
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
-		if (user == null) {
-			response.put("message", "The user with ID: ".concat(id.toString().concat(" doesn't exist")));
-			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
-		}
-		else if(user.getIsEnabled() == false) {
-			response.put("message", "The user with ID: ".concat(id.toString().concat(" is unable")));
-			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
-		}
 
 		// Al eliminar correctamente el usuario se retorna un mensaje de exito con un
 		// estatus 200
-		user.setIsEnabled(false);
 		response.put("message", "The user has been DELETED successfully!");
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}

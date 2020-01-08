@@ -27,20 +27,20 @@ import com.gmoodle.models.entity.Document;
 import com.gmoodle.models.services.IDocumentService;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/document")
 public class DocumentController {
 	@Autowired
 	private IDocumentService documentService;
 	
-	@GetMapping("/document")
+	@GetMapping
 	public List<Document> index(){
 		return documentService.findAll();
 	}
-	@GetMapping("/document/page/{page}")
+	@GetMapping("/page/{page}")
 	public Page<Document> index(@PathVariable Integer page){
 		return documentService.findAll(PageRequest.of(page, 3));	
 	}
-	@GetMapping("/document/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<?> show(@PathVariable Long id){
 		Document document = null;
 		Map<String, Object> response = new HashMap<>();
@@ -62,7 +62,7 @@ public class DocumentController {
 		return new ResponseEntity<Document>(document,HttpStatus.OK);
 	}
 	
-	@PostMapping("/document")
+	@PostMapping
 	// @Valid validates the data @BindingResult error messages
 	public ResponseEntity<?> create(@Valid @RequestBody Document document, BindingResult result) {
 		Document documentNew = null;
@@ -93,7 +93,7 @@ public class DocumentController {
 		response.put("cliente", documentNew);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
-	@PutMapping("/document/{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<?> update(@Valid @RequestBody Document document, BindingResult result, @PathVariable Long id) {
 		Document documentActual = documentService.findById(id);
 		Document documentUpdate = null;
@@ -134,7 +134,7 @@ public class DocumentController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 
 	}
-	@DeleteMapping("/document/{id}") 
+	@DeleteMapping("/{id}") 
 	public ResponseEntity<?> delete(@PathVariable Long id) {		
 		Map<String, Object> response = new HashMap<>();
 		

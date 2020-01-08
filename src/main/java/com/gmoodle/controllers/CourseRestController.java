@@ -29,22 +29,22 @@ import com.gmoodle.models.entity.Course;
 import com.gmoodle.models.services.ICourseService;
 
 @RestController
-@RequestMapping("/api") 
+@RequestMapping("/course") 
 public class CourseRestController {
 	@Autowired
 	private ICourseService courseService;
 	
-	@GetMapping("/course")
+	@GetMapping
 	public List<Course> index(){
 		return courseService.findAll();	
 	}
 	
 	// Show all but with pages {number of pages}
-	@GetMapping("/course/page/{page}")
+	@GetMapping("/page/{page}")
 	public Page<Course> index(@PathVariable Integer page){
 		return courseService.findAll(PageRequest.of(page, 3));	
 	}
-	@GetMapping("/course/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<?> show(@PathVariable Long id){
 		Course course = null;
 		Map<String, Object> response = new HashMap<>();
@@ -67,7 +67,7 @@ public class CourseRestController {
 	}
 	
 	@Secured({ "ROLE_ADMIN" })
-	@PostMapping("/course")
+	@PostMapping
 	// @Valid validates the data @BindingResult error messages
 	public ResponseEntity<?> create(@Valid @RequestBody Course course, BindingResult result) {
 		Course courseNew = null;
@@ -99,7 +99,7 @@ public class CourseRestController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
 	@Secured({ "ROLE_ADMIN" })
-	@PutMapping("/course/{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<?> update(@Valid @RequestBody Course course, BindingResult result, @PathVariable Long id) {
 		Course courseActual = courseService.findById(id);
 		Course courseUpdate = null;
@@ -145,7 +145,7 @@ public class CourseRestController {
 
 	}
 	@Secured({ "ROLE_ADMIN" })
-	@DeleteMapping("/course/{id}") 
+	@DeleteMapping("/{id}") 
 	public ResponseEntity<?> delete(@PathVariable Long id) {		
 		Map<String, Object> response = new HashMap<>();
 		

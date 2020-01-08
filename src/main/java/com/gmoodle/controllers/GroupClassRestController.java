@@ -29,12 +29,12 @@ import com.gmoodle.models.entity.groupClass;
 import com.gmoodle.models.services.IGroupClassService;
 
 @RestController
-@RequestMapping("/api") 
+@RequestMapping("/group") 
 public class GroupClassRestController {
 	@Autowired
 	private IGroupClassService groupService;
 	
-	@GetMapping("/group")
+	@GetMapping
 	public List<groupClass> index(){
 		return groupService.findAll();	
 	}
@@ -44,7 +44,7 @@ public class GroupClassRestController {
 		return groupService.findAll(PageRequest.of(page, 3));	
 	}
 	
-	@GetMapping("/group/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<?> show(@PathVariable Long id){
 		groupClass group = null;
 		Map<String, Object> response = new HashMap<>();
@@ -67,7 +67,7 @@ public class GroupClassRestController {
 	}
 	
 
-	@PostMapping("/group")
+	@PostMapping
 	// @Valid validates the data @BindingResult error messages
 	public ResponseEntity<?> create(@Valid @RequestBody groupClass group, BindingResult result) {
 		groupClass groupNew = null;
@@ -99,7 +99,7 @@ public class GroupClassRestController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
 	
-	@PutMapping("/group/{id}")
+	@PutMapping("/id}")
 	public ResponseEntity<?> update(@Valid @RequestBody groupClass group, BindingResult result, @PathVariable Long id) {
 		groupClass groupActual = groupService.findById(id);
 		groupClass groupUpdate = null;
@@ -145,7 +145,7 @@ public class GroupClassRestController {
 
 	}
 	
-	@DeleteMapping("/group/{id}") 
+	@DeleteMapping("/{id}") 
 	public ResponseEntity<?> delete(@PathVariable Long id) {		
 		Map<String, Object> response = new HashMap<>();
 		
@@ -156,7 +156,7 @@ public class GroupClassRestController {
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		response.put("message", "El clien eliminado con éxito!");
+		response.put("message", "The group has been DELETED successfully!");
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 	
