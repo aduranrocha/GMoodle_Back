@@ -135,5 +135,14 @@ public class groupClass implements Serializable{
 	public void setIsEnableGroup(boolean isEnableGroup) {
 		this.isEnableGroup = isEnableGroup;
 	}
+	
+	public List<Course> getCourse() {
+		return course;
+	}
+
+	public void setCourse(List<Course> course) {
+		this.course = course;
+	}
+
 	private static final long serialVersionUID = 1L;
 }
