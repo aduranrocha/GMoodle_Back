@@ -204,4 +204,21 @@ public class Course implements Serializable {
 	public void setCreateById(boolean createById) {
 		this.createById = createById;
 	}
+	
+	/**
+	 *  Method that gets the object of class Users
+	 * @return the users
+	 */
+	public Users getUsers() {
+		return users;
+	}
+
+	/**
+	 *  Method that sets the object of class Users
+	 * @param users the users to set
+	 */
+	public void setUsers(Users users) {
+		this.users = users;
+	}
+
 }
