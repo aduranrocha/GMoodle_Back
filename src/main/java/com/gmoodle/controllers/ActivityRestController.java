@@ -1,10 +1,8 @@
 package com.gmoodle.controllers;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -27,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gmoodle.models.entity.Activity;
-import com.gmoodle.models.entity.Roles;
 import com.gmoodle.models.services.IActivityService;
 
 
