@@ -74,7 +74,7 @@ public class UsersSystemController {
 		return userService.findAll();
 	}
 
-	@Secured({ "ROLE_ADMIN" })
+	@Secured({ "ROLE_ADMIN","ROLE_TEACHER","ROLE_STUDENT" })
 	@GetMapping("/{id}")
 	public ResponseEntity<?> showOne(@PathVariable Long id) {
 		/*
@@ -91,16 +91,36 @@ public class UsersSystemController {
 		try {
 			user = userService.findById(id);
 		} catch (DataAccessException e) {
-			response.put("mensaje", "Error al consultar la base de datos");
+			response.put("message", "Error: Connecting with DB");
 			response.put("error", e.getMessage() + " : " + e.getMostSpecificCause());
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
 		if (user == null) {
-			response.put("mensaje", "No existe el usuario en la base de datos");
+			response.put("message", "The user with ID: ".concat(id.toString().concat(" doesn't exist")));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
 
+		return new ResponseEntity<Users>(user, HttpStatus.OK);
+	}
+	
+	@GetMapping("/username/{username}")
+	public ResponseEntity<?> showByUsername(@PathVariable String username){
+		Users user = null;
+		Map<String,Object> response = new HashMap<>();
+		try {
+			user = userService.findByUsername(username);
+		}catch (DataAccessException e) {
+			response.put("message", "Error: Connecting with DB");
+			response.put("error", e.getMessage() + " : " + e.getMostSpecificCause());
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		if (user == null) {
+			response.put("message", "The user with Username: ".concat(username.toString().concat(" doesn't exist")));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+		}
+		user.setPassword(" ");
 		return new ResponseEntity<Users>(user, HttpStatus.OK);
 	}
 
@@ -157,7 +177,7 @@ public class UsersSystemController {
 		try {
 			nUser = userService.save(user);
 		} catch (DataAccessException e) {
-			response.put("mensaje", "Error al crear el usuario");
+			response.put("message", "Error: insterting user into DB");
 			response.put("error", e.getMessage() + " : " + e.getMostSpecificCause());
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -196,7 +216,7 @@ public class UsersSystemController {
 		u = userService.findById(id);
 
 		if (u == null) {
-			response.put("mensaje", "El usuario no se encuentra ne la base de datos");
+			response.put("message", "Error: Update fail, the user with ID:  ".concat(id.toString().concat(" doesn't exist")));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
 
@@ -223,7 +243,7 @@ public class UsersSystemController {
 		try {
 			userUploaded = userService.save(u);
 		} catch (DataAccessException e) {
-			response.put("mensaje", "Error al actualizar el usuario en la base de datos, intenta más tarde");
+			response.put("message", "Error: updating user into DB");
 			response.put("error", e.getMessage() + " : " + e.getMostSpecificCause());
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -235,6 +255,7 @@ public class UsersSystemController {
 	@Secured({ "ROLE_ADMIN" })
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> DeleteUser(@PathVariable Long id) {
+		Users user = null;
 		Map<String, Object> response = new HashMap<>();
 
 		/*
@@ -242,16 +263,17 @@ public class UsersSystemController {
 		 * regresa un error 500 con su respectivo mensaje
 		 */
 		try {
-			userService.delete(id);
+			//userService.delete(id);
+			user.setIsEnabled(false);
 		} catch (DataAccessException e) {
-			response.put("mensaje", "Error al eliminar el usuario");
+			response.put("message", "Error: deleting user in the DB");
 			response.put("error", e.getMessage() + " : " + e.getMostSpecificCause());
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
 		// Al eliminar correctamente el usuario se retorna un mensaje de exito con un
 		// estatus 200
-		response.put("mensaje", "Usuario eliminado con exito!");
+		response.put("message", "The user has been DELETED successfully!");
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 }

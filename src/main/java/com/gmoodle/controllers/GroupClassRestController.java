@@ -89,12 +89,12 @@ public class GroupClassRestController {
 		try {
 			groupNew = groupService.save(group);
 		} catch(DataAccessException e) {
-			response.put("mensaje", "Error: insterting data into DB");
+			response.put("message", "Error: insterting data into DB");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		response.put("mensaje", "The group has been CREATED successfuly!");
+		response.put("message", "The group has been CREATED successfuly!");
 		response.put("cliente", groupNew);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
@@ -134,12 +134,12 @@ public class GroupClassRestController {
 			groupUpdate = groupService.save(groupActual);
 			
 		}catch(DataAccessException e) { 
-			response.put("mensaje", "Error: updating data into DB");
+			response.put("message", "Error: updating data into DB");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		response.put("mensaje", "The group has been UPDATE successfuly!");
+		response.put("message", "The group has been UPDATE successfuly!");
 		response.put("cliente", groupUpdate);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 
@@ -152,11 +152,11 @@ public class GroupClassRestController {
 		try {
 		    groupService.delete(id);
 		} catch (DataAccessException e) {
-			response.put("mensaje", "Error al eliminar el cliente de la base de datos");
+			response.put("message", "Error: deleting document in the DB");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		response.put("mensaje", "El cliente eliminado con éxito!");
+		response.put("message", "El clien eliminado con éxito!");
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 	

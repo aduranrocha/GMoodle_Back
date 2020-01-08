@@ -84,12 +84,12 @@ public class DocumentController {
 		try {
 			documentNew = documentService.save(document);
 		} catch(DataAccessException e) {
-			response.put("mensaje", "Error: insterting data into DB");
+			response.put("message", "Error: insterting data into DB");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		response.put("mensaje", "The document has been CREATED successfuly!");
+		response.put("message", "The document has been CREATED successfuly!");
 		response.put("cliente", documentNew);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
@@ -114,7 +114,7 @@ public class DocumentController {
 		}
 		// In case the number of ID doesn't exist
 		if (documentActual == null) {
-			response.put("message","Error: Update fail, the group with ID:  ".concat(id.toString().concat(" doesn't exist")));
+			response.put("message","Error: Update fail, the document with ID:  ".concat(id.toString().concat(" doesn't exist")));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
 		try {
@@ -124,12 +124,12 @@ public class DocumentController {
 			documentUpdate = documentService.save(documentActual);
 			
 		}catch(DataAccessException e) { 
-			response.put("mensaje", "Error: updating data into DB");
+			response.put("message", "Error: updating data into DB");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		response.put("mensaje", "The document has been UPDATE successfully!");
+		response.put("message", "The document has been UPDATE successfully!");
 		response.put("cliente", documentUpdate);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 
@@ -141,11 +141,11 @@ public class DocumentController {
 		try {
 			documentService.delete(id);
 		} catch (DataAccessException e) {
-			response.put("mensaje", "Error: deleting document in the DB");
+			response.put("message", "Error: deleting document in the DB");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		response.put("mensaje", "The document has been DELETED successfully!");
+		response.put("message", "The document has been DELETED successfully!");
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 }

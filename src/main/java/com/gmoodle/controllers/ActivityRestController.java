@@ -95,12 +95,12 @@ public class ActivityRestController {
 		try {
 			activityNew = activityService.save(activity);
 		} catch(DataAccessException e) {
-			response.put("mensaje", "Error: insterting data into DB");
+			response.put("message", "Error: insterting data into DB");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		response.put("mensaje", "The activity has been CREATED successfully!");
+		response.put("message", "The activity has been CREATED successfully!");
 		response.put("cliente", activityNew);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
@@ -127,7 +127,7 @@ public class ActivityRestController {
 		}
 		// In case the number of ID doesn't exist
 		if (activityActual == null) {
-			response.put("message","Error: Update fail, the group with ID:  ".concat(id.toString().concat(" doesn't exist")));
+			response.put("message","Error: Update fail, the activity with ID:  ".concat(id.toString().concat(" doesn't exist")));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
 		try {
@@ -137,12 +137,12 @@ public class ActivityRestController {
 			activityUpdate = activityService.save(activityActual);
 			
 		}catch(DataAccessException e) { 
-			response.put("mensaje", "Error: updating data into DB");
+			response.put("message", "Error: updating data into DB");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		response.put("mensaje", "The activity has been UPDATE successfully!");
+		response.put("message", "The activity has been UPDATE successfully!");
 		response.put("cliente", activityUpdate);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 
@@ -155,11 +155,11 @@ public class ActivityRestController {
 		try {
 			activityService.delete(id);
 		} catch (DataAccessException e) {
-			response.put("mensaje", "Error: deleting activity in the DB");
+			response.put("message", "Error: deleting activity in the DB");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		response.put("mensaje", "The activity has been DELETED successfully!");
+		response.put("message", "The activity has been DELETED successfully!");
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 }

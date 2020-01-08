@@ -89,12 +89,12 @@ public class CourseRestController {
 		try {
 			courseNew = courseService.save(course);
 		} catch(DataAccessException e) {
-			response.put("mensaje", "Error: insterting data into DB");
+			response.put("message", "Error: insterting data into DB");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		response.put("mensaje", "The course has been CREATED successfuly!");
+		response.put("message", "The course has been CREATED successfuly!");
 		response.put("cliente", courseNew);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
@@ -134,12 +134,12 @@ public class CourseRestController {
 			courseUpdate = courseService.save(courseActual);
 			
 		}catch(DataAccessException e) { 
-			response.put("mensaje", "Error: updating data into DB");
+			response.put("message", "Error: updating data into DB");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		response.put("mensaje", "The course has been UPDATE successfuly!");
+		response.put("message", "The course has been UPDATE successfuly!");
 		response.put("cliente", courseUpdate);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 
@@ -152,11 +152,11 @@ public class CourseRestController {
 		try {
 		    courseService.delete(id);
 		} catch (DataAccessException e) {
-			response.put("mensaje", "Error: deleting course in the DB");
+			response.put("message", "Error: deleting course in the DB");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		response.put("mensaje", "The course has been DELETED successfully!");
+		response.put("message", "The course has been DELETED successfully!");
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 }
