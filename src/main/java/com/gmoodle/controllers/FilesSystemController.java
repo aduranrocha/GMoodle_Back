@@ -50,7 +50,7 @@ public class FilesSystemController {
 	private IDocumentService documentService;
 	
 	/*
-	 * Se utiliza para remplazar la diagonal en el fullPath de los archivos, al momento de guardarla no hay fallo alguno
+	 * Se utiliza para remplazar la diagonal en el fullPath de los archivos, al momento de guardarla en la base de datos no hay fallo alguno
 	 * pero al momento de consultarla por GET, el sistema la interpreta como dicha ruta (que no existe) y no a la correcta para
 	 * acceder a la visualización de los archivos
 	 */
