@@ -22,6 +22,18 @@ public class Document implements Serializable{
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long idDocument;
 	
+	@NotEmpty(message ="can not be empty")
+	@Column(nullable=false)
+	private String pathDoucument;
+	
+	@NotNull(message="can not be empty")
+	@Column(nullable=false)
+	private boolean isCheck;
+	
+	@NotNull(message="can not be empty")
+	@Column(nullable=false)
+	private boolean isEnableDocument;
+	
 	/**
 	 * Relation ManyToOne from Document to Activity
 	 * @JoinColumn: will add the column with that name into the actual table
@@ -34,18 +46,6 @@ public class Document implements Serializable{
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="idUser")
     private Users users;
-	
-	@NotEmpty(message ="can not be empty")
-	@Column(nullable=false)
-	private String pathDoucument;
-	
-	@NotNull(message="can not be empty")
-	@Column(nullable=false)
-	private boolean isCheck;
-	
-	@NotNull(message="can not be empty")
-	@Column(nullable=false)
-	private boolean isEnableDocument;
 	
 	/**
 	 * @return the idDocument
