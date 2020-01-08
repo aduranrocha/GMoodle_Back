@@ -48,6 +48,13 @@ public class FilesSystemController {
 	
 	@Autowired
 	private IDocumentService documentService;
+	
+	/*
+	 * Se utiliza para remplazar la diagonal en el fullPath de los archivos, al momento de guardarla no hay fallo alguno
+	 * pero al momento de consultarla por GET, el sistema la interpreta como dicha ruta (que no existe) y no a la correcta para
+	 * acceder a la visualización de los archivos
+	 */
+	private final String DIAGONAL_REPLACEMENT = "*-*";
 
 	/*
 	 * Se crea el metodo para subir la foto de perfil Se valida si el archivo es
@@ -59,6 +66,7 @@ public class FilesSystemController {
 		Map<String, Object> response = new HashMap<>();
 		Users user = userService.findById(id);
 		String fullPath = "files/profiles";
+		String dbPath = "";
 
 		// Validar si el campo archivo esta vacío
 		if (!file.isEmpty()) {
@@ -99,8 +107,10 @@ public class FilesSystemController {
 			// Borrar la imagen anterior si existe en el servidor
 			deleteLastImage(user.getPhoto());
 
+			// Se cambia la diagonal por otro caracter (Consultar comentarios del metodo GetFile())
+			dbPath = fullPath.replace("/", DIAGONAL_REPLACEMENT);
 			// Se actualiza con el nombre de la foto en el modelo Users
-			user.setPhoto(fullPath + "/" + fileName);
+			user.setPhoto(dbPath + DIAGONAL_REPLACEMENT + fileName);
 
 			// Se guarda dicha actualización en la base de datos
 			userService.save(user);
@@ -128,6 +138,7 @@ public class FilesSystemController {
 		String mimeType = "";
 		String fileName = "";
 		String fullPath = "files/";
+		String dbPath = "";
 		
 		/*
 		 * Document: Para guardar los datos del archivo en la base de datos
@@ -192,8 +203,12 @@ public class FilesSystemController {
 			document.setActivity(activity);
 			document.setIsCheck(false);
 			document.setIsEnableDocument(true);
-			document.setPathDoucument(fullPath + "/" + fileName);
 			document.setUsers(user);
+			
+			
+			// Se cambia la diagonal por otro caracter (Consultar comentarios del metodo GetFile())
+			dbPath = fullPath.replace("/", DIAGONAL_REPLACEMENT);
+			document.setPathDoucument(dbPath + DIAGONAL_REPLACEMENT + fileName);
 			
 			documentService.save(document);
 
@@ -210,7 +225,7 @@ public class FilesSystemController {
 	}
 
 	@GetMapping("/v/{fileName:.+}")
-	public ResponseEntity<Resource> watchPhoto(@PathVariable String fileName) {
+	public ResponseEntity<Resource> GetFile(@PathVariable String fileName) {
 
 		/*
 		 * Se realiza split al nombre del archivo ya que contiene la ruta completa donde se
@@ -220,7 +235,7 @@ public class FilesSystemController {
 		 * 2: Nombre del archivo
 		 * Se crea la ruta con las carpetas donde se guarda el archivo
 		 */
-		String partsFile[] = fileName.split(Pattern.quote("/"));
+		String partsFile[] = fileName.split(Pattern.quote(DIAGONAL_REPLACEMENT));
 		String fullPath = partsFile[0] + "/" + partsFile[1];
 
 		// Se obtiene la ruta absoluta y se asigna a la variable
