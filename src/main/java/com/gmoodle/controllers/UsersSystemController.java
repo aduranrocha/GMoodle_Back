@@ -215,8 +215,8 @@ public class UsersSystemController {
 		Users userUploaded = null;
 		u = userService.findById(id);
 
-		if (u == null) {
-			response.put("message", "Error: Update fail, the user with ID:  ".concat(id.toString().concat(" doesn't exist")));
+		if (u == null || u.getIsEnabled() == false) {
+			response.put("message", "Error: Update fail, the user with ID:  ".concat(id.toString().concat(" doesn't exist or is unable")));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
 
@@ -264,15 +264,25 @@ public class UsersSystemController {
 		 */
 		try {
 			//userService.delete(id);
-			user.setIsEnabled(false);
+			user = userService.findById(id);
 		} catch (DataAccessException e) {
-			response.put("message", "Error: deleting user in the DB");
+			response.put("message", "Error: Connecting with DB");
 			response.put("error", e.getMessage() + " : " + e.getMostSpecificCause());
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		if (user == null) {
+			response.put("message", "The user with ID: ".concat(id.toString().concat(" doesn't exist")));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+		}
+		else if(user.getIsEnabled() == false) {
+			response.put("message", "The user with ID: ".concat(id.toString().concat(" is unable")));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
 
 		// Al eliminar correctamente el usuario se retorna un mensaje de exito con un
 		// estatus 200
+		user.setIsEnabled(false);
 		response.put("message", "The user has been DELETED successfully!");
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
