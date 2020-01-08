@@ -147,6 +147,7 @@ public class ActivityRestController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 
 	}
+	@Secured({ "ROLE_TEACHER" })
 	@DeleteMapping("/activity/{id}") 
 	public ResponseEntity<?> delete(@PathVariable Long id) {		
 		Map<String, Object> response = new HashMap<>();
