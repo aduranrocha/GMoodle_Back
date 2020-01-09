@@ -245,8 +245,10 @@ public class UsersSystemController {
 		
 		// Se obtiene el usuario por su id antes de eliminarlo
 		Users user = userService.findById(id);
-		// Se elimina la imagen antes de eliminar el usuario
-		FilesSystemController.deleteLastImage(user.getPhoto());
+		// Se renombra la imagen para que no sea accedida
+		String newName = FilesSystemController.RenameFile(user.getPhoto());
+		
+		user.setPhoto(newName);
 		
 		try {
 			userService.delete(id);

@@ -55,6 +55,7 @@ public class FilesSystemController {
 	 * acceder a la visualización de los archivos
 	 */
 	private final String DIAGONAL_REPLACEMENT = "*-*";
+	private final static String DIAGONAL_REPLACEMENT_STATIC = "*-*";
 
 	/*
 	 * Se crea el metodo para subir la foto de perfil Se valida si el archivo es
@@ -357,5 +358,28 @@ public class FilesSystemController {
 		}
 
 		return isValid;
+	}
+
+	public static String RenameFile(String fileName)
+	{
+		String[] file = fileName.split(Pattern.quote(DIAGONAL_REPLACEMENT_STATIC));
+		
+		String oName = file[0] + "/" + file[1] + "/" + file[2];
+		String nName = file[0] + "/" + file[1] + "/disabled___" + file[2];
+		String fName = nName.replace("/", DIAGONAL_REPLACEMENT_STATIC);
+		
+		
+		File oldName = new File(oName);
+		
+		File newName = new File(nName);
+		
+		if(oldName.renameTo(newName))
+		{
+			return fName;
+		}
+		
+		return "error";
+		
+		
 	}
 }
