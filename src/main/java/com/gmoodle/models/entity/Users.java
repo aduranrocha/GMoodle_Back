@@ -303,7 +303,7 @@ public class Users implements Serializable{
 	public void setRoles(List<Roles> roles) {
 		this.roles = roles;
 	}
-	
+
 	public List<groupClass> getGroup(){
 		return group;
 	}
@@ -311,7 +311,7 @@ public class Users implements Serializable{
 	public void setGroup(List<groupClass> group) {
 		this.group = group;
 	}
-
+	
 	public List<Course> getCourse() {
 		return course;
 	}

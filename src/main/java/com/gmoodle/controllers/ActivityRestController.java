@@ -29,13 +29,13 @@ import com.gmoodle.models.services.IActivityService;
 
 
 @RestController
-@RequestMapping("/api") 
+@RequestMapping("/activity") 
 public class ActivityRestController {
 	@Autowired
 	private IActivityService activityService;
 	
 	
-	@GetMapping("/activity")
+	@GetMapping
 	public List<Activity> index(){
 		return activityService.findAll();	
 	}
@@ -43,13 +43,13 @@ public class ActivityRestController {
 	 * Me pregunto si el find sera exclusivo del maestro
 	 * ya que alumno tambien quiero verlo
 	 * */
-	@GetMapping("/activity/page/{page}")
+	@GetMapping("/page/{page}")
 	public Page<Activity> index(@PathVariable Integer page){
 		return activityService.findAll(PageRequest.of(page, 3));	
 	}
 	
 	
-	@GetMapping("/activity/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<?> show(@PathVariable Long id){
 		Activity activity = null;
 		Map<String, Object> response = new HashMap<>();
@@ -72,7 +72,7 @@ public class ActivityRestController {
 	}
 	
 	@Secured({ "ROLE_TEACHER" })
-	@PostMapping("/activity")
+	@PostMapping
 	// @Valid validates the data @BindingResult error messages
 	public ResponseEntity<?> create(@Valid @RequestBody Activity activity, BindingResult result) {
 		Activity activityNew = null;
@@ -106,7 +106,7 @@ public class ActivityRestController {
 	}
 	
 	@Secured({ "ROLE_TEACHER" })
-	@PutMapping("/activity/{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<?> update(@Valid @RequestBody Activity activity, BindingResult result, @PathVariable Long id) {
 		Activity activityActual = activityService.findById(id);
 		Activity activityUpdate = null;
@@ -148,7 +148,7 @@ public class ActivityRestController {
 
 	}
 	@Secured({ "ROLE_TEACHER" })
-	@DeleteMapping("/activity/{id}") 
+	@DeleteMapping("/{id}") 
 	public ResponseEntity<?> delete(@PathVariable Long id) {		
 		Map<String, Object> response = new HashMap<>();
 		
