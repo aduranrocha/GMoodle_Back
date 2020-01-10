@@ -3,7 +3,9 @@ package com.gmoodle.models.entity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -207,10 +209,16 @@ public class Course implements Serializable {
 	
 	/**
 	 *  Method that gets the object of class Users
-	 * @return the users
+	 * @return the users data in a HashMap
 	 */
-	public Users getUsers() {
-		return users;
+	public Map<String,Object> getUsers() {
+		Map<String,Object> myUserMap = new HashMap<>();
+		
+		myUserMap.put("idUser", users.getIdUser());
+		myUserMap.put("userName", users.getUsername());
+		myUserMap.put("email", users.getEmail());
+		
+		return myUserMap;
 	}
 
 	/**

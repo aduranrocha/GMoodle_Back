@@ -2,7 +2,9 @@ package com.gmoodle.models.entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -63,7 +65,6 @@ public class Activity implements Serializable{
 		return titleActivity;
 	}
 
-
 	public void setTitleActivity(String titleActivity) {
 		this.titleActivity = titleActivity;
 	}
@@ -76,16 +77,26 @@ public class Activity implements Serializable{
 		this.instructions = instructions;
 	}
 
-	public Course getCourse() {
-		return course;
+	public Map<String,Object> getCourse() {
+		Map<String,Object> myCourseMap = new HashMap<>();
+		myCourseMap.put("idCourse", course.getIdCourse());
+		myCourseMap.put("nameCourse",course.getNameCourse());
+		myCourseMap.put("idUser",course.getUsers());
+		return myCourseMap;
 	}
 
 	public void setCourse(Course course) {
 		this.course = course;
 	}
 
-	public Users getUsers() {
-		return users;
+	public Map<String,Object> getUsers() {
+		Map<String,Object> myUserMap = new HashMap<>();
+		
+		myUserMap.put("idUser", users.getIdUser());
+		myUserMap.put("userName", users.getUsername());
+		myUserMap.put("email", users.getEmail());
+		
+		return myUserMap;
 	}
 
 	public void setUsers(Users users) {

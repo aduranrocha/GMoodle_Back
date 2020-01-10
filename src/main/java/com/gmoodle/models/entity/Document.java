@@ -1,6 +1,8 @@
 package com.gmoodle.models.entity;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -42,7 +44,11 @@ public class Document implements Serializable{
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="idActivity")
     private Activity activity;
-	
+	/**
+	 * Relation ManyToOne from Document to User
+	 * @JoinColumn: will add the column with that name into the actual table
+	 * 
+	 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="idUser")
     private Users users;
@@ -108,8 +114,14 @@ public class Document implements Serializable{
 	 * Method that gets the object of class Activity
 	 * @return the activity
 	 */
-	public Activity getActivity() {
-		return activity;
+	public Map<String,Object> getActivity() {
+		Map<String,Object> myActivityMap = new HashMap<>();
+		
+		myActivityMap.put("activityId", activity.getIdActivity());
+		myActivityMap.put("activityName", activity.getTitleActivity());
+		myActivityMap.put("activityUser", activity.getUsers());
+		
+		return myActivityMap;
 	}
 
 	/**
@@ -124,9 +136,16 @@ public class Document implements Serializable{
 	 *  Method that gets the object of class Users
 	 * @return the users
 	 */
-	public Users getUsers() {
-		return users;
+	public Map<String,Object> getUsers() {
+		Map<String,Object> myUserMap = new HashMap<>();
+		
+		myUserMap.put("idUser", users.getIdUser());
+		myUserMap.put("userName", users.getUsername());
+		myUserMap.put("email", users.getEmail());
+		
+		return myUserMap;
 	}
+	
 
 	/**
 	 *  Method that sets the object of class Users
