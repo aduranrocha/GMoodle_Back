@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -25,14 +26,23 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gmoodle.models.dao.UserDao;
 import com.gmoodle.models.entity.Course;
+import com.gmoodle.models.entity.Users;
 import com.gmoodle.models.services.ICourseService;
+import com.gmoodle.models.services.userservice.IUserService;
 
 @RestController
 @RequestMapping("/course") 
 public class CourseRestController {
 	@Autowired
 	private ICourseService courseService;
+	
+	@Autowired
+	private UserDao userDao;
+	
+	@Autowired
+	private IUserService userService;
 	
 	@GetMapping
 	public List<Course> index(){
@@ -66,7 +76,7 @@ public class CourseRestController {
 		return new ResponseEntity<Course>(course,HttpStatus.OK);
 	}
 	
-	@Secured({ "ROLE_ADMIN" })
+	//@Secured({ "ROLE_ADMIN" })
 	@PostMapping
 	// @Valid validates the data @BindingResult error messages
 	public ResponseEntity<?> create(@Valid @RequestBody Course course, BindingResult result) {
@@ -86,7 +96,15 @@ public class CourseRestController {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
 		
+		// Access to the ID of myUser
+		Long idUser = (Long) course.getUsers().get("idUser");
+		//
+		Optional<Users> courseUser = userDao.findById(idUser);
+		
+		course.setUsers(courseUser.get());
+		
 		try {
+			
 			courseNew = courseService.save(course);
 		} catch(DataAccessException e) {
 			response.put("message", "Error: insterting data into DB");
@@ -98,6 +116,7 @@ public class CourseRestController {
 		response.put("cliente", courseNew);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
+	
 	@Secured({ "ROLE_ADMIN" })
 	@PutMapping("/{id}")
 	public ResponseEntity<?> update(@Valid @RequestBody Course course, BindingResult result, @PathVariable Long id) {
@@ -124,12 +143,22 @@ public class CourseRestController {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
 		try {
+		
+			Users newUser = null;
+			newUser = userService.findById(id);
+			
+			if (newUser == null || newUser.getIsEnabled() == false) {
+				response.put("message", "Error: Update fail, the user with ID:  ".concat(id.toString().concat(" doesn't exist or is unable")));
+				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+			}
+			
 			courseActual.setNameCourse(course.getNameCourse());
 			courseActual.setSummaryCourse(course.getSummaryCourse());
 			courseActual.setStartDateCourse(course.getStartDateCourse());
 			courseActual.setEndDateCourse(course.getEndDateCourse());
 			courseActual.setIsEnableCourse(course.getIsEnableCourse());
 			courseActual.setUpdateAt(new Date());
+			//courseActual.setUsers(course.getUsers().get("idUser"));
 			
 			courseUpdate = courseService.save(courseActual);
 			
