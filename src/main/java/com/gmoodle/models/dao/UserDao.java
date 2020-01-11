@@ -1,5 +1,7 @@
 package com.gmoodle.models.dao;
 
+import java.util.Optional;
+
 import org.springframework.data.repository.CrudRepository;
 
 import com.gmoodle.models.entity.Users;
@@ -15,4 +17,5 @@ public interface UserDao extends CrudRepository<Users, Long> {
 	 * And o OR :  Para utilizar más de un parametro
 	 */
 	public Users findByUsername(String username);
+	public Optional<Users> findById(Long idUser);
 }

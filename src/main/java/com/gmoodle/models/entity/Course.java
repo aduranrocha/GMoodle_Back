@@ -33,7 +33,7 @@ public class Course implements Serializable {
 	
 	@NotEmpty(message="can not be empty")
 	@Size(min=4, max=44, message="the size must be between 4 and 44")
-	@Column(nullable=false,unique=true)
+	@Column(nullable=false)
 	private String nameCourse;
 	
 	@NotEmpty(message ="can not be empty")
@@ -64,7 +64,7 @@ public class Course implements Serializable {
 	
 	@NotNull(message="can not be empty")
 	@Column(nullable=false)
-	private boolean createById;
+	private Long createById;
 	
 	//column that will connect with the other table
 	@OneToMany(mappedBy="course", cascade = CascadeType.ALL)
@@ -196,14 +196,14 @@ public class Course implements Serializable {
 	/**
 	 * @return the createById
 	 */
-	public boolean isCreateById() {
+	public Long isCreateById() {
 		return createById;
 	}
 
 	/**
 	 * @param createById the createById to set
 	 */
-	public void setCreateById(boolean createById) {
+	public void setCreateById(Long createById) {
 		this.createById = createById;
 	}
 	
