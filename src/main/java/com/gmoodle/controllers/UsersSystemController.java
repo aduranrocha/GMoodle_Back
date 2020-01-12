@@ -137,26 +137,63 @@ public class UsersSystemController {
 		user.setPassword(MSG_PASSWORD);
 		return new ResponseEntity<Users>(user, HttpStatus.OK);
 	}
-	
+	/*@GetMapping("/enrolStudent")
+	public ResponseEntity<?> availableGroups(){
+		groupClass newGroup = null;
+		for(groupClass g:)
+		return null;
+		
+	}*/
 	@Secured({"ROLE_STUDENT"})
-	@PostMapping("/enrolStudent")
-	public ResponseEntity<?> EnrolStundent(@RequestBody Users user, BindingResult result){
+	@PutMapping("/enrolStudent/{id}")
+	public ResponseEntity<?> enrolStundent(@RequestBody groupClass group, BindingResult result, @PathVariable Long id){
 		
 		// Obtener tu objeto groupClass
-		groupClass group = null;
-		group = groupService.findById((Long) user.getGroup().get("idGroup"));
+		groupClass existGroup = null;
+		Users existUser = null;
+		Users updated = null;
+		groupClass newGroup = null;
+		Map<String, Object> response = new HashMap<>();
 		
-		if (group == null)
+		existGroup = groupService.findById(group.getIdGroup());
+		existUser = userService.findById(id);
+
+		
+		if (existGroup == null)
 		{
-			//retornar error
+			response.put("error", "Group does not exist in DB");
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+			// return error
+		}
+		else if(existUser == null)
+		{
+			response.put("error", "User does not exist in DB");
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);			
 		}
 		
-		// obtener el idUser y el idGroup
-		// verificar que ambos existan y esten activos no esten llenos y lo del deathline
-		// comparar los enrolmentKey
-		// set del idgroup en la tabla user
+		if (group.getEnrolmentKey() != existGroup.getEnrolmentKey())
+		{
+			response.put("error", "The given key does not match");
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 		
-		return null;
+		existUser.setGroup(newGroup);
+		
+		newGroup = groupService.findById(id);
+		if(newGroup.getNumberMax() >= newGroup.getCountNumber()) {
+			newGroup.setCountNumber((byte) (newGroup.getCountNumber()+1));
+		}
+		else if (newGroup.getNumberMax() <= newGroup.getCountNumber()) {
+			response.put("error", "The group it is already full");
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+		}
+		
+		updated = userService.save(existUser);
+		
+		response.put("message", "The user was added with success");
+		response.put("client", updated);
+		
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 	
 	@Secured({ "ROLE_ADMIN", "ROLE_TEACHER", "ROLE_STUDENT" })

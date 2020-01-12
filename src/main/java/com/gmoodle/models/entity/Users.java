@@ -317,21 +317,9 @@ public class Users implements Serializable{
 	public void setRoles(List<Roles> roles) {
 		this.roles = roles;
 	}
-	/*
-	public List<groupClass> getGroup(){
-		return group;
-	}
 	
-	public void setGroup(List<groupClass> group) {
-		this.group = group;
-	}
-	*/
-	public Map<String, Object> getGroup() {
-		Map<String, Object> groupMap = new HashMap<>();
-		
-		groupMap.put("idGroup", group.getIdGroup());
-		
-		return groupMap;
+	public groupClass getGroup() {
+		return group;
 	}
 	
 	public void setGroup(groupClass group) {

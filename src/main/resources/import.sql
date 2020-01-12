@@ -21,17 +21,18 @@ INSERT INTO `users_roles` (user_id, role_id) VALUES (7, 2);
 INSERT INTO `users_roles` (user_id, role_id) VALUES (8, 3);
 
 
-INSERT INTO groupclass (nameGroup, createAt,enrolmentKey,numberMax,isEnableGroup, summaryGroup,updateAt,startDateCourse,endDateCourse) VALUES('Cohort 12','2018-09-14','PapaMacho',30,false,'Grupo para convertirse en desarollador fullstack','2018-10-30','2019-09-30','2019-12-30');
-INSERT INTO groupclass (nameGroup, createAt,enrolmentKey,numberMax,isEnableGroup, summaryGroup,updateAt,startDateCourse,endDateCourse) VALUES('Cohort 13','2018-11-27','LeoRocks',30,false,'Grupo para convertirse en desarollador fullstack','2018-12-15','2019-09-30','2019-12-30');
-INSERT INTO groupclass (nameGroup, createAt,enrolmentKey,numberMax,isEnableGroup, summaryGroup,updateAt,startDateCourse,endDateCourse) VALUES('Cohort 14','2019-01-30','Ivone',30,false,'Grupo para convertirse en desarollador fullstack','2019-03-30','2019-09-30','2019-12-30');
-INSERT INTO groupclass (nameGroup, createAt,enrolmentKey,numberMax,isEnableGroup, summaryGroup,updateAt,startDateCourse,endDateCourse) VALUES('Cohort 15','2019-03-05','Cohort15',30,true,'Grupo para convertirse en desarollador fullstack','2019-05-05','2019-09-30','2019-12-30');
-INSERT INTO groupclass (nameGroup, createAt,enrolmentKey,numberMax,isEnableGroup, summaryGroup,updateAt,startDateCourse,endDateCourse) VALUES('Cohort 16','2019-05-22','CuidadCreativa',30,true,'Grupo para convertirse en desarollador fullstack','2019-07-11','2019-09-30','2019-12-30');
-INSERT INTO groupclass (nameGroup, createAt,enrolmentKey,numberMax,isEnableGroup, summaryGroup,updateAt,startDateCourse,endDateCourse) VALUES('Cohort 17','2019-07-02','GrupoChido',30,true,'Grupo para convertirse en desarollador fullstack','2019-10-25','2019-09-30','2019-12-30');
-INSERT INTO groupclass (nameGroup, createAt,enrolmentKey,numberMax,isEnableGroup, summaryGroup,updateAt,startDateCourse,endDateCourse) VALUES('Cohort 18','2019-09-30','PapaMacho',30,true,'Grupo para convertirse en desarollador fullstack','2019-11-09','2019-09-30','2019-12-30');
 
 INSERT INTO course(nameCourse,summaryCourse,isEnableCourse,createAt,createById,idUser) VALUES ('JavaFullstack','Desarrollo de conociemiento en tecnologias web mediante JAVA',true,'2019-08-30',1,3);
 INSERT INTO course(nameCourse,summaryCourse,isEnableCourse,createAt,createById,idUser) VALUES ('English','Mejorar en el habla del idioma Ingles en un ambiente laboral',true,'2019-08-30',1,1);
 INSERT INTO course(nameCourse,summaryCourse,isEnableCourse,createAt,createById,idUser) VALUES ('Mentoria','Mejorar las softskills del alumno',true,'2019-08-30',1,1);
+
+INSERT INTO groupclass (nameGroup, createAt,enrolmentKey,numberMax,isEnableGroup, summaryGroup,updateAt,startDateGroup,endDateGroup,countNumber,isStartGroup) VALUES('Cohort 12','2018-09-14','PapaMacho',30,false,'Grupo para convertirse en desarollador fullstack','2018-10-30','2019-09-30','2019-12-30',1,true);
+INSERT INTO groupclass (nameGroup, createAt,enrolmentKey,numberMax,isEnableGroup, summaryGroup,updateAt,startDateGroup,endDateGroup,countNumber,isStartGroup) VALUES('Cohort 13','2018-11-27','LeoRocks',30,false,'Grupo para convertirse en desarollador fullstack','2018-12-15','2019-09-30','2019-12-30',1,true);
+INSERT INTO groupclass (nameGroup, createAt,enrolmentKey,numberMax,isEnableGroup, summaryGroup,updateAt,startDateGroup,endDateGroup,countNumber,isStartGroup) VALUES('Cohort 14','2019-01-30','Ivone',30,false,'Grupo para convertirse en desarollador fullstack','2019-03-30','2019-09-30','2019-12-30',1,true);
+INSERT INTO groupclass (nameGroup, createAt,enrolmentKey,numberMax,isEnableGroup, summaryGroup,updateAt,startDateGroup,endDateGroup,countNumber,isStartGroup) VALUES('Cohort 15','2019-03-05','Cohort15',30,true,'Grupo para convertirse en desarollador fullstack','2019-05-05','2019-09-30','2019-12-30',1,true);
+INSERT INTO groupclass (nameGroup, createAt,enrolmentKey,numberMax,isEnableGroup, summaryGroup,updateAt,startDateGroup,endDateGroup,countNumber,isStartGroup) VALUES('Cohort 16','2019-05-22','CuidadCreativa',30,true,'Grupo para convertirse en desarollador fullstack','2019-07-11','2019-09-30','2019-12-30',1,true);
+INSERT INTO groupclass (nameGroup, createAt,enrolmentKey,numberMax,isEnableGroup, summaryGroup,updateAt,startDateGroup,endDateGroup,countNumber,isStartGroup) VALUES('Cohort 17','2019-07-02','GrupoChido',30,true,'Grupo para convertirse en desarollador fullstack','2019-10-25','2019-09-30','2019-12-30',1,true);
+INSERT INTO groupclass (nameGroup, createAt,enrolmentKey,numberMax,isEnableGroup, summaryGroup,updateAt,startDateGroup,endDateGroup,countNumber,isStartGroup) VALUES('Cohort 18','2019-09-30','PapaMacho',30,true,'Grupo para convertirse en desarollador fullstack','2019-11-09','2019-09-30','2019-12-30',1,true);
 
 INSERT INTO activity(titleActivity,instructions,idCourse,idUser) VALUES ('Series de Fiboncci','Create a code that generates the Fibonnaci series util de the number the user ask',1,1);
 INSERT INTO activity(titleActivity,instructions,idCourse,idUser) VALUES ('Email solution of problems','Write an email to solve a conflict',1,1);

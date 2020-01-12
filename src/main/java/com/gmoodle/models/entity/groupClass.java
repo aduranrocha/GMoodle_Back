@@ -64,17 +64,17 @@ public class groupClass implements Serializable{
 	//Save the number max of students in the course
 	@NotNull(message="can not be empty")
 	@Column(nullable=false)
-	private Short numberMax;
+	private byte numberMax;
 	// It will count the number of students already add
-	@NotNull(message="can not be empty")
+	//@NotNull(message="can not be empty")
 	@Column(nullable=false)
-	private Short countNumber;
+	private byte countNumber;
 	// Validates 5 days after from the startDateCourse
-	@NotNull(message="can not be empty")
+	//@NotNull(message="can not be empty")
 	@Column(nullable=false)
 	private boolean isStartGroup;
 	
-	@NotNull(message="can not be empty")
+	//@NotNull(message="can not be empty")
 	@Column(nullable=false)
 	private boolean isEnableGroup;
 	
@@ -144,11 +144,11 @@ public class groupClass implements Serializable{
 		this.updateAt = updateAt;
 	}
 
-	public Short getNumberMax() {
+	public byte getNumberMax() {
 		return numberMax;
 	}
 
-	public void setNumberMax(Short numberMax) {
+	public void setNumberMax(byte numberMax) {
 		this.numberMax = numberMax;
 	}
 
@@ -159,11 +159,11 @@ public class groupClass implements Serializable{
 	public void setIsEnableGroup(boolean isEnableGroup) {
 		this.isEnableGroup = isEnableGroup;
 	}
-	public Short getCountNumber() {
+	public byte getCountNumber() {
 		return countNumber;
 	}
 
-	public void setCountNumber(Short countNumber) {
+	public void setCountNumber(byte countNumber) {
 		this.countNumber = countNumber;
 	}
 
