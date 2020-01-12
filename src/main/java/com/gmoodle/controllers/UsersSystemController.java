@@ -265,6 +265,7 @@ public class UsersSystemController {
 		// Se obtiene la hora actual del servidor para guardarla en el campo updateAt
 		dt = new Date(System.currentTimeMillis());
 		Map<String, Object> response = new HashMap<>();
+		List<Roles> roles = new ArrayList<>();
 
 		/*
 		 * Validamos si existe un error al momento de recibir los datos, en caso de ser
@@ -292,6 +293,9 @@ public class UsersSystemController {
 			response.put("message", "Error: Update fail, the user with ID:  ".concat(id.toString().concat(" doesn't exist or is unable")));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
+		Optional<Roles> userRol = roleDao.findByName(user.getRoles().get(0).getName());
+		roles.add(userRol.get());
+		u.setRoles(roles);
 
 		u.setUsername(user.getUsername());
 		u.setName(user.getName());
