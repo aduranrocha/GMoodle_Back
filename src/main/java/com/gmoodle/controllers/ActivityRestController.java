@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gmoodle.models.entity.Activity;
+import com.gmoodle.models.entity.Course;
 import com.gmoodle.models.entity.Users;
 import com.gmoodle.models.services.IActivityService;
 
@@ -125,6 +126,8 @@ public class ActivityRestController {
 	public ResponseEntity<?> update(@Valid @RequestBody Activity activity, BindingResult result, @PathVariable Long id) {
 		Activity activityActual = activityService.findById(id);
 		Activity activityUpdate = null;
+		Users newUser = null;
+		Course newCourse = null;
 
 		Map<String, Object> response = new HashMap<>();
 		

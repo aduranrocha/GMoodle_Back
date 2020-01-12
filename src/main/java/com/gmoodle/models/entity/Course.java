@@ -33,7 +33,7 @@ public class Course implements Serializable {
 	
 	@NotEmpty(message="can not be empty")
 	@Size(min=4, max=44, message="the size must be between 4 and 44")
-	@Column(nullable=false,unique=true)
+	@Column(nullable=false)
 	private String nameCourse;
 	
 	@NotEmpty(message ="can not be empty")
@@ -207,18 +207,14 @@ public class Course implements Serializable {
 		this.createById = createById;
 	}
 	
-	/**
-	 *  Method that gets the object of class Users
-	 * @return the users
-	 */
-	public Map<String, Object> getUsers() {
-		Map<String, Object> myList = new HashMap<>();
+	public Map<String,Object> getUsers() {
+		Map<String,Object> myUserMap = new HashMap<>();
 		
-		myList.put("idUser", users.getIdUser());
-		myList.put("userName",users.getName());
-		myList.put("email",users.getEmail());
+		myUserMap.put("idUser", users.getIdUser());
+		myUserMap.put("userName", users.getUsername());
+		myUserMap.put("email", users.getEmail());
 		
-		return myList;
+		return myUserMap;
 	}
 
 	/**

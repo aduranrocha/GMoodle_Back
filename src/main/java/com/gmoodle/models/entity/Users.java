@@ -3,7 +3,9 @@ package com.gmoodle.models.entity;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -133,7 +135,6 @@ public class Users implements Serializable{
 	@JoinTable(name = "users_members", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "group_id"), uniqueConstraints = {
 			@UniqueConstraint(columnNames = { "user_id", "group_id" }) })
 	private List<groupClass> group = new ArrayList<>();
-	
 	/**
 	 * Relation OneToMany from User to Course
 	 * mappedBy is the table that will produce the relation
@@ -152,7 +153,13 @@ public class Users implements Serializable{
 	 */
 	@OneToMany(mappedBy="users", cascade = CascadeType.ALL)
     private List<Document> document = new ArrayList<>();
-	
+	/**
+	 * Relation OneToMany from User to Activity
+	 * mappedBy is the table that will produce the relation
+	 * The method will 
+	 * return a list of the Activity
+	 * 
+	 */
 	@OneToMany(mappedBy="users", cascade = CascadeType.ALL)
     private List<Activity> activity = new ArrayList<>();
 	
@@ -319,20 +326,43 @@ public class Users implements Serializable{
 	public void setCourse(List<Course> course) {
 		this.course = course;
 	}
-
-	public List<Document> getDocument() {
-		return document;
+	
+	public List<Map<String,Object>> getDocument() {
+		
+		List<Map<String,Object>> myDocumentList = new ArrayList<>();
+		
+		for (Document d : document){
+			Map<String,Object> myDocumentMap = new HashMap<>();
+			myDocumentMap.put("id", d.getIdDocument());
+			myDocumentMap.put("path", d.getPathDoucument());
+			
+			myDocumentList.add(myDocumentMap);
+		}
+		
+		return myDocumentList;
+		
+		//return document;
 	}
 
 	public void setDocument(List<Document> document) {
 		this.document = document;
 	}
-
-	public List<Activity> getActivity() {
-		return activity;
+	
+	public List<Map<String,Object>> getActivity() {
+		List<Map<String,Object>> myActivityList = new ArrayList<>();
+		
+		for(Activity a : activity) {
+			Map<String,Object> myActivityMap = new HashMap<>();
+			myActivityMap.put("idActivity",a.getIdActivity());
+			myActivityMap.put("titleActivity", a.getTitleActivity());
+			
+			myActivityList.add(myActivityMap);
+		}
+		return myActivityList;
 	}
 
 	public void setActivity(List<Activity> activity) {
 		this.activity = activity;
 	}
+	
 }
