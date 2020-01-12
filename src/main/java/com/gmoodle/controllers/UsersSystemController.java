@@ -65,25 +65,22 @@ public class UsersSystemController {
 
 	@Autowired
 	private RoleDao roleDao;
+	
+	private final String MSG_PASSWORD = "[PROTECTED]";
 
 	Date dt;
-	/*
+
 	@Secured({ "ROLE_ADMIN" })
 	@GetMapping
 	public List<Users> index() {
 		List<Users> myUsers = userService.findAll();
 		List<Users> nonePassUser = new ArrayList<Users>();
 		for(Users user : myUsers){
-			user.setPassword(" ");
+			user.setPassword(MSG_PASSWORD);
 			nonePassUser.add(user);
 		}
 		
 		return nonePassUser;
-	}
-	*/
-	@GetMapping
-	public List<Users> index() {
-		return userService.findAll();
 	}
 
 	@GetMapping("/{id}")
@@ -112,6 +109,7 @@ public class UsersSystemController {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
 
+		user.setPassword(MSG_PASSWORD);
 		return new ResponseEntity<Users>(user, HttpStatus.OK);
 	}
 	
@@ -131,12 +129,12 @@ public class UsersSystemController {
 			response.put("message", "The user with Username: ".concat(username.toString().concat(" doesn't exist")));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
-		user.setPassword(" ");
+		user.setPassword(MSG_PASSWORD);
 		return new ResponseEntity<Users>(user, HttpStatus.OK);
 	}
 
-	@Secured({ "ROLE_ADMIN,ROLE_STUDENT" })
-	@PostMapping("/create")
+	@Secured({ "ROLE_ADMIN", "ROLE_TEACHER", "ROLE_STUDENT" })
+	@PostMapping
 	public ResponseEntity<?> CreateUser(@Valid @RequestBody Users user, BindingResult result) {
 
 		// Se obtiene la hora actual del servidor para guardarla en el campo createAt
@@ -193,6 +191,7 @@ public class UsersSystemController {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
+		nUser.setPassword(MSG_PASSWORD);
 		// Se retorna el usuario con el estatus 201
 		return new ResponseEntity<Users>(nUser, HttpStatus.CREATED);
 	}
@@ -257,7 +256,7 @@ public class UsersSystemController {
 			response.put("error", e.getMessage() + " : " + e.getMostSpecificCause());
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-
+		userUploaded.setPassword(MSG_PASSWORD);
 		// Se retorna el usuario actualizado con el estatus 200
 		return new ResponseEntity<Users>(userUploaded, HttpStatus.OK);
 	}

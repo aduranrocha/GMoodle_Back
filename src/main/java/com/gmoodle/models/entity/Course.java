@@ -196,7 +196,7 @@ public class Course implements Serializable {
 	/**
 	 * @return the createById
 	 */
-	public Long isCreateById() {
+	public Long getCreateById() {
 		return createById;
 	}
 

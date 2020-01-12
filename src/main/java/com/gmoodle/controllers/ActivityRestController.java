@@ -29,6 +29,8 @@ import com.gmoodle.models.entity.Activity;
 import com.gmoodle.models.entity.Course;
 import com.gmoodle.models.entity.Users;
 import com.gmoodle.models.services.IActivityService;
+import com.gmoodle.models.services.ICourseService;
+import com.gmoodle.models.services.userservice.IUserService;
 
 
 @RestController
@@ -36,6 +38,12 @@ import com.gmoodle.models.services.IActivityService;
 public class ActivityRestController {
 	@Autowired
 	private IActivityService activityService;
+	
+	@Autowired
+	private ICourseService courseService;
+	
+	@Autowired
+	private IUserService userService;
 	
 	
 	@GetMapping
@@ -128,7 +136,6 @@ public class ActivityRestController {
 		Activity activityUpdate = null;
 		Users newUser = null;
 		Course newCourse = null;
-
 		Map<String, Object> response = new HashMap<>();
 		
 		if(result.hasErrors()) {
@@ -148,7 +155,33 @@ public class ActivityRestController {
 			response.put("message","Error: Update fail, the activity with ID:  ".concat(id.toString().concat(" doesn't exist")));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
+		
 		try {
+			newUser = userService.findById((Long) activity.getUsers().get("idUser"));
+			newCourse = courseService.findById( (Long) activity.getCourse().get("idCourse"));
+			
+			if (newCourse == null)
+			{
+				response.put("error", "The course does not exist in DB");
+				
+				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+			else if (newUser == null)
+			{
+				response.put("error", "The user does not exist in DB");
+				
+				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+			
+			if(activity.getUsers().get("idUser") != activityActual.getUsers().get("idUser")) {
+				activityActual.setUsers(newUser);
+				System.out.println(activity.getUsers().get("userName"));
+				System.out.println(activityActual.getUsers().get("userName"));
+			}
+			
+			if(activity.getCourse().get("idCourse") != activityActual.getCourse().get("idCourse")) {
+				activityActual.setCourse(newCourse);
+			}
 			activityActual.setTitleActivity(activity.getTitleActivity());
 			activityActual.setInstructions(activity.getInstructions());
 			
@@ -161,7 +194,7 @@ public class ActivityRestController {
 		}
 		
 		response.put("message", "The activity has been UPDATE successfully!");
-		response.put("cliente", activityUpdate);
+		response.put("activity", activityUpdate);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 
 	}

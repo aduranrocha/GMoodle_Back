@@ -12,7 +12,13 @@ INSERT INTO `roles` (name) VALUES ('ROLE_TEACHER');
 INSERT INTO `roles` (name) VALUES ('ROLE_STUDENT');
 
 INSERT INTO `users_roles` (user_id, role_id) VALUES (1, 1);
-INSERT INTO `users_roles` (user_id, role_id) VALUES (3, 1); 
+INSERT INTO `users_roles` (user_id, role_id) VALUES (2, 1); 
+INSERT INTO `users_roles` (user_id, role_id) VALUES (3, 2);
+INSERT INTO `users_roles` (user_id, role_id) VALUES (4, 3);
+INSERT INTO `users_roles` (user_id, role_id) VALUES (5, 3);
+INSERT INTO `users_roles` (user_id, role_id) VALUES (6, 2);
+INSERT INTO `users_roles` (user_id, role_id) VALUES (7, 2);
+INSERT INTO `users_roles` (user_id, role_id) VALUES (8, 3);
 
 
 INSERT INTO groupclass (nameGroup, createAt,enrolmentKey,idNumberMax,isEnableGroup, summaryGroup,updateAt) VALUES('Cohort 12','2018-09-14','PapaMacho',30,false,'Grupo para convertirse en desarollador fullstack','2018-10-30');
@@ -23,8 +29,8 @@ INSERT INTO groupclass (nameGroup, createAt,enrolmentKey,idNumberMax,isEnableGro
 INSERT INTO groupclass (nameGroup, createAt,enrolmentKey,idNumberMax,isEnableGroup, summaryGroup,updateAt) VALUES('Cohort 17','2019-07-02','GrupoChido',30,true,'Grupo para convertirse en desarollador fullstack','2019-10-25');
 INSERT INTO groupclass (nameGroup, createAt,enrolmentKey,idNumberMax,isEnableGroup, summaryGroup,updateAt) VALUES('Cohort 18','2019-09-30','PapaMacho',30,true,'Grupo para convertirse en desarollador fullstack','2019-11-09');
 
-INSERT INTO course(nameCourse,summaryCourse,startDateCourse,endDateCourse,isEnableCourse,createAt,createById,idUser) VALUES ('JavaFullstack','Desarrollo de conociemiento en tecnologias web mediante JAVA','2019-09-30','2019-12-30',true,'2019-08-30',1,1);
-INSERT INTO course(nameCourse,summaryCourse,startDateCourse,endDateCourse,isEnableCourse,createAt,createById,idUser) VALUES ('English','Mejorar en el habla del idioma Ingles en un ambiente laboral','2019-09-30','2019-12-30',true,'2019-08-30',1,2);
+INSERT INTO course(nameCourse,summaryCourse,startDateCourse,endDateCourse,isEnableCourse,createAt,createById,idUser) VALUES ('JavaFullstack','Desarrollo de conociemiento en tecnologias web mediante JAVA','2019-09-30','2019-12-30',true,'2019-08-30',1,3);
+INSERT INTO course(nameCourse,summaryCourse,startDateCourse,endDateCourse,isEnableCourse,createAt,createById,idUser) VALUES ('English','Mejorar en el habla del idioma Ingles en un ambiente laboral','2019-09-30','2019-12-30',true,'2019-08-30',1,1);
 INSERT INTO course(nameCourse,summaryCourse,startDateCourse,endDateCourse,isEnableCourse,createAt,createById,idUser) VALUES ('Mentoria','Mejorar las softskills del alumno','2019-09-30','2019-12-30',true,'2019-08-30',1,1);
 
 INSERT INTO activity(titleActivity,instructions,idCourse,idUser) VALUES ('Series de Fiboncci','Create a code that generates the Fibonnaci series util de the number the user ask',1,1);
@@ -34,3 +40,4 @@ INSERT INTO activity(titleActivity,instructions,idCourse,idUser) VALUES ('Interv
 INSERT INTO document(pathDoucument,isCheck,isEnableDocument,idActivity,idUser) VALUES ('kndkjsndkjdsndkj',true,true,1,1);
 INSERT INTO document(pathDoucument,isCheck,isEnableDocument,idActivity,idUser) VALUES ('kndkjsndkjdsndkj',true,true,1,2);
 
+INSERT INTO group_course(group_id,course_id) VALUES (7,1);

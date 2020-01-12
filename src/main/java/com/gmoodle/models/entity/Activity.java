@@ -82,7 +82,7 @@ public class Activity implements Serializable{
 		Map<String,Object> myCourseMap = new HashMap<>();
 		myCourseMap.put("idCourse", course.getIdCourse());
 		myCourseMap.put("nameCourse",course.getNameCourse());
-		myCourseMap.put("idUser",course.getUsers());
+		//myCourseMap.put("idUser",course.getUsers());
 		return myCourseMap;
 	}
 

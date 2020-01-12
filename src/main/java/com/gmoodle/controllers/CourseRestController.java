@@ -38,8 +38,6 @@ public class CourseRestController {
 	@Autowired
 	private ICourseService courseService;
 	
-	private UserDao userDao;
-	
 	@Autowired
 	private IUserService userService;
 	
@@ -99,9 +97,9 @@ public class CourseRestController {
 		// Access to the ID of myUser
 		Long idUser = (Long) course.getUsers().get("idUser");
 		//
-		Optional<Users> courseUser = userDao.findById(idUser);
+		Users courseUser = userService.findById(idUser);
 		
-		course.setUsers(courseUser.get());
+		course.setUsers(courseUser);
 		
 		try {
 			

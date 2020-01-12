@@ -319,8 +319,17 @@ public class Users implements Serializable{
 		this.group = group;
 	}
 	
-	public List<Course> getCourse() {
-		return course;
+	public List<Map<String, Object>> getCourse() {
+		List<Map<String, Object>> courseList = new ArrayList<>();
+		for (Course c : course)
+		{
+			Map<String, Object> myMap = new HashMap<>();
+			myMap.put("idCourse", c.getIdCourse());
+			myMap.put("nameCourse", c.getNameCourse());
+			
+			courseList.add(myMap);
+		}
+		return courseList;
 	}
 
 	public void setCourse(List<Course> course) {
