@@ -106,7 +106,7 @@ public class GroupClassRestController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
 	
-	@PutMapping("/id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<?> update(@Valid @RequestBody groupClass group, BindingResult result, @PathVariable Long id) {
 		groupClass groupActual = groupService.findById(id);
 		groupClass groupUpdate = null;
@@ -133,9 +133,10 @@ public class GroupClassRestController {
 		}
 		try {
 			groupActual.setNameGroup(group.getNameGroup());
-			groupActual.setNumberMax(group.getNumberMax());
-			groupActual.setEnrolmentKey(group.getEnrolmentKey());
 			groupActual.setSummaryGroup(group.getSummaryGroup());
+			groupActual.setEnrolmentKey(group.getEnrolmentKey());
+			groupActual.setNumberMax(group.getNumberMax());
+			groupActual.setIsStartGroup(group.getIsStartGroup());
 			groupActual.setIsEnableGroup(group.getIsEnableGroup());
 			groupActual.setStartDateGroup(group.getStartDateGroup());
 			groupActual.setEndDateGroup(group.getEndDateGroup());
