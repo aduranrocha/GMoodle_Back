@@ -14,5 +14,5 @@ public interface IGroupClassService {
 	public groupClass findById(Long id);
 	public groupClass save(groupClass group);
 	public void delete(Long id);
-
+	public groupClass findByNameGroup(String name);
 }

@@ -1,12 +1,16 @@
 package com.gmoodle.models.entity;
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 /* Indicar que es un objeto de persistencia que esta mapeado a una tabla */
@@ -32,22 +36,22 @@ public class Roles implements Serializable{
 	@Column(unique = true, length = 20)
 	private String name;
 	
-	/*
-	 * Obtener todos los usuarios por rol (bidireccional)
+	
+	/*// Obtener todos los usuarios por rol (bidireccional)
 	// Indica por cual columna esta relacionada
 	@ManyToMany(mappedBy="roles")
-	private List<User> users;
+	private List<Users> users;
 	
 	
 
-	public List<User> getUsers() {
+	public List<Users> getUsers() {
 		return users;
 	}
 
-	public void setUsers(List<User> users) {
+	public void setUsers(List<Users> users) {
 		this.users = users;
-	}
-	*/
+	}*/
+	
 
 	public Long getId() {
 		return id;

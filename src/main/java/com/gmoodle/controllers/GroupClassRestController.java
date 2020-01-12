@@ -29,12 +29,12 @@ import com.gmoodle.models.entity.groupClass;
 import com.gmoodle.models.services.IGroupClassService;
 
 @RestController
-@RequestMapping("/api") 
+@RequestMapping("/group") 
 public class GroupClassRestController {
 	@Autowired
 	private IGroupClassService groupService;
 	
-	@GetMapping("/group")
+	@GetMapping
 	public List<groupClass> index(){
 		return groupService.findAll();	
 	}
@@ -44,7 +44,7 @@ public class GroupClassRestController {
 		return groupService.findAll(PageRequest.of(page, 3));	
 	}
 	
-	@GetMapping("/group/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<?> show(@PathVariable Long id){
 		groupClass group = null;
 		Map<String, Object> response = new HashMap<>();
@@ -67,10 +67,11 @@ public class GroupClassRestController {
 	}
 	
 
-	@PostMapping("/group")
+	@PostMapping
 	// @Valid validates the data @BindingResult error messages
 	public ResponseEntity<?> create(@Valid @RequestBody groupClass group, BindingResult result) {
 		groupClass groupNew = null;
+		groupClass existGroup = null;
 		Map<String, Object> response = new HashMap<>();
 		// validate if it has mistakes
 		if(result.hasErrors()) {
@@ -85,25 +86,31 @@ public class GroupClassRestController {
 			response.put("errors", errors);
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
-		
+		//Check if the group with that name already exist
+		existGroup = groupService.findByNameGroup(group.getNameGroup());
+		// send a response if group name exist
+		if (existGroup != null) {
+			response.put("error", "Group already exist!");
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 		try {
 			groupNew = groupService.save(group);
 		} catch(DataAccessException e) {
-			response.put("mensaje", "Error: insterting data into DB");
+			response.put("message", "Error: insterting data into DB");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		response.put("mensaje", "The group has been CREATED successfuly!");
+		response.put("message", "The group has been CREATED successfuly!");
 		response.put("cliente", groupNew);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
 	
-	@PutMapping("/group/{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<?> update(@Valid @RequestBody groupClass group, BindingResult result, @PathVariable Long id) {
 		groupClass groupActual = groupService.findById(id);
 		groupClass groupUpdate = null;
-
+		
 		Map<String, Object> response = new HashMap<>();
 		
 		if(result.hasErrors()) {
@@ -118,6 +125,7 @@ public class GroupClassRestController {
 			response.put("errors", errors);
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
+
 		// In case the number of ID doesn't exist
 		if (groupActual == null) {
 			response.put("message","Error: Update fail, the group with ID:  ".concat(id.toString().concat(" doesn't exist")));
@@ -125,38 +133,41 @@ public class GroupClassRestController {
 		}
 		try {
 			groupActual.setNameGroup(group.getNameGroup());
-			groupActual.setIdNumberMax(group.getIdNumberMax());
-			groupActual.setEnrolmentKey(group.getEnrolmentKey());
 			groupActual.setSummaryGroup(group.getSummaryGroup());
+			groupActual.setEnrolmentKey(group.getEnrolmentKey());
+			groupActual.setNumberMax(group.getNumberMax());
+			groupActual.setIsStartGroup(group.getIsStartGroup());
 			groupActual.setIsEnableGroup(group.getIsEnableGroup());
+			groupActual.setStartDateGroup(group.getStartDateGroup());
+			groupActual.setEndDateGroup(group.getEndDateGroup());
 			groupActual.setUpdateAt(new Date());
 			
 			groupUpdate = groupService.save(groupActual);
 			
 		}catch(DataAccessException e) { 
-			response.put("mensaje", "Error: updating data into DB");
+			response.put("message", "Error: updating data into DB");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		response.put("mensaje", "The group has been UPDATE successfuly!");
+		response.put("message", "The group has been UPDATE successfuly!");
 		response.put("cliente", groupUpdate);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 
 	}
 	
-	@DeleteMapping("/group/{id}") 
+	@DeleteMapping("/{id}") 
 	public ResponseEntity<?> delete(@PathVariable Long id) {		
 		Map<String, Object> response = new HashMap<>();
 		
 		try {
 		    groupService.delete(id);
 		} catch (DataAccessException e) {
-			response.put("mensaje", "Error al eliminar el cliente de la base de datos");
+			response.put("message", "Error: deleting document in the DB");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		response.put("mensaje", "El cliente eliminado con éxito!");
+		response.put("message", "The group has been DELETED successfully!");
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 	

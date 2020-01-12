@@ -27,20 +27,20 @@ import com.gmoodle.models.entity.Document;
 import com.gmoodle.models.services.IDocumentService;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/document")
 public class DocumentController {
 	@Autowired
 	private IDocumentService documentService;
 	
-	@GetMapping("/document")
+	@GetMapping
 	public List<Document> index(){
 		return documentService.findAll();
 	}
-	@GetMapping("/document/page/{page}")
+	@GetMapping("/page/{page}")
 	public Page<Document> index(@PathVariable Integer page){
 		return documentService.findAll(PageRequest.of(page, 3));	
 	}
-	@GetMapping("/document/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<?> show(@PathVariable Long id){
 		Document document = null;
 		Map<String, Object> response = new HashMap<>();
@@ -62,7 +62,7 @@ public class DocumentController {
 		return new ResponseEntity<Document>(document,HttpStatus.OK);
 	}
 	
-	@PostMapping("/document")
+	@PostMapping
 	// @Valid validates the data @BindingResult error messages
 	public ResponseEntity<?> create(@Valid @RequestBody Document document, BindingResult result) {
 		Document documentNew = null;
@@ -84,16 +84,16 @@ public class DocumentController {
 		try {
 			documentNew = documentService.save(document);
 		} catch(DataAccessException e) {
-			response.put("mensaje", "Error: insterting data into DB");
+			response.put("message", "Error: insterting data into DB");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		response.put("mensaje", "The document has been CREATED successfuly!");
+		response.put("message", "The document has been CREATED successfuly!");
 		response.put("cliente", documentNew);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
-	@PutMapping("/document/{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<?> update(@Valid @RequestBody Document document, BindingResult result, @PathVariable Long id) {
 		Document documentActual = documentService.findById(id);
 		Document documentUpdate = null;
@@ -114,7 +114,7 @@ public class DocumentController {
 		}
 		// In case the number of ID doesn't exist
 		if (documentActual == null) {
-			response.put("message","Error: Update fail, the group with ID:  ".concat(id.toString().concat(" doesn't exist")));
+			response.put("message","Error: Update fail, the document with ID:  ".concat(id.toString().concat(" doesn't exist")));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
 		try {
@@ -124,28 +124,28 @@ public class DocumentController {
 			documentUpdate = documentService.save(documentActual);
 			
 		}catch(DataAccessException e) { 
-			response.put("mensaje", "Error: updating data into DB");
+			response.put("message", "Error: updating data into DB");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		response.put("mensaje", "The document has been UPDATE successfully!");
+		response.put("message", "The document has been UPDATE successfully!");
 		response.put("cliente", documentUpdate);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 
 	}
-	@DeleteMapping("/document/{id}") 
+	@DeleteMapping("/{id}") 
 	public ResponseEntity<?> delete(@PathVariable Long id) {		
 		Map<String, Object> response = new HashMap<>();
 		
 		try {
 			documentService.delete(id);
 		} catch (DataAccessException e) {
-			response.put("mensaje", "Error: deleting document in the DB");
+			response.put("message", "Error: deleting document in the DB");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		response.put("mensaje", "The document has been DELETED successfully!");
+		response.put("message", "The document has been DELETED successfully!");
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 }

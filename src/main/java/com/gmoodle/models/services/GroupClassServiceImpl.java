@@ -43,5 +43,10 @@ public class GroupClassServiceImpl implements IGroupClassService{
 	public void delete(Long id) {
 		groupDao.deleteById(id);
 	}
+
+	@Override
+	public groupClass findByNameGroup(String name) {
+		return groupDao.findByNameGroup(name);
+	}
 	
 }

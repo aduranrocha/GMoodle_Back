@@ -3,7 +3,9 @@ package com.gmoodle.models.entity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -31,7 +33,7 @@ public class Course implements Serializable {
 	
 	@NotEmpty(message="can not be empty")
 	@Size(min=4, max=44, message="the size must be between 4 and 44")
-	@Column(nullable=false,unique=true)
+	@Column(nullable=false)
 	private String nameCourse;
 	
 	@NotEmpty(message ="can not be empty")
@@ -44,14 +46,6 @@ public class Course implements Serializable {
 	@Temporal(TemporalType.DATE)
 	private Date createAt;
 	
-	@NotNull(message ="can not be empty")
-	@Temporal(TemporalType.DATE)
-	private Date startDateCourse;
-	
-	@NotNull(message ="can not be empty")
-	@Temporal(TemporalType.DATE)
-	private Date endDateCourse;
-	
 	@NotNull(message="can not be empty")
 	@Column(nullable=false)
 	private boolean isEnableCourse;
@@ -62,7 +56,7 @@ public class Course implements Serializable {
 	
 	@NotNull(message="can not be empty")
 	@Column(nullable=false)
-	private boolean createById;
+	private Long createById;
 	
 	//column that will connect with the other table
 	@OneToMany(mappedBy="course", cascade = CascadeType.ALL)
@@ -136,34 +130,6 @@ public class Course implements Serializable {
 	}
 
 	/**
-	 * @return the startDateCourse
-	 */
-	public Date getStartDateCourse() {
-		return startDateCourse;
-	}
-
-	/**
-	 * @param startDateCourse the startDateCourse to set
-	 */
-	public void setStartDateCourse(Date startDateCourse) {
-		this.startDateCourse = startDateCourse;
-	}
-
-	/**
-	 * @return the endDateCourse
-	 */
-	public Date getEndDateCourse() {
-		return endDateCourse;
-	}
-
-	/**
-	 * @param endDateCourse the endDateCourse to set
-	 */
-	public void setEndDateCourse(Date endDateCourse) {
-		this.endDateCourse = endDateCourse;
-	}
-
-	/**
 	 * @return the isEnableCourse
 	 */
 	public boolean getIsEnableCourse() {
@@ -194,14 +160,33 @@ public class Course implements Serializable {
 	/**
 	 * @return the createById
 	 */
-	public boolean isCreateById() {
+	public Long getCreateById() {
 		return createById;
 	}
 
 	/**
 	 * @param createById the createById to set
 	 */
-	public void setCreateById(boolean createById) {
+	public void setCreateById(Long createById) {
 		this.createById = createById;
 	}
+	
+	public Map<String,Object> getUsers() {
+		Map<String,Object> myUserMap = new HashMap<>();
+		
+		myUserMap.put("idUser", users.getIdUser());
+		myUserMap.put("userName", users.getUsername());
+		myUserMap.put("email", users.getEmail());
+		
+		return myUserMap;
+	}
+
+	/**
+	 *  Method that sets the object of class Users
+	 * @param users the users to set
+	 */
+	public void setUsers(Users users) {
+		this.users = users;
+	}
+
 }

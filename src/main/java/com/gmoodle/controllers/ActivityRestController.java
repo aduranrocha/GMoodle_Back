@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -27,32 +26,44 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gmoodle.models.entity.Activity;
-import com.gmoodle.models.entity.Roles;
+import com.gmoodle.models.entity.Course;
+import com.gmoodle.models.entity.Users;
 import com.gmoodle.models.services.IActivityService;
+import com.gmoodle.models.services.ICourseService;
+import com.gmoodle.models.services.userservice.IUserService;
 
 
 @RestController
-@RequestMapping("/api") 
+@RequestMapping("/activity") 
 public class ActivityRestController {
 	@Autowired
 	private IActivityService activityService;
 	
+	@Autowired
+	private ICourseService courseService;
 	
-	@GetMapping("/activity")
-	public List<Activity> index(){
-		return activityService.findAll();	
+	@Autowired
+	private IUserService userService;
+	
+	
+	@GetMapping
+	public ResponseEntity<?> index(){
+		List<Activity> a = new ArrayList<>();
+		a = activityService.findAll();
+		
+		return new ResponseEntity<List<Activity>>(a, HttpStatus.OK);
 	}
 	/*
 	 * Me pregunto si el find sera exclusivo del maestro
 	 * ya que alumno tambien quiero verlo
 	 * */
-	@GetMapping("/activity/page/{page}")
+	@GetMapping("/page/{page}")
 	public Page<Activity> index(@PathVariable Integer page){
-		return activityService.findAll(PageRequest.of(page, 3));	
+		return activityService.findAll(PageRequest.of(page, 10));	
 	}
 	
 	
-	@GetMapping("/activity/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<?> show(@PathVariable Long id){
 		Activity activity = null;
 		Map<String, Object> response = new HashMap<>();
@@ -74,11 +85,13 @@ public class ActivityRestController {
 		return new ResponseEntity<Activity>(activity,HttpStatus.OK);
 	}
 	
-	@Secured({ "ROLE_TEACHER" })
-	@PostMapping("/activity")
+	@Secured({ "ROLE_TEACHER", "ROLE_ADMIN" })
+	@PostMapping
 	// @Valid validates the data @BindingResult error messages
 	public ResponseEntity<?> create(@Valid @RequestBody Activity activity, BindingResult result) {
 		Activity activityNew = null;
+		Activity exist = null;
+		
 		Map<String, Object> response = new HashMap<>();
 		// validate if it has mistakes
 		if(result.hasErrors()) {
@@ -94,26 +107,35 @@ public class ActivityRestController {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
 		
+		exist = activityService.findByTitleActivity(activity.getTitleActivity());
+		
+		if (exist != null)
+		{
+			response.put("error", "Activity already exist!");
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
 				
 		try {
 			activityNew = activityService.save(activity);
 		} catch(DataAccessException e) {
-			response.put("mensaje", "Error: insterting data into DB");
+			response.put("message", "Error: insterting data into DB");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		response.put("mensaje", "The activity has been CREATED successfully!");
-		response.put("cliente", activityNew);
+		response.put("message", "The activity has been CREATED successfully!");
+		response.put("activity", activityNew);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
 	
-	@Secured({ "ROLE_TEACHER" })
-	@PutMapping("/activity/{id}")
+	@Secured({ "ROLE_TEACHER","ROLE_ADMIN" })
+	@PutMapping("/{id}")
 	public ResponseEntity<?> update(@Valid @RequestBody Activity activity, BindingResult result, @PathVariable Long id) {
 		Activity activityActual = activityService.findById(id);
 		Activity activityUpdate = null;
-
+		Users newUser = null;
+		Course newCourse = null;
 		Map<String, Object> response = new HashMap<>();
 		
 		if(result.hasErrors()) {
@@ -130,38 +152,63 @@ public class ActivityRestController {
 		}
 		// In case the number of ID doesn't exist
 		if (activityActual == null) {
-			response.put("message","Error: Update fail, the group with ID:  ".concat(id.toString().concat(" doesn't exist")));
+			response.put("message","Error: Update fail, the activity with ID:  ".concat(id.toString().concat(" doesn't exist")));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
+		
 		try {
+			newUser = userService.findById((Long) activity.getUsers().get("idUser"));
+			newCourse = courseService.findById( (Long) activity.getCourse().get("idCourse"));
+			
+			if (newCourse == null)
+			{
+				response.put("error", "The course does not exist in DB");
+				
+				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+			else if (newUser == null)
+			{
+				response.put("error", "The user does not exist in DB");
+				
+				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+			
+			if(activity.getUsers().get("idUser") != activityActual.getUsers().get("idUser")) {
+				activityActual.setUsers(newUser);
+			}
+			
+			if(activity.getCourse().get("idCourse") != activityActual.getCourse().get("idCourse")) {
+				activityActual.setCourse(newCourse);
+			}
 			activityActual.setTitleActivity(activity.getTitleActivity());
 			activityActual.setInstructions(activity.getInstructions());
 			
 			activityUpdate = activityService.save(activityActual);
 			
 		}catch(DataAccessException e) { 
-			response.put("mensaje", "Error: updating data into DB");
+			response.put("message", "Error: updating data into DB");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		response.put("mensaje", "The activity has been UPDATE successfully!");
-		response.put("cliente", activityUpdate);
+		response.put("message", "The activity has been UPDATE successfully!");
+		response.put("activity", activityUpdate);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 
 	}
-	@DeleteMapping("/activity/{id}") 
+	@Secured({ "ROLE_TEACHER","ROLE_ADMIN" })
+	@DeleteMapping("/{id}") 
 	public ResponseEntity<?> delete(@PathVariable Long id) {		
 		Map<String, Object> response = new HashMap<>();
 		
 		try {
 			activityService.delete(id);
 		} catch (DataAccessException e) {
-			response.put("mensaje", "Error: deleting activity in the DB");
+			response.put("message", "Error: deleting activity in the DB");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		response.put("mensaje", "The activity has been DELETED successfully!");
+		response.put("message", "The activity has been DELETED successfully!");
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 }

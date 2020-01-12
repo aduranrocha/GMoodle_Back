@@ -26,25 +26,31 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gmoodle.models.entity.Course;
+import com.gmoodle.models.entity.Users;
 import com.gmoodle.models.services.ICourseService;
+import com.gmoodle.models.services.userservice.IUserService;
 
 @RestController
-@RequestMapping("/api") 
+@RequestMapping("/course") 
 public class CourseRestController {
 	@Autowired
 	private ICourseService courseService;
 	
-	@GetMapping("/course")
+	@Autowired
+	private IUserService userService;
+	
+	@GetMapping
 	public List<Course> index(){
-		return courseService.findAll();	
+		return courseService.findAll();
+		
 	}
 	
 	// Show all but with pages {number of pages}
-	@GetMapping("/course/page/{page}")
+	@GetMapping("/page/{page}")
 	public Page<Course> index(@PathVariable Integer page){
 		return courseService.findAll(PageRequest.of(page, 3));	
 	}
-	@GetMapping("/course/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<?> show(@PathVariable Long id){
 		Course course = null;
 		Map<String, Object> response = new HashMap<>();
@@ -66,8 +72,8 @@ public class CourseRestController {
 		return new ResponseEntity<Course>(course,HttpStatus.OK);
 	}
 	
-	@Secured({ "ROLE_ADMIN" })
-	@PostMapping("/course")
+	//@Secured({ "ROLE_ADMIN" })
+	@PostMapping
 	// @Valid validates the data @BindingResult error messages
 	public ResponseEntity<?> create(@Valid @RequestBody Course course, BindingResult result) {
 		Course courseNew = null;
@@ -86,23 +92,33 @@ public class CourseRestController {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
 		
+		// Access to the ID of myUser
+		Long idUser = (Long) course.getUsers().get("idUser");
+		//
+		Users courseUser = userService.findById(idUser);
+		
+		course.setUsers(courseUser);
+		
 		try {
+			
 			courseNew = courseService.save(course);
 		} catch(DataAccessException e) {
-			response.put("mensaje", "Error: insterting data into DB");
+			response.put("message", "Error: insterting data into DB");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		response.put("mensaje", "The course has been CREATED successfuly!");
+		response.put("message", "The course has been CREATED successfuly!");
 		response.put("cliente", courseNew);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
+	
 	@Secured({ "ROLE_ADMIN" })
-	@PutMapping("/course/{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<?> update(@Valid @RequestBody Course course, BindingResult result, @PathVariable Long id) {
 		Course courseActual = courseService.findById(id);
 		Course courseUpdate = null;
+		Users newUser = null;
 
 		Map<String, Object> response = new HashMap<>();
 		
@@ -124,39 +140,51 @@ public class CourseRestController {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
 		try {
+			if (course.getUsers().get("idUser") != courseActual.getUsers().get("idUser"))
+			{
+				newUser = userService.findById((Long) course.getUsers().get("idUser"));
+				
+				courseActual.setUsers(newUser);
+			}
+		
+			newUser = userService.findById(id);
+			
+			if (newUser == null || newUser.getIsEnabled() == false) {
+				response.put("message", "Error: Update fail, the user with ID:  ".concat(id.toString().concat(" doesn't exist or is unable")));
+				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+			}
 			courseActual.setNameCourse(course.getNameCourse());
 			courseActual.setSummaryCourse(course.getSummaryCourse());
-			courseActual.setStartDateCourse(course.getStartDateCourse());
-			courseActual.setEndDateCourse(course.getEndDateCourse());
 			courseActual.setIsEnableCourse(course.getIsEnableCourse());
 			courseActual.setUpdateAt(new Date());
+			//courseActual.setUsers(course.getUsers().get("idUser"));
 			
 			courseUpdate = courseService.save(courseActual);
 			
 		}catch(DataAccessException e) { 
-			response.put("mensaje", "Error: updating data into DB");
+			response.put("message", "Error: updating data into DB");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		response.put("mensaje", "The course has been UPDATE successfuly!");
+		response.put("message", "The course has been UPDATE successfuly!");
 		response.put("cliente", courseUpdate);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 
 	}
 	@Secured({ "ROLE_ADMIN" })
-	@DeleteMapping("/course/{id}") 
+	@DeleteMapping("/{id}") 
 	public ResponseEntity<?> delete(@PathVariable Long id) {		
 		Map<String, Object> response = new HashMap<>();
 		
 		try {
 		    courseService.delete(id);
 		} catch (DataAccessException e) {
-			response.put("mensaje", "Error: deleting course in the DB");
+			response.put("message", "Error: deleting course in the DB");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		response.put("mensaje", "The course has been DELETED successfully!");
+		response.put("message", "The course has been DELETED successfully!");
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 }

@@ -2,7 +2,9 @@ package com.gmoodle.models.entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -51,75 +53,64 @@ public class Activity implements Serializable{
 	@JoinColumn(name="idUser")
     private Users users;
 	
-	/**
-	 * @return the idActivity
-	 */
 	public Long getIdActivity() {
 		return idActivity;
 	}
 
-	/**
-	 * @param idActivity the idActivity to set
-	 */
 	public void setIdActivity(Long idActivity) {
 		this.idActivity = idActivity;
 	}
 
-	/**
-	 * @return the titleActivity
-	 */
 	public String getTitleActivity() {
 		return titleActivity;
 	}
 
-	/**
-	 * @param titleActivity the titleActivity to set
-	 */
 	public void setTitleActivity(String titleActivity) {
 		this.titleActivity = titleActivity;
 	}
-	/**
-	 * @return the instructions
-	 */
+
 	public String getInstructions() {
 		return instructions;
 	}
 
-	/**
-	 * @param instructions the instructions to set
-	 */
 	public void setInstructions(String instructions) {
 		this.instructions = instructions;
 	}
-	/**
-	 * @return the course
-	 */
-	public Course getCourse() {
-		return course;
+
+	public Map<String,Object> getCourse() 
+	{
+		Map<String,Object> myCourseMap = new HashMap<>();
+		myCourseMap.put("idCourse", course.getIdCourse());
+		myCourseMap.put("nameCourse",course.getNameCourse());
+		//myCourseMap.put("idUser",course.getUsers());
+		return myCourseMap;
 	}
 
-	/**
-	 * @param course the course to set
-	 */
 	public void setCourse(Course course) {
 		this.course = course;
 	}
 
-	/**
-	 * @return the users
-	 */
-	public Users getUsers() {
-		return users;
+	public Map<String,Object> getUsers() {
+		Map<String,Object> myUserMap = new HashMap<>();
+		
+		myUserMap.put("idUser", users.getIdUser());
+		myUserMap.put("userName", users.getUsername());
+		myUserMap.put("email", users.getEmail());
+		
+		return myUserMap;
 	}
 
-	/**
-	 * @param users the users to set
-	 */
 	public void setUsers(Users users) {
 		this.users = users;
 	}
-	/**
-	 * 
-	 */
+	
+	public List<Document> getDocument() {
+		return document;
+	}
+
+	public void setDocument(List<Document> document) {
+		this.document = document;
+	}
+
 	private static final long serialVersionUID = 1L;
 }

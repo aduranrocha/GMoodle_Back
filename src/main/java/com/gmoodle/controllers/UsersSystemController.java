@@ -30,11 +30,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.gmoodle.models.dao.RoleDao;
 import com.gmoodle.models.entity.Roles;
 import com.gmoodle.models.entity.Users;
+import com.gmoodle.models.entity.groupClass;
+import com.gmoodle.models.services.IGroupClassService;
 import com.gmoodle.models.services.userservice.IUserService;
 
 @CrossOrigin(origins = { "http://localhost:4200" })
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/user")
 public class UsersSystemController {
 
 	/*
@@ -65,16 +67,27 @@ public class UsersSystemController {
 
 	@Autowired
 	private RoleDao roleDao;
+	
+	@Autowired
+	private IGroupClassService groupService;
+	
+	private final String MSG_PASSWORD = "[PROTECTED]";
 
 	Date dt;
 
 	@Secured({ "ROLE_ADMIN" })
 	@GetMapping
 	public List<Users> index() {
-		return userService.findAll();
+		List<Users> myUsers = userService.findAll();
+		List<Users> nonePassUser = new ArrayList<Users>();
+		for(Users user : myUsers){
+			user.setPassword(MSG_PASSWORD);
+			nonePassUser.add(user);
+		}
+		
+		return nonePassUser;
 	}
 
-	@Secured({ "ROLE_ADMIN" })
 	@GetMapping("/{id}")
 	public ResponseEntity<?> showOne(@PathVariable Long id) {
 		/*
@@ -91,21 +104,100 @@ public class UsersSystemController {
 		try {
 			user = userService.findById(id);
 		} catch (DataAccessException e) {
-			response.put("mensaje", "Error al consultar la base de datos");
+			response.put("message", "Error: Connecting with DB");
 			response.put("error", e.getMessage() + " : " + e.getMostSpecificCause());
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
 		if (user == null) {
-			response.put("mensaje", "No existe el usuario en la base de datos");
+			response.put("message", "The user with ID: ".concat(id.toString().concat(" doesn't exist")));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
 
+		user.setPassword(MSG_PASSWORD);
 		return new ResponseEntity<Users>(user, HttpStatus.OK);
 	}
+	
+	@GetMapping("/username/{username}")
+	public ResponseEntity<?> showByUsername(@PathVariable String username){
+		Users user = null;
+		Map<String,Object> response = new HashMap<>();
+		try {
+			user = userService.findByUsername(username);
+		}catch (DataAccessException e) {
+			response.put("message", "Error: Connecting with DB");
+			response.put("error", e.getMessage() + " : " + e.getMostSpecificCause());
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 
-	@Secured({ "ROLE_ADMIN" })
-	@PostMapping("/create")
+		if (user == null) {
+			response.put("message", "The user with Username: ".concat(username.toString().concat(" doesn't exist")));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+		}
+		user.setPassword(MSG_PASSWORD);
+		return new ResponseEntity<Users>(user, HttpStatus.OK);
+	}
+	/*@GetMapping("/enrolStudent")
+	public ResponseEntity<?> availableGroups(){
+		groupClass newGroup = null;
+		for(groupClass g:)
+		return null;
+		
+	}*/
+	@Secured({"ROLE_STUDENT"})
+	@PutMapping("/enrolStudent/{id}")
+	public ResponseEntity<?> enrolStundent(@RequestBody groupClass group, BindingResult result, @PathVariable Long id){
+		
+		// Obtener tu objeto groupClass
+		groupClass existGroup = null;
+		Users existUser = null;
+		Users updated = null;
+		groupClass newGroup = null;
+		Map<String, Object> response = new HashMap<>();
+		
+		existGroup = groupService.findById(group.getIdGroup());
+		existUser = userService.findById(id);
+
+		
+		if (existGroup == null)
+		{
+			response.put("error", "Group does not exist in DB");
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+			// return error
+		}
+		else if(existUser == null)
+		{
+			response.put("error", "User does not exist in DB");
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);			
+		}
+		
+		if (group.getEnrolmentKey() != existGroup.getEnrolmentKey())
+		{
+			response.put("error", "The given key does not match");
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		existUser.setGroup(newGroup);
+		
+		newGroup = groupService.findById(id);
+		if(newGroup.getNumberMax() >= newGroup.getCountNumber()) {
+			newGroup.setCountNumber((byte) (newGroup.getCountNumber()+1));
+		}
+		else if (newGroup.getNumberMax() <= newGroup.getCountNumber()) {
+			response.put("error", "The group it is already full");
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+		}
+		
+		updated = userService.save(existUser);
+		
+		response.put("message", "The user was added with success");
+		response.put("client", updated);
+		
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+	}
+	
+	@Secured({ "ROLE_ADMIN", "ROLE_TEACHER", "ROLE_STUDENT" })
+	@PostMapping
 	public ResponseEntity<?> CreateUser(@Valid @RequestBody Users user, BindingResult result) {
 
 		// Se obtiene la hora actual del servidor para guardarla en el campo createAt
@@ -136,7 +228,7 @@ public class UsersSystemController {
 		user.setCreateAt(dt);
 
 		/*
-		 * Desde el frontend por json se recive la propiedad roles como un array de un
+		 * Desde el frontend por json se recibe la propiedad roles como un array de un
 		 * solo elemento tipo json el cual contiene un unico campo llamado "name" y que
 		 * contiene el nombre del rol para obtenerlo posteriormente y realizar la
 		 * relación en la base de datos Pendiente Options
@@ -157,21 +249,23 @@ public class UsersSystemController {
 		try {
 			nUser = userService.save(user);
 		} catch (DataAccessException e) {
-			response.put("mensaje", "Error al crear el usuario");
+			response.put("message", "Error: insterting user into DB");
 			response.put("error", e.getMessage() + " : " + e.getMostSpecificCause());
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
+		nUser.setPassword(MSG_PASSWORD);
 		// Se retorna el usuario con el estatus 201
 		return new ResponseEntity<Users>(nUser, HttpStatus.CREATED);
 	}
 
-	@Secured({ "ROLE_ADMIN" })
+	
 	@PutMapping("/{id}")
 	public ResponseEntity<?> UpdateUser(@RequestBody Users user, BindingResult result, @PathVariable Long id) {
 		// Se obtiene la hora actual del servidor para guardarla en el campo updateAt
 		dt = new Date(System.currentTimeMillis());
 		Map<String, Object> response = new HashMap<>();
+		List<Roles> roles = new ArrayList<>();
 
 		/*
 		 * Validamos si existe un error al momento de recibir los datos, en caso de ser
@@ -195,10 +289,13 @@ public class UsersSystemController {
 		Users userUploaded = null;
 		u = userService.findById(id);
 
-		if (u == null) {
-			response.put("mensaje", "El usuario no se encuentra ne la base de datos");
+		if (u == null || u.getIsEnabled() == false) {
+			response.put("message", "Error: Update fail, the user with ID:  ".concat(id.toString().concat(" doesn't exist or is unable")));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
+		Optional<Roles> userRol = roleDao.findByName(user.getRoles().get(0).getName());
+		roles.add(userRol.get());
+		u.setRoles(roles);
 
 		u.setUsername(user.getUsername());
 		u.setName(user.getName());
@@ -223,44 +320,49 @@ public class UsersSystemController {
 		try {
 			userUploaded = userService.save(u);
 		} catch (DataAccessException e) {
-			response.put("mensaje", "Error al actualizar el usuario en la base de datos, intenta más tarde");
+			response.put("message", "Error: updating user into DB");
 			response.put("error", e.getMessage() + " : " + e.getMostSpecificCause());
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-
+		userUploaded.setPassword(MSG_PASSWORD);
 		// Se retorna el usuario actualizado con el estatus 200
 		return new ResponseEntity<Users>(userUploaded, HttpStatus.OK);
 	}
 
-	@Secured({ "ROLE_ADMIN" })
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> DeleteUser(@PathVariable Long id) {
 		Map<String, Object> response = new HashMap<>();
+		Users user = userService.findById(id);
 
 		/*
 		 * Se intenta eliminar el usuario, en caso de fallo se ejecuta el catch y
 		 * regresa un error 500 con su respectivo mensaje
 		 */
 		
-		
-		// Se obtiene el usuario por su id antes de eliminarlo
-		Users user = userService.findById(id);
 		// Se renombra la imagen para que no sea accedida
+		
+		if (user == null)
+		{
+			response.put("error", "The user does not exist in DB");
+			
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+		}
+
 		String newName = FilesSystemController.RenameFile(user.getPhoto());
 		
-		user.setPhoto(newName);
-		
 		try {
+			user.setRoles(null);			
+			userService.save(user);
 			userService.delete(id);
 		} catch (DataAccessException e) {
-			response.put("mensaje", "Error al eliminar el usuario");
+			response.put("message", "Error: Connecting with DB");
 			response.put("error", e.getMessage() + " : " + e.getMostSpecificCause());
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
 		// Al eliminar correctamente el usuario se retorna un mensaje de exito con un
 		// estatus 200
-		response.put("mensaje", "Usuario eliminado con exito!");
+		response.put("message", "The user has been DELETED successfully!");
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 }
