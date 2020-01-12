@@ -43,5 +43,10 @@ public class ActivityServiceImpl implements IActivityService{
 	public void delete(Long id) {
 		activityDao.deleteById(id);
 	}
+
+	@Override
+	public Activity findByTitleActivity(String title) {
+		return activityDao.findByTitleActivity(title);
+	}
 	
 }

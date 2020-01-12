@@ -76,16 +76,16 @@ public class Activity implements Serializable{
 		this.instructions = instructions;
 	}
 
-	public Course getCourse() {
-		return course;
+	public Long getCourse() {
+		return course.getIdCourse();
 	}
 
 	public void setCourse(Course course) {
 		this.course = course;
 	}
 
-	public Users getUsers() {
-		return users;
+	public Long getUsers() {
+		return users.getIdUser();
 	}
 
 	public void setUsers(Users users) {

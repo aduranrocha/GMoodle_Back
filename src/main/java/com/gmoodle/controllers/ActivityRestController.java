@@ -1,5 +1,6 @@
 package com.gmoodle.controllers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gmoodle.models.entity.Activity;
+import com.gmoodle.models.entity.Users;
 import com.gmoodle.models.services.IActivityService;
 
 
@@ -36,8 +38,11 @@ public class ActivityRestController {
 	
 	
 	@GetMapping
-	public List<Activity> index(){
-		return activityService.findAll();	
+	public ResponseEntity<?> index(){
+		List<Activity> a = new ArrayList<>();
+		a = activityService.findAll();
+		
+		return new ResponseEntity<List<Activity>>(a, HttpStatus.OK);
 	}
 	/*
 	 * Me pregunto si el find sera exclusivo del maestro
@@ -45,7 +50,7 @@ public class ActivityRestController {
 	 * */
 	@GetMapping("/page/{page}")
 	public Page<Activity> index(@PathVariable Integer page){
-		return activityService.findAll(PageRequest.of(page, 3));	
+		return activityService.findAll(PageRequest.of(page, 10));	
 	}
 	
 	
@@ -71,11 +76,13 @@ public class ActivityRestController {
 		return new ResponseEntity<Activity>(activity,HttpStatus.OK);
 	}
 	
-	@Secured({ "ROLE_TEACHER" })
+	@Secured({ "ROLE_TEACHER", "ROLE_ADMIN" })
 	@PostMapping
 	// @Valid validates the data @BindingResult error messages
 	public ResponseEntity<?> create(@Valid @RequestBody Activity activity, BindingResult result) {
 		Activity activityNew = null;
+		Activity exist = null;
+		
 		Map<String, Object> response = new HashMap<>();
 		// validate if it has mistakes
 		if(result.hasErrors()) {
@@ -91,6 +98,14 @@ public class ActivityRestController {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
 		
+		exist = activityService.findByTitleActivity(activity.getTitleActivity());
+		
+		if (exist != null)
+		{
+			response.put("error", "Activity already exist!");
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
 				
 		try {
 			activityNew = activityService.save(activity);
@@ -101,11 +116,11 @@ public class ActivityRestController {
 		}
 		
 		response.put("message", "The activity has been CREATED successfully!");
-		response.put("cliente", activityNew);
+		response.put("activity", activityNew);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
 	
-	@Secured({ "ROLE_TEACHER" })
+	@Secured({ "ROLE_TEACHER","ROLE_ADMIN" })
 	@PutMapping("/{id}")
 	public ResponseEntity<?> update(@Valid @RequestBody Activity activity, BindingResult result, @PathVariable Long id) {
 		Activity activityActual = activityService.findById(id);

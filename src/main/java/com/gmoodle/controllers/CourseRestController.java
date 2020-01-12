@@ -26,7 +26,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gmoodle.models.entity.Course;
+import com.gmoodle.models.entity.Users;
 import com.gmoodle.models.services.ICourseService;
+import com.gmoodle.models.services.userservice.UserService;
 
 @RestController
 @RequestMapping("/course") 
@@ -34,9 +36,13 @@ public class CourseRestController {
 	@Autowired
 	private ICourseService courseService;
 	
+	@Autowired
+	private UserService userService;
+	
 	@GetMapping
 	public List<Course> index(){
-		return courseService.findAll();	
+		return courseService.findAll();
+		
 	}
 	
 	// Show all but with pages {number of pages}
@@ -103,6 +109,7 @@ public class CourseRestController {
 	public ResponseEntity<?> update(@Valid @RequestBody Course course, BindingResult result, @PathVariable Long id) {
 		Course courseActual = courseService.findById(id);
 		Course courseUpdate = null;
+		Users newUser = null;
 
 		Map<String, Object> response = new HashMap<>();
 		
@@ -124,6 +131,12 @@ public class CourseRestController {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
 		try {
+			if (course.getUsers().get("idUser") != courseActual.getUsers().get("idUser"))
+			{
+				newUser = userService.findById((Long) course.getUsers().get("idUser"));
+				
+				courseActual.setUsers(newUser);
+			}
 			courseActual.setNameCourse(course.getNameCourse());
 			courseActual.setSummaryCourse(course.getSummaryCourse());
 			courseActual.setStartDateCourse(course.getStartDateCourse());

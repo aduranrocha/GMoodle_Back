@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.gmoodle.models.entity.Activity;
 
 public interface IActivityDao extends JpaRepository<Activity, Long>{
-
+	public Activity findByTitleActivity(String title);
 }

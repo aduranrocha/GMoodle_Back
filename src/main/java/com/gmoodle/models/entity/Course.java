@@ -3,7 +3,9 @@ package com.gmoodle.models.entity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -62,7 +64,7 @@ public class Course implements Serializable {
 	
 	@NotNull(message="can not be empty")
 	@Column(nullable=false)
-	private boolean createById;
+	private Long createById;
 	
 	//column that will connect with the other table
 	@OneToMany(mappedBy="course", cascade = CascadeType.ALL)
@@ -194,14 +196,14 @@ public class Course implements Serializable {
 	/**
 	 * @return the createById
 	 */
-	public boolean isCreateById() {
+	public Long isCreateById() {
 		return createById;
 	}
 
 	/**
 	 * @param createById the createById to set
 	 */
-	public void setCreateById(boolean createById) {
+	public void setCreateById(Long createById) {
 		this.createById = createById;
 	}
 	
@@ -209,8 +211,14 @@ public class Course implements Serializable {
 	 *  Method that gets the object of class Users
 	 * @return the users
 	 */
-	public Users getUsers() {
-		return users;
+	public Map<String, Object> getUsers() {
+		Map<String, Object> myList = new HashMap<>();
+		
+		myList.put("idUser", users.getIdUser());
+		myList.put("userName",users.getName());
+		myList.put("email",users.getEmail());
+		
+		return myList;
 	}
 
 	/**
