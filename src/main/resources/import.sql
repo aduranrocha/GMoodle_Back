@@ -34,9 +34,9 @@ INSERT INTO groupclass (nameGroup, createAt,enrolmentKey,numberMax,isEnableGroup
 INSERT INTO groupclass (nameGroup, createAt,enrolmentKey,numberMax,isEnableGroup, summaryGroup,updateAt,startDateGroup,endDateGroup,countNumber,isStartGroup) VALUES('Cohort 17','2019-07-02','GrupoChido',30,true,'Grupo para convertirse en desarollador fullstack','2019-10-25','2019-09-30','2019-12-30',1,true);
 INSERT INTO groupclass (nameGroup, createAt,enrolmentKey,numberMax,isEnableGroup, summaryGroup,updateAt,startDateGroup,endDateGroup,countNumber,isStartGroup) VALUES('Cohort 18','2019-09-30','PapaMacho',30,true,'Grupo para convertirse en desarollador fullstack','2019-11-09','2019-09-30','2019-12-30',1,true);
 
-INSERT INTO activity(titleActivity,instructions,idCourse,idUser) VALUES ('Series de Fiboncci','Create a code that generates the Fibonnaci series util de the number the user ask',1,1);
-INSERT INTO activity(titleActivity,instructions,idCourse,idUser) VALUES ('Email solution of problems','Write an email to solve a conflict',1,1);
-INSERT INTO activity(titleActivity,instructions,idCourse,idUser) VALUES ('Interview questions','Make a list of interview questions',1,1);
+INSERT INTO activity(titleActivity,instructions,idCourse,idUser) VALUES ('Series de Fiboncci','Create a code that generates the Fibonnaci series util de the number the user ask',1,3);
+INSERT INTO activity(titleActivity,instructions,idCourse,idUser) VALUES ('Email solution of problems','Write an email to solve a conflict',1,6);
+INSERT INTO activity(titleActivity,instructions,idCourse,idUser) VALUES ('Interview questions','Make a list of interview questions',1,7);
 
 INSERT INTO document(pathDoucument,isCheck,isEnableDocument,idActivity,idUser) VALUES ('kndkjsndkjdsndkj',true,true,1,1);
 INSERT INTO document(pathDoucument,isCheck,isEnableDocument,idActivity,idUser) VALUES ('kndkjsndkjdsndkj',true,true,1,2);
