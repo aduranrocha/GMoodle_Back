@@ -327,15 +327,25 @@ public class UsersSystemController {
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> DeleteUser(@PathVariable Long id) {
-		Roles rol = null;
 		Map<String, Object> response = new HashMap<>();
+		Users user = userService.findById(id);
 
 		/*
 		 * Se intenta eliminar el usuario, en caso de fallo se ejecuta el catch y
 		 * regresa un error 500 con su respectivo mensaje
 		 */
 		
+		if (user == null)
+		{
+			response.put("error", "The user does not exist in DB");
+			
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+		}
+		
+		
 		try {
+			user.setRoles(null);			
+			userService.save(user);
 			userService.delete(id);
 		} catch (DataAccessException e) {
 			response.put("message", "Error: Connecting with DB");
