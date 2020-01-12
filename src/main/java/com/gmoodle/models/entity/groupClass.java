@@ -3,7 +3,9 @@ package com.gmoodle.models.entity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -15,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -58,19 +61,40 @@ public class groupClass implements Serializable{
 	@Column(nullable=true)
 	@Temporal(TemporalType.DATE)
 	private Date updateAt;
-	
+	//Save the number max of students in the course
 	@NotNull(message="can not be empty")
 	@Column(nullable=false)
-	private Short idNumberMax;
+	private Short numberMax;
+	// It will count the number of students already add
+	@NotNull(message="can not be empty")
+	@Column(nullable=false)
+	private Short countNumber;
+	// Validates 5 days after from the startDateCourse
+	@NotNull(message="can not be empty")
+	@Column(nullable=false)
+	private boolean isStartGroup;
 	
 	@NotNull(message="can not be empty")
 	@Column(nullable=false)
 	private boolean isEnableGroup;
+	
+	@NotNull(message ="can not be empty")
+	@Temporal(TemporalType.DATE)
+	private Date startDateGroup;
+	
+	@NotNull(message ="can not be empty")
+	@Temporal(TemporalType.DATE)
+	private Date endDateGroup;
 
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable(name = "group_course", joinColumns = @JoinColumn(name = "group_id"), inverseJoinColumns = @JoinColumn(name = "course_id"), uniqueConstraints = {
 			@UniqueConstraint(columnNames = { "group_id", "course_id" }) })
 	private List<Course> course = new ArrayList<>();
+	/**
+	 * Relation @OneToMany between the user and the group
+	 */
+	@OneToMany(mappedBy="group", cascade = CascadeType.ALL)
+	private List<Users> user = new ArrayList<>();
 	
 	public Long getIdGroup() {
 		return idGroup;
@@ -120,12 +144,12 @@ public class groupClass implements Serializable{
 		this.updateAt = updateAt;
 	}
 
-	public Short getIdNumberMax() {
-		return idNumberMax;
+	public Short getNumberMax() {
+		return numberMax;
 	}
 
-	public void setIdNumberMax(Short idNumberMax) {
-		this.idNumberMax = idNumberMax;
+	public void setNumberMax(Short numberMax) {
+		this.numberMax = numberMax;
 	}
 
 	public boolean getIsEnableGroup() {
@@ -135,6 +159,49 @@ public class groupClass implements Serializable{
 	public void setIsEnableGroup(boolean isEnableGroup) {
 		this.isEnableGroup = isEnableGroup;
 	}
+	public Short getCountNumber() {
+		return countNumber;
+	}
+
+	public void setCountNumber(Short countNumber) {
+		this.countNumber = countNumber;
+	}
+
+	public boolean getIsStartGroup() {
+		return isStartGroup;
+	}
+
+	public void setIsStartGroup(boolean isStartGroup) {
+		this.isStartGroup = isStartGroup;
+	}
+
+	/**
+	 * @return the startDateCourse
+	 */
+	public Date getStartDateGroup() {
+		return startDateGroup;
+	}
+
+	/**
+	 * @param startDateCourse the startDateCourse to set
+	 */
+	public void setStartDateGroup(Date startDateGroup) {
+		this.startDateGroup = startDateGroup;
+	}
+	
+	/**
+	 * @return the endDateCourse
+	 */
+	public Date getEndDateGroup() {
+		return endDateGroup;
+	}
+
+	/**
+	 * @param endDateCourse the endDateCourse to set
+	 */
+	public void setEndDateGroup(Date endDateGroup) {
+		this.endDateGroup = endDateGroup;
+	}
 	
 	public List<Course> getCourse() {
 		return course;
@@ -142,6 +209,22 @@ public class groupClass implements Serializable{
 
 	public void setCourse(List<Course> course) {
 		this.course = course;
+	}
+
+	public List<Map<String,Object>> getUser() {
+		List<Map<String,Object>> usersList = new ArrayList<>();
+		for (Users u:user) {
+			Map<String,Object> myUserMap = new HashMap<>();
+			myUserMap.put("iduser", u.getIdUser());
+			myUserMap.put("name", u.getName());
+			
+			usersList.add(myUserMap);
+		}
+		return usersList;
+	}
+
+	public void setUser(List<Users> user) {
+		this.user = user;
 	}
 
 	private static final long serialVersionUID = 1L;

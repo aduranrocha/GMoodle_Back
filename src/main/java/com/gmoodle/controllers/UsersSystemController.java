@@ -30,11 +30,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.gmoodle.models.dao.RoleDao;
 import com.gmoodle.models.entity.Roles;
 import com.gmoodle.models.entity.Users;
+import com.gmoodle.models.entity.groupClass;
+import com.gmoodle.models.services.IGroupClassService;
 import com.gmoodle.models.services.userservice.IUserService;
 
 @CrossOrigin(origins = { "http://localhost:4200" })
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/user")
 public class UsersSystemController {
 
 	/*
@@ -65,6 +67,9 @@ public class UsersSystemController {
 
 	@Autowired
 	private RoleDao roleDao;
+	
+	@Autowired
+	private IGroupClassService groupService;
 	
 	private final String MSG_PASSWORD = "[PROTECTED]";
 
@@ -132,7 +137,28 @@ public class UsersSystemController {
 		user.setPassword(MSG_PASSWORD);
 		return new ResponseEntity<Users>(user, HttpStatus.OK);
 	}
-
+	
+	@Secured({"ROLE_STUDENT"})
+	@PostMapping("/enrolStudent")
+	public ResponseEntity<?> EnrolStundent(@RequestBody Users user, BindingResult result){
+		
+		// Obtener tu objeto groupClass
+		groupClass group = null;
+		group = groupService.findById((Long) user.getGroup().get("idGroup"));
+		
+		if (group == null)
+		{
+			//retornar error
+		}
+		
+		// obtener el idUser y el idGroup
+		// verificar que ambos existan y esten activos no esten llenos y lo del deathline
+		// comparar los enrolmentKey
+		// set del idgroup en la tabla user
+		
+		return null;
+	}
+	
 	@Secured({ "ROLE_ADMIN", "ROLE_TEACHER", "ROLE_STUDENT" })
 	@PostMapping
 	public ResponseEntity<?> CreateUser(@Valid @RequestBody Users user, BindingResult result) {
@@ -196,6 +222,7 @@ public class UsersSystemController {
 		return new ResponseEntity<Users>(nUser, HttpStatus.CREATED);
 	}
 
+	
 	@PutMapping("/{id}")
 	public ResponseEntity<?> UpdateUser(@RequestBody Users user, BindingResult result, @PathVariable Long id) {
 		// Se obtiene la hora actual del servidor para guardarla en el campo updateAt

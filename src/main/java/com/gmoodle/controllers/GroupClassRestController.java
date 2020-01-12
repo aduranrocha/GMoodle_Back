@@ -125,10 +125,12 @@ public class GroupClassRestController {
 		}
 		try {
 			groupActual.setNameGroup(group.getNameGroup());
-			groupActual.setIdNumberMax(group.getIdNumberMax());
+			groupActual.setNumberMax(group.getNumberMax());
 			groupActual.setEnrolmentKey(group.getEnrolmentKey());
 			groupActual.setSummaryGroup(group.getSummaryGroup());
 			groupActual.setIsEnableGroup(group.getIsEnableGroup());
+			groupActual.setStartDateGroup(group.getStartDateGroup());
+			groupActual.setEndDateGroup(group.getEndDateGroup());
 			groupActual.setUpdateAt(new Date());
 			
 			groupUpdate = groupService.save(groupActual);

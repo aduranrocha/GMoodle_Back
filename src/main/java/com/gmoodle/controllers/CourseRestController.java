@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -26,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.gmoodle.models.dao.UserDao;
 import com.gmoodle.models.entity.Course;
 import com.gmoodle.models.entity.Users;
 import com.gmoodle.models.services.ICourseService;
@@ -157,8 +155,6 @@ public class CourseRestController {
 			}
 			courseActual.setNameCourse(course.getNameCourse());
 			courseActual.setSummaryCourse(course.getSummaryCourse());
-			courseActual.setStartDateCourse(course.getStartDateCourse());
-			courseActual.setEndDateCourse(course.getEndDateCourse());
 			courseActual.setIsEnableCourse(course.getIsEnableCourse());
 			courseActual.setUpdateAt(new Date());
 			//courseActual.setUsers(course.getUsers().get("idUser"));

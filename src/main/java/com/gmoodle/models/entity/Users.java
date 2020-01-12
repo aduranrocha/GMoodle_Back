@@ -17,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -131,6 +132,11 @@ public class Users implements Serializable{
 			@UniqueConstraint(columnNames = { "user_id", "role_id" }) })
 	private List<Roles> roles = new ArrayList<>();
 	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="idGroup")
+    private groupClass group;
+	
+	/*
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable(name = "users_members", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "group_id"), uniqueConstraints = {
 			@UniqueConstraint(columnNames = { "user_id", "group_id" }) })
@@ -162,6 +168,7 @@ public class Users implements Serializable{
 	 */
 	@OneToMany(mappedBy="users", cascade = CascadeType.ALL)
     private List<Activity> activity = new ArrayList<>();
+	
 	
 	public Long getIdUser() {
 		return idUser;
@@ -310,12 +317,24 @@ public class Users implements Serializable{
 	public void setRoles(List<Roles> roles) {
 		this.roles = roles;
 	}
-
+	/*
 	public List<groupClass> getGroup(){
 		return group;
 	}
 	
 	public void setGroup(List<groupClass> group) {
+		this.group = group;
+	}
+	*/
+	public Map<String, Object> getGroup() {
+		Map<String, Object> groupMap = new HashMap<>();
+		
+		groupMap.put("idGroup", group.getIdGroup());
+		
+		return groupMap;
+	}
+	
+	public void setGroup(groupClass group) {
 		this.group = group;
 	}
 	

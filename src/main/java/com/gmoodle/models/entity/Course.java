@@ -46,14 +46,6 @@ public class Course implements Serializable {
 	@Temporal(TemporalType.DATE)
 	private Date createAt;
 	
-	@NotNull(message ="can not be empty")
-	@Temporal(TemporalType.DATE)
-	private Date startDateCourse;
-	
-	@NotNull(message ="can not be empty")
-	@Temporal(TemporalType.DATE)
-	private Date endDateCourse;
-	
 	@NotNull(message="can not be empty")
 	@Column(nullable=false)
 	private boolean isEnableCourse;
@@ -135,34 +127,6 @@ public class Course implements Serializable {
 	 */
 	public void setCreateAt(Date createAt) {
 		this.createAt = createAt;
-	}
-
-	/**
-	 * @return the startDateCourse
-	 */
-	public Date getStartDateCourse() {
-		return startDateCourse;
-	}
-
-	/**
-	 * @param startDateCourse the startDateCourse to set
-	 */
-	public void setStartDateCourse(Date startDateCourse) {
-		this.startDateCourse = startDateCourse;
-	}
-
-	/**
-	 * @return the endDateCourse
-	 */
-	public Date getEndDateCourse() {
-		return endDateCourse;
-	}
-
-	/**
-	 * @param endDateCourse the endDateCourse to set
-	 */
-	public void setEndDateCourse(Date endDateCourse) {
-		this.endDateCourse = endDateCourse;
 	}
 
 	/**
