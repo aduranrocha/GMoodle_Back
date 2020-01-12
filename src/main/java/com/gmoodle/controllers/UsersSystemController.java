@@ -327,12 +327,14 @@ public class UsersSystemController {
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> DeleteUser(@PathVariable Long id) {
+		Roles rol = null;
 		Map<String, Object> response = new HashMap<>();
 
 		/*
 		 * Se intenta eliminar el usuario, en caso de fallo se ejecuta el catch y
 		 * regresa un error 500 con su respectivo mensaje
 		 */
+		
 		try {
 			userService.delete(id);
 		} catch (DataAccessException e) {

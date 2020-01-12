@@ -71,6 +71,7 @@ public class GroupClassRestController {
 	// @Valid validates the data @BindingResult error messages
 	public ResponseEntity<?> create(@Valid @RequestBody groupClass group, BindingResult result) {
 		groupClass groupNew = null;
+		groupClass existGroup = null;
 		Map<String, Object> response = new HashMap<>();
 		// validate if it has mistakes
 		if(result.hasErrors()) {
@@ -85,7 +86,13 @@ public class GroupClassRestController {
 			response.put("errors", errors);
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
-		
+		//Check if the group with that name already exist
+		existGroup = groupService.findByNameGroup(group.getNameGroup());
+		// send a response if group name exist
+		if (existGroup != null) {
+			response.put("error", "Group already exist!");
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 		try {
 			groupNew = groupService.save(group);
 		} catch(DataAccessException e) {
@@ -103,7 +110,7 @@ public class GroupClassRestController {
 	public ResponseEntity<?> update(@Valid @RequestBody groupClass group, BindingResult result, @PathVariable Long id) {
 		groupClass groupActual = groupService.findById(id);
 		groupClass groupUpdate = null;
-
+		
 		Map<String, Object> response = new HashMap<>();
 		
 		if(result.hasErrors()) {
@@ -118,6 +125,7 @@ public class GroupClassRestController {
 			response.put("errors", errors);
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
+
 		// In case the number of ID doesn't exist
 		if (groupActual == null) {
 			response.put("message","Error: Update fail, the group with ID:  ".concat(id.toString().concat(" doesn't exist")));

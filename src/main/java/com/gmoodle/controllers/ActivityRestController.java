@@ -175,8 +175,6 @@ public class ActivityRestController {
 			
 			if(activity.getUsers().get("idUser") != activityActual.getUsers().get("idUser")) {
 				activityActual.setUsers(newUser);
-				System.out.println(activity.getUsers().get("userName"));
-				System.out.println(activityActual.getUsers().get("userName"));
 			}
 			
 			if(activity.getCourse().get("idCourse") != activityActual.getCourse().get("idCourse")) {
@@ -198,7 +196,7 @@ public class ActivityRestController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 
 	}
-	@Secured({ "ROLE_TEACHER" })
+	@Secured({ "ROLE_TEACHER","ROLE_ADMIN" })
 	@DeleteMapping("/{id}") 
 	public ResponseEntity<?> delete(@PathVariable Long id) {		
 		Map<String, Object> response = new HashMap<>();
