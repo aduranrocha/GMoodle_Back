@@ -347,11 +347,11 @@ public class UsersSystemController {
 			
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
-
-		String newName = FilesSystemController.RenameFile(user.getPhoto());
 		
 		try {
-			user.setRoles(null);			
+			
+			FilesSystemController.deleteFile(user.getPhoto());
+			user.setRoles(null);
 			userService.save(user);
 			userService.delete(id);
 		} catch (DataAccessException e) {

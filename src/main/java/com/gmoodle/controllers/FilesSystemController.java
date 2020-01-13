@@ -106,7 +106,7 @@ public class FilesSystemController {
 			}
 
 			// Borrar la imagen anterior si existe en el servidor
-			deleteLastImage(user.getPhoto());
+			deleteFile(user.getPhoto());
 
 			// Se cambia la diagonal por otro caracter (Consultar comentarios del metodo GetFile())
 			dbPath = fullPath.replace("/", DIAGONAL_REPLACEMENT);
@@ -266,19 +266,20 @@ public class FilesSystemController {
 	}
 
 	// Clase estatica para eliminar las imagenes del servidor
-	public static void deleteLastImage(String photo) {
+	public static void deleteFile(String fileName) {
 		/*
 		 * Al momento de actualizar la imagen del perfil del usuario, se elimina la
 		 * imagen anterior del servidor y se reemplaza por la imagen nueva.
 		 */
-
+		String partsFile[] = fileName.split(Pattern.quote(DIAGONAL_REPLACEMENT_STATIC));
+		String fullPath = partsFile[0] + "/" + partsFile[1];
 		// Se obtiene el nombre de la foto actual del usuario
-		String lastPhoto = photo;
+		String file = partsFile[2];
 		// Se valida que el nombre realmente exista
-		if (lastPhoto != null && lastPhoto.length() > 0) {
+		if (file != null && file.length() > 0) {
 
 			// Se obtiene la ruta de la foto
-			Path pathLastPhoto = Paths.get("files").resolve(lastPhoto).toAbsolutePath();
+			Path pathLastPhoto = Paths.get(fullPath).resolve(file).toAbsolutePath();
 			// Se convierte a tipo File(tipo archivo)
 			File fileLastPhoto = pathLastPhoto.toFile();
 			// Se valida si existe y si se puede leer
@@ -360,7 +361,7 @@ public class FilesSystemController {
 		return isValid;
 	}
 
-	public static String RenameFile(String fileName)
+	/*public static String RenameFile(String fileName)
 	{
 		String[] file = fileName.split(Pattern.quote(DIAGONAL_REPLACEMENT_STATIC));
 		
@@ -381,5 +382,5 @@ public class FilesSystemController {
 		return "error";
 		
 		
-	}
+	}*/
 }
