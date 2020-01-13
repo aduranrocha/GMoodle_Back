@@ -34,7 +34,7 @@ import com.gmoodle.models.entity.groupClass;
 import com.gmoodle.models.services.IGroupClassService;
 import com.gmoodle.models.services.userservice.IUserService;
 
-@CrossOrigin(origins = { "http://localhost:4200" })
+@CrossOrigin(origins = { "http://localhost:4200", "*" })
 @RestController
 @RequestMapping("/user")
 public class UsersSystemController {

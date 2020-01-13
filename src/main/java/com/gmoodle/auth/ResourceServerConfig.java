@@ -57,7 +57,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	{
 		CorsConfiguration config = new CorsConfiguration();
 		// Se configura el origen que va a poder acceder al backend
-		config.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+		config.setAllowedOrigins(Arrays.asList("http://localhost:4200", "*"));
 		// Los metodos que se van a utilizar
 		config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 		// Se permiten las credenciales para las autenticaciones
