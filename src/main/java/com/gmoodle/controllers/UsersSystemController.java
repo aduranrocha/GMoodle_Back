@@ -140,7 +140,7 @@ public class UsersSystemController {
 		}
 		
 		response.put("admin", adminList);
-		return new ResponseEntity<Map<String,Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<Map<String,Object>>(response, HttpStatus.OK);
 	}
 	/*
 	 * Method that will 
