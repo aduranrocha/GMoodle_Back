@@ -12,6 +12,8 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -87,7 +89,16 @@ public class UsersSystemController {
 
 		return nonePassUser;
 	}
-	
+
+	// Show all but with pages {number of pages}
+	// 'numElem' its the number of element per page, 'page' number of the page 
+	@GetMapping("/page/{numElem}/{page}")
+	public Page<Users> index(
+			@PathVariable(value = "numElem") Integer numElem,
+			@PathVariable(value = "page") Integer page){
+		return userService.findAll(PageRequest.of(page, numElem));
+	}
+
 	@GetMapping("/{id}")
 	public ResponseEntity<?> showOne(@PathVariable Long id) {
 		/*
@@ -117,33 +128,37 @@ public class UsersSystemController {
 		user.setPassword(MSG_PASSWORD);
 		return new ResponseEntity<Users>(user, HttpStatus.OK);
 	}
+
 	/*
-	 * Method that will 
+	 * Method that will
+	 * 
 	 * @return a list of all the admin
 	 */
 	@GetMapping("/admin")
-	public ResponseEntity<?> showAdmin(){
-		Map<String,Object> response = new HashMap<>();
+	public ResponseEntity<?> showAdmin() {
+		Map<String, Object> response = new HashMap<>();
 		List<Users> userList = userService.findAll();
 		List<Users> adminList = new ArrayList<>();
 		try {
-			for(Users u : userList) {
-				if(u.getRoles().get(0).getName().equals("ROLE_ADMIN")) {
+			for (Users u : userList) {
+				if (u.getRoles().get(0).getName().equals("ROLE_ADMIN")) {
 					u.setPassword(MSG_PASSWORD);
 					adminList.add(u);
 				}
 			}
-		}catch (DataAccessException e) {
+		} catch (DataAccessException e) {
 			response.put("message", "Error: Connecting with DB");
 			response.put("error", e.getMessage() + " : " + e.getMostSpecificCause());
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
+
 		response.put("admin", adminList);
-		return new ResponseEntity<Map<String,Object>>(response, HttpStatus.OK);
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
+
 	/*
-	 * Method that will 
+	 * Method that will
+	 * 
 	 * @return a list of all the students
 	 */
 	@GetMapping("/students")
@@ -167,32 +182,34 @@ public class UsersSystemController {
 		response.put("students", studentList);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
+
 	/*
-	 * Method that will 
+	 * Method that will
+	 * 
 	 * @return a list of all the teacher
 	 */
 	@GetMapping("/teachers")
-	public ResponseEntity<?> showTeacher(){
-		Map<String,Object> response = new HashMap<>();
+	public ResponseEntity<?> showTeacher() {
+		Map<String, Object> response = new HashMap<>();
 		List<Users> userList = userService.findAll();
 		List<Users> teacherList = new ArrayList<>();
 		try {
-			for(Users u: userList) {
-				if(u.getRoles().get(0).getName().equals("ROLE_TEACHER")) {
+			for (Users u : userList) {
+				if (u.getRoles().get(0).getName().equals("ROLE_TEACHER")) {
 					u.setPassword(MSG_PASSWORD);
 					teacherList.add(u);
 				}
 			}
-		}catch (DataAccessException e) {
+		} catch (DataAccessException e) {
 			response.put("message", "Error: Connecting with DB");
 			response.put("error", e.getMessage() + " : " + e.getMostSpecificCause());
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
+
 		response.put("teacher", teacherList);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/username/{username}")
 	public ResponseEntity<?> showByUsername(@PathVariable String username) {
 		Users user = null;

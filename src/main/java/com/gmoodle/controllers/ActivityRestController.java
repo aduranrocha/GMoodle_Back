@@ -54,12 +54,13 @@ public class ActivityRestController {
 		
 		return new ResponseEntity<List<Activity>>(a, HttpStatus.OK);
 	}
-	/*
-	 * Me pregunto si el find sera exclusivo del maestro
-	 * ya que alumno tambien quiero verlo
-	 * */
-	@GetMapping("/page/{page}")
-	public Page<Activity> index(@PathVariable Integer page){
+	
+	// Show all but with pages {number of pages}
+	// 'numElem' its the number of element per page, 'page' number of the page
+	@GetMapping("/page/{numElem}/{page}")
+	public Page<Activity> index(
+			@PathVariable(value = "numElem") Integer numElem,
+			@PathVariable(value = "page") Integer page){
 		return activityService.findAll(PageRequest.of(page, 10));	
 	}
 	

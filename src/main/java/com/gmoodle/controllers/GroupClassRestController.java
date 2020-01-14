@@ -40,10 +40,14 @@ public class GroupClassRestController {
 	public List<groupClass> index(){
 		return groupService.findAll();	
 	}
+	
 	// Show all but with pages {number of pages}
-	@GetMapping("/group/page/{page}")
-	public Page<groupClass> index(@PathVariable Integer page){
-		return groupService.findAll(PageRequest.of(page, 3));	
+	// 'numElem' its the number of element per page, 'page' number of the page
+	@GetMapping("/page/{numElem}/{page}")
+	public Page<groupClass> index(
+			@PathVariable(value = "numElem") Integer numElem,
+			@PathVariable(value = "page") Integer page){
+		return groupService.findAll(PageRequest.of(page, numElem));	
 	}
 	
 	@GetMapping("/{id}")
