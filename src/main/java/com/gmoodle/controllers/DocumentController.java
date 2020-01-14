@@ -38,9 +38,13 @@ public class DocumentController {
 	public List<Document> index(){
 		return documentService.findAll();
 	}
-	@GetMapping("/page/{page}")
-	public Page<Document> index(@PathVariable Integer page){
-		return documentService.findAll(PageRequest.of(page, 3));	
+	// Show all but with pages {number of pages}
+		// 'numElem' its the number of element per page, 'page' number of the page
+	@GetMapping("/page/{numElem}/{page}")
+	public Page<Document> index(
+			@PathVariable(value = "numElem") Integer numElem,
+			@PathVariable(value = "page") Integer page){
+		return documentService.findAll(PageRequest.of(page, numElem));	
 	}
 	@GetMapping("/{id}")
 	public ResponseEntity<?> show(@PathVariable Long id){

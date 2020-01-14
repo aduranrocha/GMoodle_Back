@@ -48,9 +48,12 @@ public class CourseRestController {
 	}
 	
 	// Show all but with pages {number of pages}
-	@GetMapping("/page/{page}")
-	public Page<Course> index(@PathVariable Integer page){
-		return courseService.findAll(PageRequest.of(page, 3));	
+	// 'numElem' its the number of element per page, 'page' number of the page
+	@GetMapping("/page/{numElem}/{page}")
+	public Page<Course> index(
+			@PathVariable(value = "numElem") Integer numElem,
+			@PathVariable(value = "page") Integer page){
+		return courseService.findAll(PageRequest.of(page, numElem));	
 	}
 	@GetMapping("/{id}")
 	public ResponseEntity<?> show(@PathVariable Long id){

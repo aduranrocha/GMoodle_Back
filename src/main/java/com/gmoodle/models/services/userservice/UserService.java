@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -89,7 +91,7 @@ public class UserService implements IUserService, UserDetailsService {
 	public List<Users> findAll() {
 		return (List<Users>) userDao.findAll();
 	}
-
+	
 	@Override
 	public Users save(Users user) {
 		return userDao.save(user);
@@ -105,5 +107,11 @@ public class UserService implements IUserService, UserDetailsService {
 	public void delete(Long id) {
 		userDao.deleteById(id);	
 	}
+
+	@Override
+	public Page<Users> findAll(Pageable pageable) {
+		return userDao.findAll(pageable);
+	}
+
 
 }

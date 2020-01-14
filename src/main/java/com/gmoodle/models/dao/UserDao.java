@@ -2,6 +2,8 @@ package com.gmoodle.models.dao;
 
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 
 import com.gmoodle.models.entity.Users;
@@ -18,4 +20,5 @@ public interface UserDao extends CrudRepository<Users, Long> {
 	 */
 	public Users findByUsername(String username);
 	public Optional<Users> findById(Long idUser);
+	public Page<Users> findAll(Pageable pageable);
 }

@@ -17,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -25,52 +26,57 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name="course")
+@Table(name = "course")
 public class Course implements Serializable {
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long idCourse;
-	
-	@NotEmpty(message="can not be empty")
-	@Size(min=4, max=44, message="the size must be between 4 and 44")
-	@Column(nullable=false)
+
+	@NotEmpty(message = "can not be empty")
+	@Size(min = 4, max = 44, message = "the size must be between 4 and 44")
+	@Column(nullable = false)
 	private String nameCourse;
-	
-	@NotEmpty(message ="can not be empty")
-	@Size(min=10, max=150, message="the size must be between 10 and 150")
-	@Column(nullable=false, columnDefinition = "longtext")
+
+	@NotEmpty(message = "can not be empty")
+	@Size(min = 10, max = 150, message = "the size must be between 10 and 150")
+	@Column(nullable = false, columnDefinition = "longtext")
 	private String summaryCourse;
-	
-	@NotNull(message ="can not be empty")
-	@Column(name="createAt")
+
+	@Column(name = "createAt")
 	@Temporal(TemporalType.DATE)
 	private Date createAt;
-	
-	@NotNull(message="can not be empty")
-	@Column(nullable=false)
+
+	@PrePersist
+	public void prePersist() {
+		createAt = new Date();
+	}
+
+	@NotNull(message = "can not be empty")
+	@Column(nullable = false)
 	private boolean isEnableCourse;
 
-	@Column(nullable=true)
+	@Column(nullable = true)
 	@Temporal(TemporalType.DATE)
 	private Date updateAt;
-	
-	@NotNull(message="can not be empty")
-	@Column(nullable=false)
+
+	@NotNull(message = "can not be empty")
+	@Column(nullable = false)
 	private Long createById;
-	
-	//column that will connect with the other table
-	@OneToMany(mappedBy="course", cascade = CascadeType.ALL)
+
+	// column that will connect with the other table
+	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
 	private List<Activity> activity = new ArrayList<>();
-	
+
 	/**
 	 * Relation ManyToOne from Document to Activity
+	 * 
 	 * @JoinColumn: will add the column with that name into the actual table
 	 * 
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="idUser")
-    private Users users;
-	
+	@JoinColumn(name = "idUser")
+	private Users users;
+
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -170,19 +176,20 @@ public class Course implements Serializable {
 	public void setCreateById(Long createById) {
 		this.createById = createById;
 	}
-	
-	public Map<String,Object> getUsers() {
-		Map<String,Object> myUserMap = new HashMap<>();
-		
+
+	public Map<String, Object> getUsers() {
+		Map<String, Object> myUserMap = new HashMap<>();
+
 		myUserMap.put("idUser", users.getIdUser());
 		myUserMap.put("userName", users.getUsername());
 		myUserMap.put("email", users.getEmail());
-		
+
 		return myUserMap;
 	}
 
 	/**
-	 *  Method that sets the object of class Users
+	 * Method that sets the object of class Users
+	 * 
 	 * @param users the users to set
 	 */
 	public void setUsers(Users users) {
