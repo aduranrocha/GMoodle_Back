@@ -165,7 +165,7 @@ public class UsersSystemController {
 		}
 
 		response.put("students", studentList);
-		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 	/*
 	 * Method that will 
@@ -190,7 +190,7 @@ public class UsersSystemController {
 		}
 		
 		response.put("teacher", teacherList);
-		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 	
 	@GetMapping("/username/{username}")
