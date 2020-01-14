@@ -38,5 +38,5 @@ INSERT INTO activity(titleActivity,instructions,idCourse,idUser) VALUES ('Series
 INSERT INTO activity(titleActivity,instructions,idCourse,idUser) VALUES ('Email solution of problems','Write an email to solve a conflict',1,6);
 INSERT INTO activity(titleActivity,instructions,idCourse,idUser) VALUES ('Interview questions','Make a list of interview questions',1,7);
 
-INSERT INTO document(pathDoucument,isCheck,isEnableDocument,idActivity,idUser) VALUES ('kndkjsndkjdsndkj',true,true,1,1);
-INSERT INTO document(pathDoucument,isCheck,isEnableDocument,idActivity,idUser) VALUES ('kndkjsndkjdsndkj',true,true,1,2);
+INSERT INTO document(pathDoucument,isCheck,isEnableDocument,idActivity,idUser) VALUES ('files*-*temp*-*a',true,true,1,1);
+INSERT INTO document(pathDoucument,isCheck,isEnableDocument,idActivity,idUser) VALUES ('files*-*temp*-*b',true,true,1,2);

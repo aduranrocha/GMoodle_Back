@@ -28,9 +28,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.gmoodle.models.entity.Activity;
 import com.gmoodle.models.entity.Course;
+import com.gmoodle.models.entity.Document;
 import com.gmoodle.models.entity.Users;
 import com.gmoodle.models.services.IActivityService;
 import com.gmoodle.models.services.ICourseService;
+import com.gmoodle.models.services.IDocumentService;
 import com.gmoodle.models.services.userservice.IUserService;
 
 @CrossOrigin(origins = { "http://localhost:4200", "*" })
@@ -202,6 +204,15 @@ public class ActivityRestController {
 	@DeleteMapping("/{id}") 
 	public ResponseEntity<?> delete(@PathVariable Long id) {		
 		Map<String, Object> response = new HashMap<>();
+		Activity myActivity = activityService.findById(id);
+		List<Map<String, Object>> documentsList = new ArrayList<>();
+
+		documentsList = myActivity.getDocument();
+		
+		for (Map<String, Object> e : documentsList)
+		{
+			FilesSystemController.deleteFile((String) e.get("path"));
+		}
 		
 		try {
 			activityService.delete(id);
@@ -213,4 +224,5 @@ public class ActivityRestController {
 		response.put("message", "The activity has been DELETED successfully!");
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
+	
 }

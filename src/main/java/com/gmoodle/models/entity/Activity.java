@@ -104,8 +104,18 @@ public class Activity implements Serializable{
 		this.users = users;
 	}
 	
-	public List<Document> getDocument() {
-		return document;
+	public List<Map<String, Object>> getDocument() {
+		List<Map<String, Object>> myList = new ArrayList<>();
+		for(Document d : document)
+		{
+			Map<String, Object> myMap = new HashMap<>();
+			
+			myMap.put("id", d.getIdDocument());
+			myMap.put("path", d.getPathDoucument());
+			
+			myList.add(myMap);
+		}
+		return myList;
 	}
 
 	public void setDocument(List<Document> document) {
