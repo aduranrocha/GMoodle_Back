@@ -28,11 +28,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.gmoodle.models.entity.Activity;
 import com.gmoodle.models.entity.Course;
-import com.gmoodle.models.entity.Document;
 import com.gmoodle.models.entity.Users;
 import com.gmoodle.models.services.IActivityService;
 import com.gmoodle.models.services.ICourseService;
-import com.gmoodle.models.services.IDocumentService;
 import com.gmoodle.models.services.userservice.IUserService;
 
 @CrossOrigin(origins = { "http://localhost:4200", "*" })
