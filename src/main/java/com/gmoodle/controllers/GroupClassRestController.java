@@ -41,7 +41,8 @@ public class GroupClassRestController {
 
 	@Autowired
 	private ICourseService courseService;
-
+	
+	Date dt;
 	@GetMapping
 	public List<groupClass> index() {
 		return groupService.findAll();
@@ -82,6 +83,7 @@ public class GroupClassRestController {
 	public ResponseEntity<?> create(@Valid @RequestBody groupClass group, BindingResult result) {
 		groupClass groupNew = null;
 		groupClass existGroup = null;
+		dt = new Date(System.currentTimeMillis());
 		Map<String, Object> response = new HashMap<>();
 		// validate if it has mistakes
 		if (result.hasErrors()) {
@@ -102,6 +104,7 @@ public class GroupClassRestController {
 			response.put("error", "Group already exist!");
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+		group.setCreateAt(dt);
 		try {
 			groupNew = groupService.save(group);
 		} catch (DataAccessException e) {
