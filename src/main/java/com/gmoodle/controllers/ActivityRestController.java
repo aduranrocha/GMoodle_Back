@@ -184,7 +184,6 @@ public class ActivityRestController {
 			}
 			activityActual.setTitleActivity(activity.getTitleActivity());
 			activityActual.setInstructions(activity.getInstructions());
-			
 			activityUpdate = activityService.save(activityActual);
 			
 		}catch(DataAccessException e) { 
@@ -198,6 +197,7 @@ public class ActivityRestController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 
 	}
+	
 	@Secured({ "ROLE_TEACHER","ROLE_ADMIN" })
 	@DeleteMapping("/{id}") 
 	public ResponseEntity<?> delete(@PathVariable Long id) {		

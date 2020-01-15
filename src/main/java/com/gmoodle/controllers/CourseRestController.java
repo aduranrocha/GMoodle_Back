@@ -41,10 +41,10 @@ public class CourseRestController {
 	@Autowired
 	private IUserService userService;
 	
+	Date dt;
 	@GetMapping
 	public List<Course> index(){
-		return courseService.findAll();
-		
+		return courseService.findAll();	
 	}
 	
 	// Show all but with pages {number of pages}
@@ -55,6 +55,7 @@ public class CourseRestController {
 			@PathVariable(value = "page") Integer page){
 		return courseService.findAll(PageRequest.of(page, numElem));	
 	}
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> show(@PathVariable Long id){
 		Course course = null;
@@ -77,11 +78,13 @@ public class CourseRestController {
 		return new ResponseEntity<Course>(course,HttpStatus.OK);
 	}
 	
-	//@Secured({ "ROLE_ADMIN" })
+	@Secured({ "ROLE_ADMIN" })
 	@PostMapping
 	// @Valid validates the data @BindingResult error messages
 	public ResponseEntity<?> create(@Valid @RequestBody Course course, BindingResult result) {
 		Course courseNew = null;
+		dt = new Date(System.currentTimeMillis());
+		
 		Map<String, Object> response = new HashMap<>();
 		// validate if it has mistakes
 		if(result.hasErrors()) {
@@ -105,7 +108,8 @@ public class CourseRestController {
 		course.setUsers(courseUser);
 		
 		try {
-			
+			course.setCreateAt(dt);
+			course.setIsEnableCourse(true);
 			courseNew = courseService.save(course);
 		} catch(DataAccessException e) {
 			response.put("message", "Error: insterting data into DB");

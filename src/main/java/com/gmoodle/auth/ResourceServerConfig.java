@@ -37,7 +37,9 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 		 * (/src/main/resources/images/**)
 		 */
 		.antMatchers("/").permitAll()
-		.antMatchers(HttpMethod.GET, "/files", "/files/profiles/**")
+		.antMatchers(HttpMethod.GET, "/files", "/files/profiles/**").permitAll()
+		.antMatchers(HttpMethod.POST,"/user/signup").permitAll()
+		.antMatchers(HttpMethod.GET, "/files/**", "/files/images/**")
 		.hasAnyRole("ROLE_ADMIN", "ROLE_TEACHER", "ROLE_STUDENT")
 		//.antMatchers(HttpMethod.GET, "/admin", "/admin/**").permitAll()
 		.anyRequest().authenticated()
