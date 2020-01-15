@@ -258,7 +258,7 @@ public class UsersSystemController {
 		}
 
 		if (user == null) {
-			response.put("message", "The user with Username: ".concat(username.toString().concat(" doesn't exist")));
+			response.put("message", "The user with username: ".concat(username.toString().concat(" doesn't exist")));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
 		user.setPassword(MSG_PASSWORD);

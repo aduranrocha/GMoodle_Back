@@ -184,7 +184,6 @@ public class ActivityRestController {
 			}
 			activityActual.setTitleActivity(activity.getTitleActivity());
 			activityActual.setInstructions(activity.getInstructions());
-			
 			activityUpdate = activityService.save(activityActual);
 			
 		}catch(DataAccessException e) { 
