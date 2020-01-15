@@ -36,6 +36,9 @@ public class Document implements Serializable{
 	@Column(nullable=false)
 	private boolean isEnableDocument;
 	
+	@Column(name = "titleDocument")
+	private String titleDocument;
+	
 	/**
 	 * Relation ManyToOne from Document to Activity
 	 * @JoinColumn: will add the column with that name into the actual table
@@ -110,6 +113,20 @@ public class Document implements Serializable{
 	}
 	
 	
+	/**
+	 * @return the titleDocument
+	 */
+	public String getTitleDocument() {
+		return titleDocument;
+	}
+
+	/**
+	 * @param titleDocument the titleDocument to set
+	 */
+	public void setTitleDocument(String titleDocument) {
+		this.titleDocument = titleDocument;
+	}
+
 	/**
 	 * Method that gets the object of class Activity
 	 * @return the activity
