@@ -1,7 +1,7 @@
 package com.gmoodle.models.entity;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +19,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotEmpty;
@@ -109,7 +110,11 @@ public class Users implements Serializable{
 	// Notese la M mayúscula para el mes en el pattern
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	private Date createAt;
-
+	
+	@PrePersist
+	public void prePersist() {
+		createAt = new Date();
+	}
 	// @DateTimeFormat(style = "dd/mm/yyyy")
 	// Notese la M mayúscula para el mes en el pattern
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
