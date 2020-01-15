@@ -404,7 +404,7 @@ public class UsersSystemController {
 		Users userUploaded = null;
 		u = userService.findById(id);
 
-		if (u == null || u.getIsEnabled() == false) {
+		if (u == null) {
 			response.put("message", "Error: Update fail, the user with ID:  "
 					.concat(id.toString().concat(" doesn't exist or is unable")));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
