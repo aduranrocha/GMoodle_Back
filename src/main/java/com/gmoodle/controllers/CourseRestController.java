@@ -55,6 +55,7 @@ public class CourseRestController {
 			@PathVariable(value = "page") Integer page){
 		return courseService.findAll(PageRequest.of(page, numElem));	
 	}
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> show(@PathVariable Long id){
 		Course course = null;
@@ -77,7 +78,7 @@ public class CourseRestController {
 		return new ResponseEntity<Course>(course,HttpStatus.OK);
 	}
 	
-	//@Secured({ "ROLE_ADMIN" })
+	@Secured({ "ROLE_ADMIN" })
 	@PostMapping
 	// @Valid validates the data @BindingResult error messages
 	public ResponseEntity<?> create(@Valid @RequestBody Course course, BindingResult result) {

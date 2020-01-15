@@ -102,6 +102,7 @@ public class UsersSystemController {
 		rolList.add(studentRol);
 		user.setRoles(rolList);
 		user.setCreateAt(dt);
+		user.setIsDemoUser(true);
 
 		/*
 		 * Se intenta guardar el usuario, en caso de error se regresa un fallo se
@@ -168,14 +169,11 @@ public class UsersSystemController {
 		}
 
 		user.setPassword(MSG_PASSWORD);
+		
 		return new ResponseEntity<Users>(user, HttpStatus.OK);
 	}
 
-	/*
-	 * Method that will
-	 * 
-	 * @return a list of all the admin
-	 */
+	@Secured({"ROLE_ADMIN"})
 	@GetMapping("/admin")
 	public ResponseEntity<?> showAdmin() {
 		Map<String, Object> response = new HashMap<>();
@@ -198,11 +196,6 @@ public class UsersSystemController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 
-	/*
-	 * Method that will
-	 * 
-	 * @return a list of all the students
-	 */
 	@GetMapping("/students")
 	public ResponseEntity<?> showStudent() {
 		Map<String, Object> response = new HashMap<>();
@@ -272,21 +265,15 @@ public class UsersSystemController {
 		return new ResponseEntity<Users>(user, HttpStatus.OK);
 	}
 
-	/*
-	 * @GetMapping("/enrolStudent") public ResponseEntity<?> availableGroups(){
-	 * groupClass newGroup = null; for(groupClass g:) return null;
-	 * 
-	 * }
-	 */
-	//@Secured({ "ROLE_STUDENT" })
+
+	@Secured({ "ROLE_STUDENT" })
 	@PutMapping("/enrolStudent/{id}")
-	public ResponseEntity<?> enrolStundent(@RequestBody groupClass group, BindingResult result, @PathVariable Long id) {
+	public ResponseEntity<?> enrolStudent(@RequestBody groupClass group, BindingResult result, @PathVariable Long id) {
 
 		// Obtener tu objeto groupClass
 		groupClass existGroup = null;
 		Users existUser = null;
 		Users updated = null;
-		groupClass newGroup = null;
 		Map<String, Object> response = new HashMap<>();
 
 		existGroup = groupService.findById(group.getIdGroup());
@@ -305,14 +292,14 @@ public class UsersSystemController {
 			response.put("error", "The given key does not match");
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		newGroup = groupService.findById(id);
-		if (newGroup.getNumberMax() >= newGroup.getCountNumber()) {
-			newGroup.setCountNumber((byte) (newGroup.getCountNumber() + 1));
-		} else if (newGroup.getNumberMax() <= newGroup.getCountNumber()) {
+		
+		if (existGroup.getNumberMax() >= existGroup.getCountNumber()) {
+			existGroup.setCountNumber((byte) (existGroup.getCountNumber() + 1));
+		} else if (existGroup.getNumberMax() <= existGroup.getCountNumber()) {
 			response.put("error", "The group it is already full");
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 		}
-		existUser.setGroup(newGroup);
+		existUser.setGroup(existGroup);
 		// The User value isDemo will turn to false when is enrol into a group
 		existUser.setIsDemoUser(false);
 		
@@ -325,7 +312,7 @@ public class UsersSystemController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 	
-	@Secured({ "ROLE_ADMIN", "ROLE_TEACHER" })
+	@Secured({ "ROLE_ADMIN" })
 	@PostMapping
 	public ResponseEntity<?> CreateUser(@Valid @RequestBody Users user, BindingResult result) {
 
@@ -458,6 +445,7 @@ public class UsersSystemController {
 		return new ResponseEntity<Users>(userUploaded, HttpStatus.OK);
 	}
 
+	@Secured({ "ROLE_ADMIN" })
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> DeleteUser(@PathVariable Long id) {
 		Map<String, Object> response = new HashMap<>();

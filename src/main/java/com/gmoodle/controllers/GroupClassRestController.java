@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -73,6 +74,7 @@ public class GroupClassRestController {
 	}
 	
 
+	@Secured({ "ROLE_ADMIN" })
 	@PostMapping
 	// @Valid validates the data @BindingResult error messages
 	public ResponseEntity<?> create(@Valid @RequestBody groupClass group, BindingResult result) {
@@ -112,6 +114,7 @@ public class GroupClassRestController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
 	
+	@Secured({ "ROLE_ADMIN" })
 	@PutMapping("/{id}")
 	public ResponseEntity<?> update(@Valid @RequestBody groupClass group, BindingResult result, @PathVariable Long id) {
 		groupClass groupActual = groupService.findById(id);
@@ -162,6 +165,7 @@ public class GroupClassRestController {
 
 	}
 	
+	@Secured({ "ROLE_ADMIN" })
 	@DeleteMapping("/{id}") 
 	public ResponseEntity<?> delete(@PathVariable Long id) {		
 		Map<String, Object> response = new HashMap<>();

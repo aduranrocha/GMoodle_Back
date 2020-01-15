@@ -198,6 +198,7 @@ public class ActivityRestController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 
 	}
+	
 	@Secured({ "ROLE_TEACHER","ROLE_ADMIN" })
 	@DeleteMapping("/{id}") 
 	public ResponseEntity<?> delete(@PathVariable Long id) {		
