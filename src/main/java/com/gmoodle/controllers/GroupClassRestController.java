@@ -147,7 +147,6 @@ public class GroupClassRestController {
 		try {
 			groupActual.setNameGroup(group.getNameGroup());
 			groupActual.setSummaryGroup(group.getSummaryGroup());
-			groupActual.setEnrolmentKey(group.getEnrolmentKey());
 			groupActual.setNumberMax(group.getNumberMax());
 			groupActual.setIsStartGroup(group.getIsStartGroup());
 			groupActual.setIsEnableGroup(group.getIsEnableGroup());
@@ -155,6 +154,13 @@ public class GroupClassRestController {
 			groupActual.setEndDateGroup(group.getEndDateGroup());
 			groupActual.setUpdateAt(new Date());
 
+			//Validar si el enrolment key no es nulo se puede cambiar
+			if (groupActual.getEnrolmentKey() != null)
+			{				
+				groupActual.setEnrolmentKey(group.getEnrolmentKey());
+			}
+			
+			
 			groupUpdate = groupService.save(groupActual);
 
 		} catch (DataAccessException e) {
