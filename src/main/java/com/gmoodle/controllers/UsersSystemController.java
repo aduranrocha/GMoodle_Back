@@ -34,6 +34,7 @@ import com.gmoodle.models.entity.Roles;
 import com.gmoodle.models.entity.Users;
 import com.gmoodle.models.entity.groupClass;
 import com.gmoodle.models.services.IGroupClassService;
+import com.gmoodle.models.services.IRolesService;
 import com.gmoodle.models.services.userservice.IUserService;
 
 @CrossOrigin(origins = { "http://localhost:4200", "*" })
@@ -69,14 +70,55 @@ public class UsersSystemController {
 
 	@Autowired
 	private RoleDao roleDao;
-
+	
+	@Autowired
+	private IRolesService rolService;
+	
 	@Autowired
 	private IGroupClassService groupService;
 
 	private final String MSG_PASSWORD = "[PROTECTED]";
 
 	Date dt;
+	// SignIn method
+	@PostMapping("/signup")
+	public ResponseEntity<?> singUp(@Valid @RequestBody Users user, BindingResult result){
+		dt = new Date(System.currentTimeMillis());
+		Users student = null;
+		Roles studentRol = null;
+		List<Roles> rolList = new ArrayList<>();
+		Map<String,Object> response = new HashMap<>();
+		
+		if (result.hasErrors()) {
+			List<String> errors = result.getFieldErrors().stream().map(e -> e.getField() + " " + e.getDefaultMessage())
+					.collect(Collectors.toList());
 
+			response.put("errors", errors);
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+		}
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		
+		studentRol= rolService.findById((long) 3);
+		rolList.add(studentRol);
+		user.setRoles(rolList);
+		user.setCreateAt(dt);
+
+		/*
+		 * Se intenta guardar el usuario, en caso de error se regresa un fallo se
+		 * ejecuta el catch y retorna un error 500 con su respectivo mensaje
+		 */
+		try {
+			student = userService.save(user);
+		} catch (DataAccessException e) {
+			response.put("message", "Error: insterting user into DB");
+			response.put("error", e.getMessage() + " : " + e.getMostSpecificCause());
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		student.setPassword(MSG_PASSWORD);
+		// Se retorna el usuario con el estatus 201
+		return new ResponseEntity<Users>(student, HttpStatus.CREATED);
+	}
 	// @Secured({ "ROLE_ADMIN" })
 	@GetMapping
 	public List<Users> index() {
@@ -236,7 +278,7 @@ public class UsersSystemController {
 	 * 
 	 * }
 	 */
-	@Secured({ "ROLE_STUDENT" })
+	//@Secured({ "ROLE_STUDENT" })
 	@PutMapping("/enrolStudent/{id}")
 	public ResponseEntity<?> enrolStundent(@RequestBody groupClass group, BindingResult result, @PathVariable Long id) {
 
@@ -259,13 +301,10 @@ public class UsersSystemController {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
-		if (group.getEnrolmentKey() != existGroup.getEnrolmentKey()) {
+		if (!group.getEnrolmentKey().equals(existGroup.getEnrolmentKey())) {
 			response.put("error", "The given key does not match");
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-
-		existUser.setGroup(newGroup);
-
 		newGroup = groupService.findById(id);
 		if (newGroup.getNumberMax() >= newGroup.getCountNumber()) {
 			newGroup.setCountNumber((byte) (newGroup.getCountNumber() + 1));
@@ -273,16 +312,20 @@ public class UsersSystemController {
 			response.put("error", "The group it is already full");
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 		}
-
+		existUser.setGroup(newGroup);
+		// The User value isDemo will turn to false when is enrol into a group
+		existUser.setIsDemoUser(false);
+		
 		updated = userService.save(existUser);
+		updated.setPassword(MSG_PASSWORD);
 
 		response.put("message", "The user was added with success");
 		response.put("user", updated);
 
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
-
-	@Secured({ "ROLE_ADMIN", "ROLE_TEACHER", "ROLE_STUDENT" })
+	
+	@Secured({ "ROLE_ADMIN", "ROLE_TEACHER" })
 	@PostMapping
 	public ResponseEntity<?> CreateUser(@Valid @RequestBody Users user, BindingResult result) {
 

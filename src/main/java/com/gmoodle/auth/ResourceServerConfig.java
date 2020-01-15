@@ -37,7 +37,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 		 * /images/**: Se les da acceso a la ruta donde se encuentran todas las imagenes en el servidor 
 		 * (/src/main/resources/images/**)
 		 */
-		.antMatchers("/").permitAll()
+		.antMatchers(HttpMethod.POST,"/user/signup").permitAll()
 		.antMatchers(HttpMethod.GET, "/files/**", "/files/images/**")
 		.hasAnyRole("ROLE_ADMIN", "ROLE_TEACHER", "ROLE_STUDENT")
 		//.antMatchers(HttpMethod.GET, "/admin", "/admin/**").permitAll()
