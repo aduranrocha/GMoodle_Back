@@ -181,7 +181,7 @@ public class Course implements Serializable {
 		Map<String, Object> myUserMap = new HashMap<>();
 
 		myUserMap.put("idUser", users.getIdUser());
-		myUserMap.put("userName", users.getUsername());
+		myUserMap.put("username", users.getUsername());
 		myUserMap.put("email", users.getEmail());
 
 		return myUserMap;
