@@ -130,7 +130,7 @@ public class FilesSystemController {
 
 	@PostMapping("/upload/file")
 	public ResponseEntity<?> UploadFile(@RequestParam("file") MultipartFile file, @RequestParam Long idUser,
-			@RequestParam Long idActivity) {
+			@RequestParam Long idActivity, @RequestParam String titleFile) {
 
 		/*
 		 * Se crean las variables para guardar el tipo de archivo, nombre completo y las
