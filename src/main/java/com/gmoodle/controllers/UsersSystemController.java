@@ -418,8 +418,6 @@ public class UsersSystemController {
 		u.setLastName(user.getLastName());
 		u.setEmail(user.getEmail());
 		u.setDegree(user.getDegree());
-		// Se encripta la contraseña para mayor seguridad
-		u.setPassword(passwordEncoder.encode(user.getPassword()));
 		u.setIsEnabled(user.getIsEnabled());
 		u.setAddress(user.getAddress());
 		u.setPhoneNumber(user.getPhoneNumber());
@@ -429,6 +427,12 @@ public class UsersSystemController {
 		u.setIsDemoUser(user.getIsDemoUser());
 		u.setUpdateAt(dt);
 
+		// Se valida si el usuario ingreso una nueva contraseña
+		System.out.println(user.getPassword());
+		if (user.getPassword() != null)
+		{
+			u.setPassword(passwordEncoder.encode(user.getPassword()));			
+		}
 		/*
 		 * Se intenta realizar la actualización del usuario, en caso de un fallo se
 		 * ejecuta el catch y regresa un error 500 con su respectivo mensaje.
