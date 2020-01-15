@@ -204,6 +204,7 @@ public class FilesSystemController {
 			document.setActivity(activity);
 			document.setIsCheck(false);
 			document.setIsEnableDocument(true);
+			document.setTitleDocument(titleFile);
 			document.setUsers(user);
 			
 			
