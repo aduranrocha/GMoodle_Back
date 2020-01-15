@@ -106,7 +106,7 @@ public class CourseRestController {
 		course.setUsers(courseUser);
 		
 		try {
-			
+			course.setIsEnableCourse(true);
 			courseNew = courseService.save(course);
 		} catch(DataAccessException e) {
 			response.put("message", "Error: insterting data into DB");
