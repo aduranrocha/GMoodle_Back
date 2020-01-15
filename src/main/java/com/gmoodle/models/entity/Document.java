@@ -36,6 +36,7 @@ public class Document implements Serializable{
 	@Column(nullable=false)
 	private boolean isEnableDocument;
 	
+	@Column(name = "titleDocument")
 	private String titleDocument;
 	
 	/**
