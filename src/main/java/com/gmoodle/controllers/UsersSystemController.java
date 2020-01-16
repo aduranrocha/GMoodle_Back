@@ -86,6 +86,7 @@ public class UsersSystemController {
 		dt = new Date(System.currentTimeMillis());
 		Users student = null;
 		Roles studentRol = null;
+		groupClass group = null;
 		List<Roles> rolList = new ArrayList<>();
 		Map<String,Object> response = new HashMap<>();
 		
@@ -99,7 +100,9 @@ public class UsersSystemController {
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		
 		studentRol= rolService.findById((long) 3);
+		group = groupService.findById((long) 1);
 		rolList.add(studentRol);
+		user.setGroup(group);
 		user.setRoles(rolList);
 		user.setCreateAt(dt);
 		user.setIsDemoUser(true);
@@ -266,7 +269,7 @@ public class UsersSystemController {
 	}
 
 
-	@Secured({ "ROLE_STUDENT" })
+	//@Secured({ "ROLE_STUDENT" })
 	@PutMapping("/enrolStudent/{id}")
 	public ResponseEntity<?> enrolStudent(@RequestBody groupClass group, BindingResult result, @PathVariable Long id) {
 
@@ -319,6 +322,7 @@ public class UsersSystemController {
 		// Se obtiene la hora actual del servidor para guardarla en el campo createAt
 		dt = new Date(System.currentTimeMillis());
 		Users nUser = null;
+		groupClass group = null;
 		Map<String, Object> response = new HashMap<>();
 
 		/*
@@ -340,6 +344,8 @@ public class UsersSystemController {
 
 		// Se obtiene la contraseña enviada por el usuario y se encripta para mayor
 		// seguridad
+		group = groupService.findById((long) 1);
+		user.setGroup(group);
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		user.setCreateAt(dt);
 

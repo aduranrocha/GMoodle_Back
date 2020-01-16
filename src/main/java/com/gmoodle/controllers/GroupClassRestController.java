@@ -214,7 +214,7 @@ public class GroupClassRestController {
 		group.setCourse(courses);
 		nGroup = groupService.save(group);
 
-		response.put("message", "The course have been assign to the group");
+		response.put("message", "The course has been assign to the group");
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 

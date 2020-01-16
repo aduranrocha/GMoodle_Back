@@ -81,6 +81,27 @@ public class Course implements Serializable {
 	@JoinColumn(name = "idUser")
 	private Users users;
 
+	/**
+	 * @return the activity
+	 */
+	public List<Activity> getActivity() {
+		return activity;
+	}
+
+	/**
+	 * @param activity the activity to set
+	 */
+	public void setActivity(List<Activity> activity) {
+		this.activity = activity;
+	}
+
+	/**
+	 * @param isEnableCourse the isEnableCourse to set
+	 */
+	public void setEnableCourse(boolean isEnableCourse) {
+		this.isEnableCourse = isEnableCourse;
+	}
+
 	private static final long serialVersionUID = 1L;
 
 	/**

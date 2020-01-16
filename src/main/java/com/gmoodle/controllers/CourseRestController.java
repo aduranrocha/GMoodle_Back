@@ -1,5 +1,6 @@
 package com.gmoodle.controllers;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -26,8 +27,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gmoodle.models.entity.Activity;
 import com.gmoodle.models.entity.Course;
 import com.gmoodle.models.entity.Users;
+import com.gmoodle.models.services.IActivityService;
 import com.gmoodle.models.services.ICourseService;
 import com.gmoodle.models.services.userservice.IUserService;
 
@@ -40,6 +43,9 @@ public class CourseRestController {
 	
 	@Autowired
 	private IUserService userService;
+	
+	@Autowired
+	private IActivityService activityService;
 	
 	Date dt;
 	@GetMapping
@@ -181,6 +187,44 @@ public class CourseRestController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 
 	}
+	
+	@PutMapping("/assignActivity/{idCourse}/{idActivity}")
+	public ResponseEntity<?> assignActivity(@Valid @RequestBody List<Activity> activity, @PathVariable Long idCourse,
+			@PathVariable Long idActivity){
+		Map<String,Object> response = new HashMap<>();
+		List<Activity> existActivity = new ArrayList<>();
+		
+		Course course = null;
+		Course newCourse = null;
+		
+		for(Activity a : activity) {
+			Activity rs = activityService.findById(a.getIdActivity());
+			
+			if(rs == null) {
+				response.put("message", "Some activity does not exist");
+				return new ResponseEntity<Map<String,Object>>(response,HttpStatus.NOT_FOUND);
+			}
+			
+			existActivity.add(activityService.findById(a.getIdActivity()));
+		}
+		
+		course = courseService.findById(idCourse);
+		if (course == null) {
+			response.put("message", "The course does not exist in DB");
+			return new ResponseEntity<Map<String,Object>>(response, HttpStatus.NOT_FOUND);
+		}
+		for(Activity a: activity) {
+			Activity rs = activityService.findById(a.getIdActivity());
+			activityService.save(rs);
+		}
+		
+		course.setActivity(activity);
+		newCourse = courseService.save(course);
+		
+		response.put("message", "The activity has been assign to the course");
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+	}
+	
 	@Secured({ "ROLE_ADMIN" })
 	@DeleteMapping("/{id}") 
 	public ResponseEntity<?> delete(@PathVariable Long id) {		
