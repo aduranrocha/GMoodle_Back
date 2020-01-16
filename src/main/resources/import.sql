@@ -27,11 +27,11 @@ INSERT INTO `users_roles` (user_id, role_id) VALUES (7, 2);
 INSERT INTO `users_roles` (user_id, role_id) VALUES (8, 3);
 
 
-
 INSERT INTO course(nameCourse,summaryCourse,isEnableCourse,createAt,createById,idUser) VALUES ('JavaFullstack','Desarrollo de conociemiento en tecnologias web mediante JAVA',true,'2019-08-30',1,3);
 INSERT INTO course(nameCourse,summaryCourse,isEnableCourse,createAt,createById,idUser) VALUES ('English','Mejorar en el habla del idioma Ingles en un ambiente laboral',true,'2019-08-30',1,1);
 INSERT INTO course(nameCourse,summaryCourse,isEnableCourse,createAt,createById,idUser) VALUES ('Mentoria','Mejorar las softskills del alumno',true,'2019-08-30',1,1);
 
+INSERT INTO groupclass (nameGroup, createAt,enrolmentKey,numberMax,isEnableGroup, summaryGroup,updateAt,startDateGroup,endDateGroup,countNumber,isStartGroup) VALUES('Teachers','2018-09-14','Teachers',30,false,'teachers','2018-10-30','2019-09-30','2019-12-30',1,true);
 INSERT INTO groupclass (nameGroup, createAt,enrolmentKey,numberMax,isEnableGroup, summaryGroup,updateAt,startDateGroup,endDateGroup,countNumber,isStartGroup) VALUES('Cohort 12','2018-09-14','PapaMacho',30,false,'Grupo para convertirse en desarollador fullstack','2018-10-30','2019-09-30','2019-12-30',1,true);
 INSERT INTO groupclass (nameGroup, createAt,enrolmentKey,numberMax,isEnableGroup, summaryGroup,updateAt,startDateGroup,endDateGroup,countNumber,isStartGroup) VALUES('Cohort 13','2018-11-27','LeoRocks',30,false,'Grupo para convertirse en desarollador fullstack','2018-12-15','2019-09-30','2019-12-30',1,true);
 INSERT INTO groupclass (nameGroup, createAt,enrolmentKey,numberMax,isEnableGroup, summaryGroup,updateAt,startDateGroup,endDateGroup,countNumber,isStartGroup) VALUES('Cohort 14','2019-01-30','Ivone',30,false,'Grupo para convertirse en desarollador fullstack','2019-03-30','2019-09-30','2019-12-30',1,true);
@@ -47,13 +47,21 @@ INSERT INTO activity(titleActivity,instructions,idCourse,idUser) VALUES ('Interv
 INSERT INTO document(pathDoucument,isCheck,isEnableDocument,idActivity,idUser) VALUES ('files*-*temp*-*a',true,true,1,1);
 INSERT INTO document(pathDoucument,isCheck,isEnableDocument,idActivity,idUser) VALUES ('files*-*temp*-*b',true,true,1,2);
 
-UPDATE users  SET idGroup=1 where idUser=4;
-UPDATE users  SET idGroup=1 where idUser=5;
-UPDATE users  SET idGroup=1 where idUser=8;
-UPDATE users  SET idGroup=2 where idUser=9;
-UPDATE users  SET idGroup=2 where idUser=10;
-UPDATE users  SET idGroup=2 where idUser=11;
-UPDATE users  SET idGroup=3 where idUser=12;
-UPDATE users  SET idGroup=3 where idUser=13;
-UPDATE users  SET idGroup=3 where idUser=14;
-UPDATE users  SET idGroup=3 where idUser=15;
+
+UPDATE users  SET idGroup=1 where idUser=1;
+UPDATE users  SET idGroup=1 where idUser=2;
+UPDATE users  SET idGroup=1 where idUser=3;
+UPDATE users  SET idGroup=1 where idUser=6;
+UPDATE users  SET idGroup=1 where idUser=7;
+
+
+UPDATE users  SET idGroup=2 where idUser=4;
+UPDATE users  SET idGroup=2 where idUser=5;
+UPDATE users  SET idGroup=2 where idUser=8;
+UPDATE users  SET idGroup=3 where idUser=9;
+UPDATE users  SET idGroup=3 where idUser=10;
+UPDATE users  SET idGroup=3 where idUser=11;
+UPDATE users  SET idGroup=4 where idUser=12;
+UPDATE users  SET idGroup=4 where idUser=13;
+UPDATE users  SET idGroup=4 where idUser=14;
+UPDATE users  SET idGroup=4 where idUser=15;
