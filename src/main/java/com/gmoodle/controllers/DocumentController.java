@@ -24,8 +24,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gmoodle.models.entity.Activity;
 import com.gmoodle.models.entity.Document;
+import com.gmoodle.models.entity.groupClass;
+import com.gmoodle.models.services.IActivityService;
 import com.gmoodle.models.services.IDocumentService;
+import com.gmoodle.models.services.IGroupClassService;
 
 @CrossOrigin(origins = { "http://localhost:4200", "*" })
 @RestController
@@ -34,6 +38,11 @@ public class DocumentController {
 	@Autowired
 	private IDocumentService documentService;
 	
+	@Autowired
+	private IGroupClassService groupService;
+	
+	@Autowired
+	private IActivityService activityService;
 	@GetMapping
 	public List<Document> index(){
 		return documentService.findAll();
@@ -46,6 +55,7 @@ public class DocumentController {
 			@PathVariable(value = "page") Integer page){
 		return documentService.findAll(PageRequest.of(page, numElem));	
 	}
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> show(@PathVariable Long id){
 		Document document = null;
@@ -86,7 +96,6 @@ public class DocumentController {
 			response.put("errors", errors);
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
-		
 		try {
 			documentNew = documentService.save(document);
 		} catch(DataAccessException e) {
@@ -103,7 +112,7 @@ public class DocumentController {
 	public ResponseEntity<?> update(@Valid @RequestBody Document document, BindingResult result, @PathVariable Long id) {
 		Document documentActual = documentService.findById(id);
 		Document documentUpdate = null;
-
+		
 		Map<String, Object> response = new HashMap<>();
 		
 		if(result.hasErrors()) {

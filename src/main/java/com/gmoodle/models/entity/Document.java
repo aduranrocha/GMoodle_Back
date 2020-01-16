@@ -1,6 +1,7 @@
 package com.gmoodle.models.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -38,6 +41,10 @@ public class Document implements Serializable{
 	
 	@Column(name = "titleDocument")
 	private String titleDocument;
+	
+	@Column(name = "createAt")
+	@Temporal(TemporalType.DATE)
+	private Date createAt;
 	
 	/**
 	 * Relation ManyToOne from Document to Activity
@@ -170,6 +177,21 @@ public class Document implements Serializable{
 	 */
 	public void setUsers(Users users) {
 		this.users = users;
+	}
+
+
+	/**
+	 * @return the createAt
+	 */
+	public Date getCreateAt() {
+		return createAt;
+	}
+
+	/**
+	 * @param createAt the createAt to set
+	 */
+	public void setCreateAt(Date createAt) {
+		this.createAt = createAt;
 	}
 
 

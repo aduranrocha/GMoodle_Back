@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +50,7 @@ public class FilesSystemController {
 	@Autowired
 	private IDocumentService documentService;
 	
+	Date dt;
 	/*
 	 * Se utiliza para remplazar la diagonal en el fullPath de los archivos, al momento de guardarla en la base de datos no hay fallo alguno
 	 * pero al momento de consultarla por GET, el sistema la interpreta como dicha ruta (que no existe) y no a la correcta para
@@ -198,9 +200,9 @@ public class FilesSystemController {
 				response.put("error", e.getCause() + " : " + e.getMessage());
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 			}
-			
+			dt = new Date(System.currentTimeMillis());
 			document = new Document();
-			
+			document.setCreateAt(dt);
 			document.setActivity(activity);
 			document.setIsCheck(false);
 			document.setIsEnableDocument(true);
