@@ -1,5 +1,6 @@
 package com.gmoodle.controllers;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -79,6 +80,29 @@ public class DocumentController {
 			return new ResponseEntity<Map<String, Object>>(response,HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<Document>(document,HttpStatus.OK);
+	}
+	
+	@GetMapping("/myfiles/{id}")
+	public ResponseEntity<?> showMyFiles(@PathVariable Long id)
+	{
+		List<Document> allDocuments = new ArrayList<>();
+		List<Document> myDocuments = new ArrayList<>();
+		Map<String, Object> response = new HashMap<>();
+	
+		allDocuments = documentService.findAll();
+		
+		for (Document d : allDocuments)
+		{
+			if ((Long) d.getUsers().get("idUser") == id)
+			{
+				myDocuments.add(d);
+			}
+		}
+		
+		response.put("message", "Documents foundeds");
+		response.put("documents", myDocuments);
+		
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 	
 	@PostMapping
