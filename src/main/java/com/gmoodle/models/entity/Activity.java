@@ -2,6 +2,7 @@ package com.gmoodle.models.entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,9 +17,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 @Table(name="activity")
@@ -52,6 +56,21 @@ public class Activity implements Serializable{
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="idUser")
     private Users users;
+	
+	// @DateTimeFormat(style = "dd/mm/yyyy")
+	// Notese la M mayúscula para el mes en el pattern
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd")
+	private Date createAt;
+	
+	@PrePersist
+	public void prePersist() {
+		createAt = new Date();
+	}
+	// @DateTimeFormat(style = "dd/mm/yyyy")
+	// Notese la M mayúscula para el mes en el pattern
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd")
+	private Date updateAt;	
+	
 	
 	public Long getIdActivity() {
 		return idActivity;
@@ -121,6 +140,22 @@ public class Activity implements Serializable{
 	public void setDocument(List<Document> document) {
 		this.document = document;
 	}
+	
+	
+	public Date getCreateAt() {
+		return createAt;
+	}
 
+	public void setCreateAt(Date createAt) {
+		this.createAt = createAt;
+	}
+
+	Date getUpdateAt() {
+		return updateAt;
+	}
+
+	public void setUpdateAt(Date updateAt) {
+		this.updateAt = updateAt;
+	}
 	private static final long serialVersionUID = 1L;
 }

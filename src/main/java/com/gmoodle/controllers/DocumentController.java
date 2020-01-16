@@ -1,5 +1,6 @@
 package com.gmoodle.controllers;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,10 +27,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.gmoodle.models.entity.Activity;
 import com.gmoodle.models.entity.Document;
+import com.gmoodle.models.entity.Users;
 import com.gmoodle.models.entity.groupClass;
 import com.gmoodle.models.services.IActivityService;
 import com.gmoodle.models.services.IDocumentService;
 import com.gmoodle.models.services.IGroupClassService;
+import com.gmoodle.models.services.userservice.IUserService;
 
 @CrossOrigin(origins = { "http://localhost:4200", "*" })
 @RestController
@@ -39,10 +42,12 @@ public class DocumentController {
 	private IDocumentService documentService;
 	
 	@Autowired
-	private IGroupClassService groupService;
+	private IUserService userService;
 	
 	@Autowired
 	private IActivityService activityService;
+	
+	Date dt;
 	@GetMapping
 	public List<Document> index(){
 		return documentService.findAll();
@@ -82,7 +87,10 @@ public class DocumentController {
 	// @Valid validates the data @BindingResult error messages
 	public ResponseEntity<?> create(@Valid @RequestBody Document document, BindingResult result) {
 		Document documentNew = null;
+		Users user = userService.findById((Long) document.getUsers().get("idUser"));
+		Activity activity = activityService.findById((Long) document.getActivity().get("idActivity"));
 		Map<String, Object> response = new HashMap<>();
+		dt = new Date (System.currentTimeMillis());
 		// validate if it has mistakes
 		if(result.hasErrors()) {
 			// obtain the errors
@@ -97,6 +105,9 @@ public class DocumentController {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
 		try {
+			document.setUsers(user);
+			document.setActivity(activity);
+			document.setCreateAt(dt);
 			documentNew = documentService.save(document);
 		} catch(DataAccessException e) {
 			response.put("message", "Error: insterting data into DB");
@@ -105,7 +116,7 @@ public class DocumentController {
 		}
 		
 		response.put("message", "The document has been CREATED successfuly!");
-		response.put("cliente", documentNew);
+		response.put("document", documentNew);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
 	@PutMapping("/{id}")
@@ -145,7 +156,7 @@ public class DocumentController {
 		}
 		
 		response.put("message", "The document has been UPDATE successfully!");
-		response.put("cliente", documentUpdate);
+		response.put("document", documentUpdate);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 
 	}

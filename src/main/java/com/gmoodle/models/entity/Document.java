@@ -141,9 +141,8 @@ public class Document implements Serializable{
 	public Map<String,Object> getActivity() {
 		Map<String,Object> myActivityMap = new HashMap<>();
 		
-		myActivityMap.put("activityId", activity.getIdActivity());
-		myActivityMap.put("activityName", activity.getTitleActivity());
-		myActivityMap.put("activityUser", activity.getUsers());
+		myActivityMap.put("idActivity", activity.getIdActivity());
+		myActivityMap.put("titleActivity", activity.getTitleActivity());
 		
 		return myActivityMap;
 	}

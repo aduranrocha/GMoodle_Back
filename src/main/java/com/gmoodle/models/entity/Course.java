@@ -25,6 +25,8 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 @Table(name = "course")
 public class Course implements Serializable {
@@ -44,6 +46,7 @@ public class Course implements Serializable {
 
 	@Column(name = "createAt")
 	@Temporal(TemporalType.DATE)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd")
 	private Date createAt;
 
 	@PrePersist
@@ -51,13 +54,14 @@ public class Course implements Serializable {
 		createAt = new Date();
 	}
 
+	@Column(nullable = true)
+	@Temporal(TemporalType.DATE)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd")
+	private Date updateAt;
+	
 	@NotNull(message = "can not be empty")
 	@Column(nullable = false)
 	private boolean isEnableCourse;
-
-	@Column(nullable = true)
-	@Temporal(TemporalType.DATE)
-	private Date updateAt;
 
 	@NotNull(message = "can not be empty")
 	@Column(nullable = false)

@@ -27,6 +27,8 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 @Table(name="groupClass")
 public class groupClass implements Serializable{
@@ -51,6 +53,7 @@ public class groupClass implements Serializable{
 	
 	@NotNull(message ="can not be empty")
 	@Temporal(TemporalType.DATE)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd")
 	private Date createAt;
 	
 	@PrePersist
@@ -60,6 +63,7 @@ public class groupClass implements Serializable{
 
 	@Column(nullable=true)
 	@Temporal(TemporalType.DATE)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd")
 	private Date updateAt;
 	//Save the number max of students in the course
 	@NotNull(message="can not be empty")

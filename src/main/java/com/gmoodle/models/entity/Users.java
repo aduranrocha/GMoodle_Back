@@ -101,14 +101,14 @@ public class Users implements Serializable{
 
 	// @DateTimeFormat(style = "dd/mm/yyyy")
 	// Notese la M mayúscula para el mes en el pattern
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd")
 	private Date birthDate;
 	
 	private String photo;
 
 	// @DateTimeFormat(style = "dd/mm/yyyy")
 	// Notese la M mayúscula para el mes en el pattern
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd")
 	private Date createAt;
 	
 	@PrePersist
@@ -117,7 +117,7 @@ public class Users implements Serializable{
 	}
 	// @DateTimeFormat(style = "dd/mm/yyyy")
 	// Notese la M mayúscula para el mes en el pattern
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd")
 	private Date updateAt;
 	
 	private boolean isDemoUser;
