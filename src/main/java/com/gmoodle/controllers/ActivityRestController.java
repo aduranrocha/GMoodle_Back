@@ -61,7 +61,7 @@ public class ActivityRestController {
 	public Page<Activity> index(
 			@PathVariable(value = "numElem") Integer numElem,
 			@PathVariable(value = "page") Integer page){
-		return activityService.findAll(PageRequest.of(page, 10));	
+		return activityService.findAll(PageRequest.of(page, numElem));	
 	}
 	
 	
