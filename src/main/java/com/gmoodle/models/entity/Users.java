@@ -323,8 +323,13 @@ public class Users implements Serializable{
 		this.roles = roles;
 	}
 	
-	public groupClass getGroup() {
-		return group;
+	public Map<String, Object> getGroup() {
+		Map<String, Object> groupMap = new HashMap<>();
+		
+		groupMap.put("idGroup", group.getIdGroup());
+		groupMap.put("nameGroup", group.getNameGroup());
+		
+		return groupMap;
 	}
 	
 	public void setGroup(groupClass group) {
