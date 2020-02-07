@@ -25,6 +25,12 @@ INSERT INTO `users_roles` (user_id, role_id) VALUES (5, 3);
 INSERT INTO `users_roles` (user_id, role_id) VALUES (6, 2);
 INSERT INTO `users_roles` (user_id, role_id) VALUES (7, 2);
 INSERT INTO `users_roles` (user_id, role_id) VALUES (8, 3);
+INSERT INTO `users_roles` (user_id, role_id) VALUES (9, 3);
+INSERT INTO `users_roles` (user_id, role_id) VALUES (10, 3);
+INSERT INTO `users_roles` (user_id, role_id) VALUES (11, 3);
+INSERT INTO `users_roles` (user_id, role_id) VALUES (12, 3);
+INSERT INTO `users_roles` (user_id, role_id) VALUES (13, 3);
+INSERT INTO `users_roles` (user_id, role_id) VALUES (14, 3);
 
 
 
@@ -47,13 +53,18 @@ INSERT INTO activity(titleActivity,instructions,idCourse,idUser) VALUES ('Interv
 INSERT INTO document(pathDoucument,isCheck,isEnableDocument,idActivity,idUser) VALUES ('files*-*temp*-*a',true,true,1,1);
 INSERT INTO document(pathDoucument,isCheck,isEnableDocument,idActivity,idUser) VALUES ('files*-*temp*-*b',true,true,1,2);
 
-UPDATE users  SET idGroup=1 where idUser=4;
-UPDATE users  SET idGroup=1 where idUser=5;
-UPDATE users  SET idGroup=1 where idUser=8;
-UPDATE users  SET idGroup=2 where idUser=9;
-UPDATE users  SET idGroup=2 where idUser=10;
-UPDATE users  SET idGroup=2 where idUser=11;
-UPDATE users  SET idGroup=3 where idUser=12;
-UPDATE users  SET idGroup=3 where idUser=13;
-UPDATE users  SET idGroup=3 where idUser=14;
-UPDATE users  SET idGroup=3 where idUser=15;
+UPDATE users SET idGroup=1 where idUser=1;
+UPDATE users SET idGroup=1 where idUser=2;
+UPDATE users SET idGroup=1 where idUser=3;
+UPDATE users SET idGroup=1 where idUser=6;
+UPDATE users SET idGroup=1 where idUser=7;
+
+UPDATE users  SET idGroup=2 where idUser=4;
+UPDATE users  SET idGroup=2 where idUser=5;
+UPDATE users  SET idGroup=2 where idUser=8;
+UPDATE users  SET idGroup=3 where idUser=9;
+UPDATE users  SET idGroup=3 where idUser=10;
+UPDATE users  SET idGroup=3 where idUser=11;
+UPDATE users  SET idGroup=4 where idUser=12;
+UPDATE users  SET idGroup=4 where idUser=13;
+UPDATE users  SET idGroup=4 where idUser=14;
